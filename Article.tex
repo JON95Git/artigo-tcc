@@ -1,0 +1,329 @@
+\documentclass[times, twoside, watermark]{artigo}
+\usepackage{blindtext}
+\usepackage[utf8]{inputenc}
+
+\leadauthor{Jonathan} 
+
+\begin{document}
+
+% -------------------------------Titulo---------------------------------------------
+
+\title{\Large {Desenvolvimento de firmware robusto e multiplataforma}}
+
+\author[1]{Jonathan Gonzaga}
+\author[2]{Orientador}
+
+\affil[1]{Graduando em Engenharia de Computação, UNISAL São José - Campinas,
+\href{mailto:jonathan.s.gonzaga@gmail.com}{jonathan.s.gonzaga@gmail.com}}
+\affil[2]{Professor do UNISAL São José - Campinas,
+\href{mailto:orientador@sj.unisal.br}{orientador@sj.unisal.br}}
+
+\maketitle
+
+% -------------------------------Resumo-Abstract-------------------------------------
+
+\begin{abstract}
+\textit{Resumo:} \normalfont{\textit{Este artigo .}}
+\end {abstract}
+
+\begin{keywords}
+\textit{\textbf{Palavras-chave: }}\normalfont{\textit{sitemas embarcados, firmware, TDD, testes unitários}}
+\end{keywords}
+
+\begin{abstract}
+\textit{Abstract:} \normalfont{\textit{This article .}}
+\end {abstract}
+\begin{keywords}
+\textit{\textbf{Keywords: }}\normalfont{\textit{embedded systems, firmware, TDD, unit tests}}
+\end{keywords}
+
+% -------------------------------INTRODUÇÃO-----------------------------------------
+
+\section{INTRODUÇÃO}
+Com o avanço da eletrônica e da computação, a miniaturização de componentes e a redução de custos de fabricação, surgiram na indústria diversos dispositivos eletrônicos com processamemento dedicado. Esses dispositivos por si só já somam a maioria dos sistemas computacionais do mundo \cite{eetimes}. Podemos chamar esses dispositivos de \textit{sistemas embarcados} (do inglês, embedded systems).
+
+\textit{Sistemas embarcados} são sistemas computacionais de propósito específico, onde há um processador realizando alguma tarefa: eletrodomésticos, eletrônicos em geral, equipamentos médicos e de telecomunicações, instrumentos eletrônicos, sistemas de controle e automação e sistemas de tempo real em veículos são ou possuem sistemas embarcados. É importante frisar que o ambiente no qual um sistema embarcado vai ser utilizado é determinante não apenas para seu custo final, mas principalmente sua robustez e tolerância a falhas.
+
+Erros, falhas ou bugs de software são um problema em diversos setores. Desde bugs que facilitam a ação de hackers em redes sociais, bugs em smartphones que causam travamento do sistema operacional a bugs em sistemas de freios que causam acidentes em veículos. Esse último caso é ainda mais grave, pois o sistema lida diretamente com vidas humanas. Bugs em sistemas embarcados costumam ser críticos, pois espera-se que o produto funcione por anos sem apresentar problemas.
+
+Especialistas em desenvolvimento de software embarcado, como Jack Ganssle, James W. Grenning e Jacob Beningo, dedicaram-se a criar literatura de qualidade, escrevendo livros e artigos com técnicas e metodologias de desenvolvimento de software. Muito se tem discutido sobre como criar sistemas mais seguros, com menos bugs e menos suscetíveis a erros do usuário.
+
+No processo de desenvolvimento de software, o custo de uma alteração no código tende a ficar maior, conforme as etapas do desenvolvimento avançam, por isso o custo de um bug encontrado em campo é muito maior do que o mesmo encontrado na fase de desenvolvimento \cite{firmware-cost}.
+
+O software embarcado muitas vezes é visto como um software difícil de ser testado e validado, o que geralmente afasta os desenvolvedores de utilizar metodologias que são utilizadas no desenvolvimento de software \textit{web} ou \textit{mobile} por exemplo.
+
+Com essas dificuldades em mente, percebe-se a necessidade de se estimular as boas práticas de desenvolvimento de software embarcado, a utilização de testes e práticas que auxiliem na redução de bugs e consequentemente, redução de custos do projeto.
+
+
+
+% ----------------------REFERENCIAL TEÓRICO-----------------------------------
+
+\section*{REFERENCIAL TEÓRICO}
+
+\subsection{Firmware}
+Firmware é o software que é executado diretamente num chip sem a necessidade de um sistema operacional complexo, além de servir a um propósito único. Em outras palavras, firmware é o software executado em um sistema embarcado. 
+
+
+\subsection{Testes de software}
+Testes de software são
+
+\subsection{Testes unitarios}
+Testes unitários são
+
+
+
+\subsection{Microcontroladores}
+Microcontroladores são basicamente processadores de pequeno porte com CPU, memórias RAM, ROM, FLASH e recursos atrelados no mesmo encapsulamento ou SoC (System on Chip)\cite{architecturemicrocontroller}. Esses recursos denominados periféricos, são inclusos no chip com o intuito de tornar possível o interfaceamento entre a CPU e o mundo externo através dos pinos físicos do componente.
+
+Os recursos mais comuns em microcontroladores são as interfaces de comunicação serial (USART, I2C, SPI), conversores analógico-digital e digital-analógico (ADC e DAC), temporizadores/contadores (TIMERS) e demais, como pode ser visto na figura abaixo:
+
+%\begin{figure}[!ht]
+%\centering
+%\caption{Arquitetura genérica de um microcontrolador}
+%\includegraphics[width=0.8\linewidth]{Figures/archictecture-mcu.jpg}
+%\caption*{\hfill\\\textbf{Fonte: }https://scienceprog.com/architecture-of-a-typical-microcontroller/}
+%\end{figure}
+
+Microcontroladores são usados em produtos e dispositivos automatizados, como os sistemas de controle de automóvel, dispositivos médicos implantáveis, controles remotos, máquinas de escritório, eletrodomésticos, ferramentas elétricas, brinquedos e outros sistemas embarcados. \newline Ao reduzir o tamanho e o custo em comparação a um projeto que usa um dispositivo microprocessado, microcontroladores tornam-se econômicos para controlar digitalmente dispositivos e processos.
+
+\subsection{Microcontroladores ARM}
+
+Microcontroladores da família de CPUs \textit{ARM Cortex-M} de 32 bits são largamente utilizados na indústria por sua alta eficiência, durabilidade, confiabilidade e arquitetura moderna, pensada para suportar sistemas operacionais dos mais variados \cite{masteringstm32}.
+
+São chips de alta performance, além de estarem disponíveis em diversos tamanhos, encapsulamentos, variando de acordo com a necessidade da aplicação.
+
+%\begin{figure}[!ht]
+%\centering
+%\caption{Família de cores ARM Cortex-M}
+%\includegraphics[width=1\linewidth]{Figures/arm-family.png}
+%\caption*{\hfill\\\textbf{Fonte: }https://mccoycomponents.com/blog/view/arm-cortex-m-family-introduction}
+%\end{figure}
+
+\subsection{Display gráfico TFT}
+Sistemas embarcados historicamente rodam de modo quase \textit{invisível} ao usuário, onde geralmente há pouca ou nenhnuma interação entre homem e máquina, por exemplo, sistemas de sensoriamento e monitoramento.
+
+Alguns projetos tem como base a interação entre usuário o que geralmente é realizado através de um display gráfico do tipo \textit{TFT - thin-film-transistor liquid-crystal display}. Esse tipo de display é comum em diversas aplicações, como terminais de autoatendimento, máquinas de cartão de crédito/débito e principalmente smartphone e tablets.
+
+
+%\begin{figure}[!ht]
+%\centering
+%\caption{Display TFT genenérico}
+%\includegraphics[width=0.5\linewidth]{Figures/tft-example.jpg}\newline
+%\caption*{\hfill\\\textbf{Fonte:} https://www.displaytech-us.com/4-3-inch-integrated-tft-driver-boards}
+%\end{figure}
+
+
+
+% ----------------------MATERIAIS E MÉTODOS-----------------------------------
+
+\section*{MATERIAIS E MÉTODOS}
+%Reseta o contador de subsection
+\setcounter{section}{-1}\stepcounter{section}
+
+\subsection{Software - CMSIS}
+O \textit{CMSIS} é uma sigla para \textit{Cortex Microcontroller Software Interface Standard}, um padrão criado pela própria ARM que define uma camada de abstração (API) de acesso ao hardware para processadores da linha Cortex-M.
+
+
+\subsection{Software - STM32 HAL Library}
+O \textit{STM32 HAL Library} é um framework/biblioteca escrita em linguagem \textit{C} pelo fabricante \textit{STMicroelectronics} para a família de microcontroladores \textit{STM32}.
+Possui todos os recursos necessários para interfaceamento e controle de periféricos dos chips.
+
+\subsection{Software - FreeRTOS}
+FreeRTOS é um kernel de tempo real, ou um sistema operacional de tempo real (\textit{Real-Time Operating System}) para dispositivos embarcados. Foi desenvolvido para ser pequeno, simples e portável. Seu kernel é composto por apenas 3 arquivos em linguagem C. O FreeRTOS permite a fácil implementação de multitarefa preemptiva ou não preemptiva com diversos níveis de prioridade de tarefas.
+
+\subsection{Software - LVGL (LitteVGL)}
+É um biblioteca gráfica open source para desenvolvimento de interfaces gráficas em sistemas embarcados. Escrita em linguagem \textit{C}, pode ser usada em microcontroladores ou microprocessadores, dispõe de uma ferramenta simulador para desenvolvimento da interface sem a necessidade do hardware dedicado.
+
+\subsection{Software - CMSIS DSP}
+É uma biblioteca com funções comuns de processamento de sinal para uso em dispositivos baseados no processadores Cortex-M. Possui funções para implementação de sistemas de controle.
+
+\subsection{Arquitetura de software do sistema}
+Abaixo pode-se ver os componentes de software separados por nível de abstração:
+
+%\begin{figure}[!ht]
+%\centering
+%\caption{Arquitetura dos componentes de software do sistema}
+%\includegraphics[width=0.8\linewidth]{Figures/stm32f7-arch.png}
+%\caption*{\hfill\\\textbf{Fonte:} Acervo do autor}
+%\end{figure}
+
+% ----------------------HARDWARE-----------------------------------
+
+\subsection{Hardware - STM32F746G-Discovery}
+Kit de desenvolvimento criado pela própria \textit{STMicroelectronics}, o modelo \textit{STM32F746G-Discovery}.
+A placa dispõe além de um display TFT 4.3" 480x272, conectores para rede Ethernet, entrada e saída de áudio, câmera digital, SD Card, USB tipo micro, pinagem padrão Arduino, dois microfones do tipo \textit{MEMS} e um gravador/debugger integrado.
+
+%\begin{figure}[!ht]
+%\centering
+%\caption{Kit de desenvolvimento STM32F746G-Discovery}
+%\includegraphics[width=0.8\linewidth]{Figures/stm32f7-disco.png}
+%\caption*{\hfill\\\textbf{Fonte:} https://www.segger.com/evaluate-our-software/st-microelectronics/st-stm32f746g-discovery/}
+%\end{figure}
+
+O kit conta com um modelo da fabricante italiana \textit{STMicroelectronics}, o modelo \textit{STM32F746NGH6}, que dispõe de uma CPU ARM \textit{Cortex-M7} (a família de cores para microcontroladores mais avançada da \textit{ARM})
+
+
+\subsection{Hardware - motor DC}
+Motor elétrico de corrente contínua de baixa potência. Com alimentação entre \textit{3V} e \textit{6V}, com rotação máxima de \textit{200 rpm}.
+
+% \begin{figure}[!ht]
+% \centering
+% \caption{Motor DC 6V}
+% \includegraphics[width=0.5\linewidth]{Figures/motor-6v.jpg}
+% \caption*{\hfill\\\textbf{Fonte:} https://www.eletrodex.com.br/motor-dc-3-6v-com-caixa-de-reduc-o-e-eixo-duplo.html}
+% \end{figure}
+
+\subsection{Hardware - driver mosfet}
+Módulo de driver mosfet Irf520 para acionamento do motor via \textit{PWM} (\textit{Pulse Width Modulation} ou Modulação por largura de pulso)
+
+
+
+% \begin{figure}[!ht]
+% \centering
+% \caption{Driver mosfet Irf520}
+% \includegraphics[width=0.5\linewidth]{Figures/mosfet-irf520.jpg}
+% \caption*{\hfill\\\textbf{Fonte:} https://www.rsrobotica.com.br/modulo-mosfet-irf520-pwm-arduino}
+% \end{figure}
+
+\subsection{Hardware - encoder}
+Disco de encoder com 20 furos para leitura do \textit{RPM} 
+
+% \begin{figure}[!ht]
+% \centering
+% \caption{Disco de encoder 20 steps}
+% \includegraphics[width=0.4\linewidth]{Figures/disco-encoder.jpg}
+% \caption*{\hfill\\\textbf{Fonte:} https://www.eletrogate.com/disco-encoder-para-sensor-de-velocidade}
+% \end{figure}
+
+Sensor de velocidade baseado no \textit{amplificador operacional LM393}
+
+% \begin{figure}[!ht]
+% \centering
+% \caption{Sensor de velocidade com LM393}
+% \includegraphics[width=0.5\linewidth]{Figures/LM393-Speed-Sensor.jpg}
+% \caption*{\hfill\\\textbf{Fonte:} https://www.autocorerobotica.com.br/sensor-de-velocidade-encoder}
+% \end{figure}
+
+
+\subsection{Arquitetura de hardware do sistema}
+%\begin{figure}[!ht]
+%\centering
+%\caption{Arquitetura de harware do sistema}
+%\includegraphics[width=1\linewidth]{Figures/pid-arch.png}
+%\caption*{\hfill\\\textbf{Fonte:} Acervo do autor}
+%\end{figure}
+
+% ----------------------DESENVOLVIMENTO-----------------------------------
+
+\section*{DESENVOLVIMENTO}
+%Reseta o contador de subsections
+\setcounter{section}{-1}\stepcounter{section}
+O processo de desenvolvimento do projeto seguiu o padrão adotado anteriormente nos projetos de Engenharia: estudo, análise, implementação, testes iniciais, integração e testes finais.\newline
+Durante a etapa de estudos, buscou-se entender a teoria dos sistemas de controle, tanto em malha fechada, quanto em malha aberta, principalmente o controle PID. \newline
+Por sua vez, na etapa de implementação, foi necessário dividir o desenvolvimento em três grandes frentes:
+\begin{itemize}
+    \item Implementação da interface gráfica com LVGL
+    \item Implementação do firmware geral (configuração de periféricos)
+    \item Implementação do algoritmo PID com CMSIS-DSP
+\end{itemize}
+
+É importante notar que mesmo segregadas, ambas as implementações citadas anteriormente foram realizadas de forma paralela, não seguindo exatamente a ordem que estão listadas.
+
+\subsection{Implementação da interface gráfica com LVGL}
+Para se iniciar a implementação da interface gráfica foi necessário entender o fluxo de utilização de um controle PID via software. Para isso foram observados outros casos já existentes de simuladores de sistemas de controle.
+A interface gráfica foi dividida em três telas principais:
+\begin{itemize}
+    \item Tela de parametrização das variáveis do PID
+    \item Tela de monitoramento da entrada e saída do controlador em tempo real
+    \item Tela onde um gráfico é plotado e atualizado em tempo real com as relação entre \textit{RPM x tempo} e \textit{set point x tempo}
+\end{itemize}
+
+A biblioteca LVGL possui uma feature muito interessante, um simulador via software no PC, o que acelera o desenvolvimento da interface gráfica. Abaixo pode-se ver o resultado da execução do simulador:
+
+
+%\begin{figure}[!ht]
+%\centering
+%\caption{Tela inicial da aplicação gráfica rodando no simulador}
+%\includegraphics[width=1\linewidth]{Figures/pid-gui-screen-param.png}
+%\caption*{\hfill\\\textbf{Fonte:} Acervo do autor.}
+%\end{figure}
+
+
+
+Uma comparação de como a implementação real é rodando no kit de desenvolvimento pode ser vista abaixo:
+
+
+
+\subsection{Implementação do firmware geral (configuração de periféricos)}\hfill\\
+É comum em toda implementação de firmware para microcontroladores que se parta de algum exemplo desenvolvido e fornecido pelo próprio fabricante. A ideia é acelerar o desenvolvimento e aumentar a produtividade. O fabricante STMicroelectronics fornece como ferramenta auxiliar, o software \textit{STM32CubeMX}, um gerador de código gráfico, que permite que as configurações de pino, clock, periféricos, interrupções e até bibliotecas seja realizada, antes mesmo de se começar a programar.
+
+%\begin{figure}[!ht]
+%\centering
+%\caption{Tela de configuração de pinout no STM32CubeMX}
+%\includegraphics[width=1\linewidth]{Figures/cubemx.png}
+%\caption*{\hfill\\\textbf{Fonte:} Acervo do autor.}
+%\end{figure}
+
+A configuração dos periféricos utilizados no firmware foi realizada utilizando o software \textit{STM32CubeMX}, e foram habilitados os seguintes periféricos:
+
+\begin{itemize}
+    \item \textit{Timer} em modo \textit{PWM} para acionamento do motor
+    \item \textit{Timer} em modo \textit{encoder} para leitura dos dados do sensor de RPM
+    \item \textit{Timer} em modo \textit{counter} para a base de tempo do \textit{PID}
+\end{itemize}
+
+Ao fim dessa etapa, o firmware já possuía entrada e saída de dados para o sistema de controle.
+
+\subsection{Implementação do algoritmo \textit{PID} CMSIS-DSP}\hfill\\
+A ideia de utilizar a biblioteca \textit{CMSIS-DSP} fornecida pela ARM, em detrimento de se implementar uma solução customizada, foi principalmente pela robustez que o software fornecido pela ARM possui.
+Uma implementação própria muito provavelmente não possuiria o mesmo grau de maturidade e confiabilidade do \textit{CMSIS-DSP}.
+Um sistema de controle em malha fechada precisa que algo muito importante seja garantido a ele: determinismo. Em outras palavras, o loop de controle precisa ser executado em um tempo fixo, com uma base de tempo clara e muito bem definida. Esse requisito foi atingido utilizando-se recursos de hardware e principalmente usando o determinismo garantido pelo RTOS.
+
+O grande desafio dessa etapa é conseguir definir as constantes do algoritmo \textit{KP}, \textit{KPI} e \textit{KD} que sejam minimamente funcionais, pois posteriormente seria realizada a etapa de sintonia do \textit{PID}.
+
+\subsection{Testes de integração}
+Após as etapas de implementação, é chegada a hora de realizar os testes necessários para integrar todas as partes do firmware.
+O mais crítico com certeza é o controle PID, pois necessita que sua execução seja \textit{real-time}.
+
+De início foi necessário medir entrada e saída do sistema:
+
+
+
+De posso dos dados de entrada de entrada e saída, é necessário realizar uma série de ajustes no algoritmo de conversão de dados afim de reduzir erros.
+Nessa etapa foi definido que seria necessária a utilização de um \textit{low pass filter}:
+
+
+Alguns dos demais componentes do sistema podem ser vistos a seguir:
+
+% ----------------------Sintonia do PID e testes-----------------------------------
+
+\subsection{Sintonia do PID e testes}
+
+Uma das etapas mais trabalhosas num processo de implementação de um sistema de controle em malha fechada é a definição de suas constantes. 
+No caso do \textit{PID} não seria diferente. Existem alguns métodos heurísticos de como conseguir a melhor configuração do algoritmo.
+Por questões práticas, a sintonia do \textit{PID} foi realizada de forma empírica, sem a utilização de metodologias que muitas vezes exigem que se tenha função de transferência do sistema.
+
+Abaixo alguns exemplos dos resultados obtidos:
+
+
+
+% ----------------------CONCLUSÃO-----------------------------------
+
+\section*{CONCLUSÃO}
+Pode-se notar a facilidade e usabilidade de uma interface gráfica no controlde de processos e plantas, principalmente tratando-se de ajuste fino de parâmetros.
+A tecnologia de displays LCD gráficos alinhada a um GUI clara e objetiva, permite que haja grande integração entre usuário e máquina, possibilitando controle em tempo real das variáveis de processo.
+
+Também é notório que sistemas embarcados são ótimos aliados na implementação de sistemas de controle, pois conseguem lidar com variáveis tanto analógicas quanto digitais num mesmo chip ou placa, eliminando a necessidade de computadores específicos para funcionarem como supervisórios.
+
+
+\section*{BIBLIOGRAFIA}
+\bibliography{biblio}
+
+%% You can use these special %TC: tags to ignore certain parts of the text.
+%TC:ignore
+%the command above ignores this section for word count
+
+% \onecolumn
+% \newpage
+
+\end{document}
