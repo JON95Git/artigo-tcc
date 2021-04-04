@@ -1,0 +1,301 @@
+\documentclass[times, twoside, watermark]{artigo}
+\usepackage{blindtext}
+\usepackage[utf8]{inputenc}
+\citebrackets[]
+
+\leadauthor{Jonathan} 
+
+\begin{document}
+
+
+% -------------------------------Titulo---------------------------------------------
+
+\title{\Large {Desenvolvimento de firmware robusto e multiplataforma}}
+
+\author[1]{Jonathan Gonzaga}
+\author[2]{Orientador}
+
+\affil[1]{Graduando em Engenharia de Computação, UNISAL São José - Campinas,
+\href{mailto:jonathan.s.gonzaga@gmail.com}{jonathan.s.gonzaga@gmail.com}}
+\affil[2]{Professor do UNISAL São José - Campinas,
+\href{mailto:orientador@sj.unisal.br}{orientador@sj.unisal.br}}
+
+\maketitle
+
+% -------------------------------Resumo-Abstract-------------------------------------
+
+\begin{abstract}
+\textit{Resumo -} \normalfont{\textit{Este artigo .}}
+\end {abstract}
+
+\begin{keywords}
+\textit{\textbf{Palavras-chave: }}\normalfont{\textit{sitemas embarcados, firmware, TDD, testes unitários}}
+\end{keywords}
+
+\begin{abstract}
+\textit{Abstract - } \normalfont{\textit{This article .}}
+\end {abstract}
+\begin{keywords}
+\textit{\textbf{Keywords: }}\normalfont{\textit{embedded systems, firmware, TDD, unit tests}}
+\end{keywords}
+
+% -------------------------------INTRODUÇÃO-----------------------------------------
+
+%Esses dispositivos por si só já somam a maioria dos sistemas computacionais do mundo \cite{eetimes}. 
+% Podemos chamar esses dispositivos de \textit{sistemas embarcados} (do inglês, embedded systems).
+
+%É importante frisar que o ambiente no qual um sistema embarcado vai ser utilizado é 
+% determinante não apenas para seu custo final, mas principalmente sua robustez e tolerância a falhas de hardware e software.
+
+%Bugs em sistemas embarcados costumam ser críticos, pois espera-se que o produto funcione por anos sem apresentar problemas.
+
+\section{INTRODUÇÃO}
+Com o avanço da eletrônica e da computação, a miniaturização de circuitos integrados e a redução de custos de fabricação, 
+surgiram na indústria diversos dispositivos eletrônicos com poder de processamento. 
+A maioria desses dispositivos conta com processadores, memórias e periféricos integrados, 
+de forma que seu \textit{software} é destinado e \textit{embarcado} numa aplicação específica. 
+Sistemas dessa natureza são conhecidos como \textit{sistemas embarcados}.
+
+Produtos como eletrodomésticos, eletrônicos em geral, equipamentos médicos, equipamentos de telecomunicações, 
+ferramentas eletrônicas, sistemas de controle e automação e sistemas de tempo real em veículos são ou 
+possuem sistemas embarcados em sua concepção.
+
+Devido ao alto nível de criticidade de alguns sistemas embarcados, é esperado que o \textit{software} executado 
+neles seja altamente confiável e com o mínimo de \textit{bugs} possível. A realidade da indústria de eletrônicos 
+mostra que essa afirmação nem sempre é verdadeira.
+
+Erros, falhas ou \textit{bugs} de \textit{software} são um problema em diversas áreas da tecnologia. 
+Desde \textit{bugs} que facilitam a ação de \textit{hackers} em redes sociais, \textit{bugs} em 
+\textit{smartphones} que causam travamento do sistema operacional a \textit{bugs} em sistemas de 
+freios que causam acidentes em veículos. Esse último caso é ainda mais grave, pois o sistema lida diretamente com vidas humanas. 
+
+Especialistas em desenvolvimento de \textit{software} embarcado, como Jack Ganssle, James W. Grenning e Jacob Beningo, 
+dedicaram-se a criar literatura de qualidade, escrevendo livros e artigos com técnicas e metodologias de 
+desenvolvimento de \textit{software}. Alguns títulos relevantes são: \textit{Test-Driven development for Embedded C} \cite{tddembeddedc},
+\textit{The Art of Designing Embedded Systems} \cite{ganssle2008art}, \textit{Reusable Firmware Development} \cite{beningo2017reusable} entre outros. 
+A partir dessas obras muito se tem discutido sobre como criar sistemas mais seguros, com menos \textit{bugs} e menos suscetíveis a erros do usuário.
+
+No processo de desenvolvimento de \textit{software}, o custo de uma alteração no código tende a ficar maior conforme 
+as etapas do desenvolvimento avançam, por isso o custo de um \textit{bug} encontrado em campo após o produto ser lançado, 
+é muito maior que o custo do mesmo \textit{bug} sendo encontrado ainda na fase de desenvolvimento \cite{firmwarecost}.
+Esse cenário por si só já mostra a necessidade de se detectar problemas nas fases iniciais do projeto.
+
+\textit{Software} embarcado muitas vezes é difícil de ser testado e validado, extremamente dependente da plataforma de 
+\textit{hardware target}, e tende a demonstrar problemas de integração com outras partes do sistema após a inserção de 
+novas funcionalidades. Devido a limitação de recursos e a extrema dependência do \textit{hardware}, testes automatizados 
+não são realizados, o que acaba prejudicando a qualidade do código.
+
+Metodologias e conceitos como \textit{TDD (Test-Driven development)}, pirâmide de testes, \textit{SOLID} e outros, 
+são historicamente e erroneamente atribuídos apenas aos \textit{softwares} de "alto nível", como \textit{web} ou 
+\textit{mobile} por exemplo, afastando os desenvolvedores de \textit{software} embarcado desses conceitos e da utilização de abstrações mais inteligentes. 
+
+Com essas dificuldades em mente, percebe-se a necessidade de se estimular as boas práticas de desenvolvimento de 
+\textit{software} embarcado, a utilização de testes automatizados e independentes do \textit{hardware}, 
+e o estudo de conceitos de engenharia de \textit{software} que auxiliem na redução de \textit{bugs} e consequentemente, 
+redução de custos do projeto e aumento da qualidade do código gerado.
+
+
+
+% ----------------------REFERENCIAL TEÓRICO-----------------------------------
+
+\section*{REFERENCIAL TEÓRICO}
+
+\subsection{Firmware}\hfill\\
+\textit{Firmware} é um tipo específico de \textit{software} executado diretamente
+num circuito integrado (ou \textit{chip}). 
+Não necessita de outras programas para ser executado (como sistemas operacionais),
+além de servir a um propósito único. 
+Em outras palavras, \textit{firmware} é o \textit{software} executado em um sistema
+ embarcado.\cite{ganssle2004firmware}
+
+Devido a limitações de tamanho e recursos desse tipo de sistema, 
+o \textit{firmware} precisa manipular o \textit{hardware} diretamente e toda a sua
+ arquitetura costuma ser voltada a eventos do mundo externo.
+
+Diferente de sistemas computacionais mais complexos e com alto nível de abstração,
+onde geralmente o \textit{kernel} do sistema operacional é modularizado e abstrai
+o acesso a dispositivos de \textit{hardware},
+num sistema embarcado o \textit{firmware} é responsável pela gerência dos recursos 
+e eventos de \textit{hardware} (interrupções e excessões do processador) e também
+pelo código da aplicação (regras de negócio, interface com usuário e demais especifidades).
+
+Muitas vezes o \textit{firmware} faz parte de um sistema computacional maior,
+por exemplo, compudatores \textit{desktop} possuem circuitos integrados para 
+aplicações específicas, como a \textit{BIOS} (\textit{Basic Input/Output System}).
+
+Algumas literaturas não fazem distinção entres os termos \textit{firmware} e 
+\textit{software embarcado}, o que pode gerar certa confusão: \textit{firmware}
+é o \textit{software} executado num circuito integrado comumente escrito em 
+linguagem \textit{C, C++}, ou mesmo \textit{Assembly}. Já o \textit{software embarcado} 
+possui características de alta abstração, sendo uma aplicação (um processo rodando 
+num sistema operacional, geralmente baseado em \textit{GNU/Linux}) porém executado 
+em dispositivos de propósito específico (roteadores, terminais de auto atendimento). 
+Pode ser escrito em linguagens de programação como \textit{C, C++, Rust, Go, Python} entre outras.
+
+Num sistema embarcado executando um \textit{firmware}, o cérebro por trás de todo o processamento é um componente chamado \textit{microcontrolador}.
+
+
+\subsection{Microcontroladores}\hfill\\
+Microcontroladores são processadores de pequeno porte com \textit{CPU}, memórias \textit{RAM}, \textit{ROM},
+FLASH e recursos atrelados no mesmo encapsulamento ou \textit{SoC (System on Chip)}.
+Esses recursos denominados periféricos, são inclusos no chip com o intuito de
+tornar possível o interfaceamento entre a \textit{CPU} e o mundo externo através dos 
+pinos físicos do componente.
+
+Os recursos mais comuns em microcontroladores são as interfaces de comunicação 
+serial (\textit{USART, I2C, SPI}), conversores analógico-digital e digital-analógico 
+(\textit{ADC} e \textit{DAC}), temporizadores/contadores (\textit{TIMERS}) e demais componentes.
+
+Microcontroladores são usados em produtos e dispositivos automatizados, como os 
+sistemas de controle de automóvel, dispositivos médicos implantáveis,
+controles remotos, máquinas de escritório, eletrodomésticos, ferramentas elétricas,
+brinquedos e outros sistemas embarcados. \newline 
+Ao reduzir o tamanho e o custo em comparação a um projeto que usa um dispositivo 
+microprocessado, microcontroladores tornam-se econômicos para controlar
+digitalmente dispositivos e processos. \cite{gridling2007introduction}
+
+\subsection{Testes de software}\hfill\\
+Testes de \textit{software} são procedimentos pelos quais o código fonte de um
+\textit{software} é submetido afim de validar seu comportamento mediante
+os requisitos pelos quais foi projetado.
+
+Existem diversos tipos de testes de \textit{software}, cada um responsável por 
+testar partes e situações diferentes. Podemos citar:
+
+\begin{itemize}
+\item Testes \textit{end-to-end}
+\item Testes de integração
+\item Testes unitários
+\end{itemize}
+
+\subsection{Testes unitarios}\hfill\\
+Testes unitários são a base dos testes de \textit{software}. Na pirâmide de testes,
+encontram-se no nível mais baixo, o que indica que são o tipo mais barato, mas
+também os mais fáceis de se implementar.\cite{8402699}
+
+Como seu nome sugere, são testes de \textit{unidade}, onde é possível testar a 
+menor unidade testável do código (sejam funções, classes ou módulos).
+
+\subsection{TDD - Test-Driven development}\hfill\\
+\textit{Test-Driven development} (ou \textit{Desenvolvimento orientado a testes}) é uma técnica incremental de construção de \textit{software}. Nessa técnica, nenhum código de produção é escrito sem que primeiro seja escrito um teste unitário que falhe na primeira execução. 
+
+Ao contrário da prática comum de desenvolvimento de \textit{software}, onde primeiro é desenvolvido o código de produção e só depois os testes, no TDD
+o desenvolvedor expressa o comportamento desejado do código em um teste. 
+O teste é executado e falha. Só então ele escreve o código de produção, fazendo o teste passar.
+A automação de testes é a chave para o \textit{TDD}. Os testes são pequenos e automatizados.
+A cada nova funcionalidade implementada, novos testes unitários são escritos, 
+seguidos imediatamente por um código de produção que satisfaça aqueles testes. 
+
+Conforme o código de produção cresce, também crescem em conjunto os testes unitários, 
+que são ativos tão valiosos quanto o próprio código de produção. A cada mudança de código, o conjunto de testes é executado, verificando a funcionalidade da nova implementação, mas também a compatibilidade com o código já existente. \cite{tddembeddedc}
+
+%\subsection{Microcontroladores ARM}\hfill\\
+%Microcontroladores da família de CPUs \textit{ARM Cortex-M} de 32 bits são largamente utilizados na 
+%indústria por sua alta eficiência, durabilidade, confiabilidade e arquitetura moderna, 
+%pensada para suportar sistemas operacionais dos mais variados \cite{masteringstm32}.
+%
+%São chips de alta performance, além de estarem disponíveis em diversos tamanhos, 
+%encapsulamentos, variando de acordo com a necessidade da aplicação.
+
+% ----------------------MATERIAIS E MÉTODOS-----------------------------------
+
+% ----------------------SOFTWARE-----------------------------------
+
+\section*{MATERIAIS E MÉTODOS}
+%Reseta o contador de subsection
+\setcounter{section}{-1}\stepcounter{section}
+
+%\subsection{Software - CMSIS}\hfill\\
+%O \textit{CMSIS} é uma sigla para \textit{Cortex Microcontroller \textit{software} Interface Standard}, 
+%um padrão criado pela própria ARM que define uma camada de abstração (\textit{API - Application programming interface}) de acesso ao \textit{hardware} para processadores da linha \textit{Cortex-M.}
+%
+%
+%\subsection{Software - STM32 HAL Library}\hfill\\
+%O \textit{STM32 HAL Library} é um \textit{framework}/biblioteca escrita em linguagem \textit{C} pelo fabricante 
+%\textit{STMicroelectronics} para a família de microcontroladores \textit{STM32}.
+%Possui todos os recursos necessários para interfaceamento e controle de periféricos dos chips.
+
+\subsection{Software - Ceedling}\hfill\\
+\textit{Ceedling} é um \textit{build system} (sistema de construção de \textit{software}) para projetos escritos em linguagem C.
+É uma espécie de extensão do sistema de construção \textit{Rake (make-ish)} do \textit{Ruby}.
+O \textit{Ceedling} é voltado principalmente para o Desenvolvimento Orientado a Testes (TDD) em C e é projetado para reunir as ferramentas \textit{CMock},
+\textit{Unity} e\textit{CException} - três outros projetos de código aberto que auxiliam na dinâmica de testes automatizados. \cite{gomes2016uttos}
+
+
+\subsection{Software - FreeRTOS}\hfill\\
+FreeRTOS é um \textit{kernel} de tempo real, ou um sistema operacional de tempo real (\textit{Real-Time Operating System}) 
+para dispositivos embarcados. Foi desenvolvido para ser pequeno, simples e portável. 
+Seu \textit{kernel} é composto por apenas 3 arquivos em linguagem C. 
+O FreeRTOS permite a fácil implementação de multitarefa preemptiva ou não preemptiva com diversos níveis de prioridade de tarefas.\cite{barry2008freertos}
+
+
+\subsection{Arquitetura de \textit{software} do sistema}\hfill\\
+Abaixo pode-se ver os componentes de \textit{software} separados por nível de abstração:
+
+
+% ----------------------HARDWARE-----------------------------------
+
+
+
+% ----------------------DESENVOLVIMENTO-----------------------------------
+
+\section*{DESENVOLVIMENTO}
+%Reseta o contador de subsections
+\setcounter{section}{-1}\stepcounter{section}
+%O processo de desenvolvimento do projeto seguiu o padrão adotado anteriormente nos projetos de Engenharia: 
+% estudo, análise, implementação, testes iniciais, integração e testes finais.\newline
+%Durante a etapa de estudos, buscou-se entender a teoria dos sistemas de controle, tanto em malha fechada, 
+% quanto em malha aberta, principalmente o controle PID. \newline
+%Por sua vez, na etapa de implementação, foi necessário dividir o desenvolvimento em três grandes frentes:
+%\begin{itemize}
+%    \item Implementação da interface gráfica com LVGL
+%    \item Implementação do firmware geral (configuração de periféricos)
+%    \item Implementação do algoritmo PID com CMSIS-DSP
+%\end{itemize}
+%
+%É importante notar que mesmo segregadas, ambas as implementações citadas anteriormente foram realizadas de 
+% forma paralela, não seguindo exatamente a ordem que estão listadas.
+
+%\subsection{Implementação da interface gráfica com LVGL}\hfill\\
+%Para se iniciar a implementação da interface gráfica foi necessário entender o fluxo de utilização de um controle PID via software. 
+% Para isso foram observados outros casos já existentes de simuladores de sistemas de controle.
+%A interface gráfica foi dividida em três telas principais:
+%\begin{itemize}
+%    \item Tela de parametrização das variáveis do PID
+%    \item Tela de monitoramento da entrada e saída do controlador em tempo real
+%    \item Tela onde um gráfico é plotado e atualizado em tempo real com as relação entre \textit{RPM x tempo} e \textit{set point x tempo}
+%\end{itemize}
+%
+%A biblioteca LVGL possui uma feature muito interessante, um simulador via \textit{software} no PC, o que acelera o desenvolvimento da interface gráfica. 
+% Abaixo pode-se ver o resultado da execução do simulador:
+
+\subsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
+Um dos pilares do desenvolvimento de \textit{software} multiplataforma a abstração.
+Utilizar interfaces bem definidas apartir de \textit{header files}, variando apenas
+a implementação dessas interfaces nos \textit{source files}.
+
+
+
+\subsection{Camadas de abstração - drivers e RTOS}\hfill\\
+Para se escrever código portável é extremamente necessário a não dependência de 
+\textit{hardware}, \textit{RTOS - (Real Time Operating Systems)} e demais bibliotecas
+
+
+\subsection{Testes unitários}\hfill\\
+Para escrever testes unitários, é necessário a utilização de um \textit{framework}
+
+
+% ----------------------CONCLUSÃO-----------------------------------
+
+\section*{CONCLUSÃO}\hfill\\
+Conlcui-se que 
+
+
+\section*{}
+\bibliography{artigo}
+
+\cite{martin2009clean}
+\cite{martin2018clean}
+\cite{denardin2019sistemas}
+
+\end{document}

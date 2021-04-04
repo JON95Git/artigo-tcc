@@ -48,7 +48,7 @@
 \RequirePackage{lmodern}
 \RequirePackage{siunitx}
 \RequirePackage{textgreek}
-\RequirePackage{cleveref}
+%\RequirePackage{cleveref}
 \RequirePackage{gensymb}
 \RequirePackage{textcomp}
 \RequirePackage[version=4]{mhchem}
@@ -321,17 +321,22 @@
 \def\footernote#1{\markboth{#1}{#1}}
 
 % %% bibliography
-\RequirePackage{chapterbib}
-\RequirePackage[sectionbib,numbers,sort&compress,merge,round]{natbib}
-\setlength{\bibsep}{0.0pt}
-\bibliographystyle{artigo}
-\renewcommand{\bibsection}{} % Remove header
-\renewcommand\bibfont{\normalfont\sffamily\fontsize{8}{10}\selectfont} % set font to be sans serif
 
-\makeatletter 
-\renewcommand\@biblabel[1]{ #1.} % Remove brackets from label
-\def\tagform@#1{\maketag@@@{\bfseries(\ignorespaces#1\unskip\@@italiccorr)}}
-\renewcommand{\eqref}[1]{\textup{{\normalfont Eq.~(\ref{#1}}\normalfont)}}
+\usepackage[num,overcite]{abntex2cite}
+
+%\RequirePackage{chapterbib}
+%\RequirePackage[sectionbib,numbers,sort&compress,merge,round]{natbib}
+%\setlength{\bibsep}{0.0pt}
+
+%\bibliographystyle{ieeetr}
+
+%\renewcommand{\bibsection}{} % Remove header
+%\renewcommand\bibfont{\normalfont\sffamily\fontsize{8}{10}\selectfont} % set font to be sans serif
+
+%\makeatletter
+%\renewcommand\@biblabel[1]{ #1.} % Remove brackets from label
+%\def\tagform@#1{\maketag@@@{\bfseries(\ignorespaces#1\unskip\@@italiccorr)}}
+%\renewcommand{\eqref}[1]{\textup{{\normalfont Eq.~(\ref{#1}}\normalfont)}}
 % \makeatother
 
 %% Title
@@ -465,16 +470,12 @@
 
 \fancypagestyle{plain}{
 \fancyhf{}
-% \fancyfoot[RE]{}
 \fancyfoot[LO, RE]{Projeto de Fim de Curso  – Engenharia de Computação, 2021-1}
-% \fancyfoot[LE]{}
-% \fancyfoot[RO]{}
 \fancyfoot[CE,CO]{\leftmark}
 \fancyfoot[LE,RO]{\thepage}
 }
 
 \pagestyle{fancy}{
-% \fancypagestyle{fancy}{
 \fancyhf{}
 \fancyfoot[LO, LE]{Projeto de Fim de Curso   – Engenharia de Computação, 2021-1}
 \fancyfoot[CE,CO]{\leftmark}
