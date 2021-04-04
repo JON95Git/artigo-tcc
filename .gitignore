@@ -11,7 +11,9 @@
 *.cb
 *.cb2
 .*.lb
-
+*build/
+*backup/
+Figures
 ## Intermediate documents:
 *.dvi
 *.xdv
