@@ -117,7 +117,7 @@ onde geralmente o \textit{kernel} do sistema operacional é modularizado e abstr
 o acesso a dispositivos de \textit{hardware},
 num sistema embarcado o \textit{firmware} é responsável pela gerência dos recursos 
 e eventos de \textit{hardware} (interrupções e excessões do processador) e também
-pelo código da aplicação (regras de negócio, interface com usuário e demais especifidades).
+pelo código da aplicação (regras de negócio, interface com usuário e demais especificidades).
 
 Muitas vezes o \textit{firmware} faz parte de um sistema computacional maior,
 por exemplo, compudatores \textit{desktop} possuem circuitos integrados para 
@@ -137,8 +137,8 @@ Num sistema embarcado executando um \textit{firmware}, o cérebro por trás de t
 
 \subsection{Microcontroladores}\hfill\\
 Microcontroladores são processadores de pequeno porte com \textit{CPU}, memórias \textit{RAM}, \textit{ROM},
-FLASH e recursos atrelados no mesmo encapsulamento ou \textit{SoC (System on Chip)}.
-Esses recursos denominados periféricos, são inclusos no chip com o intuito de
+\textit{FLASH} e recursos atrelados no mesmo encapsulamento ou \textit{SoC (System on Chip)}.
+Esses recursos denominados periféricos, são inclusos no \textit{chip} com o intuito de
 tornar possível o interfaceamento entre a \textit{CPU} e o mundo externo através dos 
 pinos físicos do componente.
 
@@ -219,11 +219,11 @@ que são ativos tão valiosos quanto o próprio código de produção. A cada mu
 \textit{Ceedling} é um \textit{build system} (sistema de construção de \textit{software}) para projetos escritos em linguagem C.
 É uma espécie de extensão do sistema de construção \textit{Rake (make-ish)} do \textit{Ruby}.
 O \textit{Ceedling} é voltado principalmente para o Desenvolvimento Orientado a Testes (TDD) em C e é projetado para reunir as ferramentas \textit{CMock},
-\textit{Unity} e\textit{CException} - três outros projetos de código aberto que auxiliam na dinâmica de testes automatizados. \cite{gomes2016uttos}
+\textit{Unity} e \textit{CException} - três outros projetos de código aberto que auxiliam na dinâmica de testes automatizados. \cite{gomes2016uttos}
 
 
 \subsection{Software - FreeRTOS}\hfill\\
-FreeRTOS é um \textit{kernel} de tempo real, ou um sistema operacional de tempo real (\textit{Real-Time Operating System}) 
+\textit{FreeRTOS} é um \textit{kernel} de tempo real, ou um sistema operacional de tempo real (\textit{Real-Time Operating System}) 
 para dispositivos embarcados. Foi desenvolvido para ser pequeno, simples e portável. 
 Seu \textit{kernel} é composto por apenas 3 arquivos em linguagem C. 
 O FreeRTOS permite a fácil implementação de multitarefa preemptiva ou não preemptiva com diversos níveis de prioridade de tarefas.\cite{barry2008freertos}
@@ -270,7 +270,7 @@ Abaixo pode-se ver os componentes de \textit{software} separados por nível de a
 % Abaixo pode-se ver o resultado da execução do simulador:
 
 \subsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
-Um dos pilares do desenvolvimento de \textit{software} multiplataforma a abstração.
+Um dos pilares do desenvolvimento de \textit{software} multiplataforma é a abstração.
 Utilizar interfaces bem definidas apartir de \textit{header files}, variando apenas
 a implementação dessas interfaces nos \textit{source files}.
 
@@ -288,7 +288,7 @@ Para escrever testes unitários, é necessário a utilização de um \textit{fra
 % ----------------------CONCLUSÃO-----------------------------------
 
 \section*{CONCLUSÃO}\hfill\\
-Conlcui-se que 
+Conclui-se que 
 
 
 \section*{}
