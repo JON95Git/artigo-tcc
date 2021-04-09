@@ -6,7 +6,14 @@ Desenvolvimento de firmware robusto e multiplataforma
 
 ## Prosposta
 
-Demonstrar necessidade de se estimular as boas práticas de desenvolvimento de software embarcado, a utilização de testes automatizados e independentes do hardware, e o estudo de conceitos de engenharia de software que auxiliem na redução de bugs e consequentemente, redução de custos do projeto e aumento da qualidade do código gerado.
+Demonstrar a necessidade de se estimular as boas práticas de desenvolvimento de firmware, a utilização de testes automatizados e independentes do hardware, e o estudo de conceitos de engenharia de software que auxiliem na redução de bugs e consequentemente, redução de custos do projeto e aumento da qualidade do código gerado.
+
+## Metodologia
+### TDD - Test-driven development
+WIP
+
+### Dual-targeting 
+WIP
 
 ## Desenvolvimento
 WIP
