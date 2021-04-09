@@ -322,7 +322,7 @@
 
 % %% bibliography
 
-\usepackage[num,overcite]{abntex2cite}
+\usepackage[num,overcite, alf,abnt-etal-list=0,abnt-etal-cite=3]{abntex2cite}
 
 %\RequirePackage{chapterbib}
 %\RequirePackage[sectionbib,numbers,sort&compress,merge,round]{natbib}
