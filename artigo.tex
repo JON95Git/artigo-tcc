@@ -189,31 +189,12 @@ seguidos imediatamente por um código de produção que satisfaça aqueles teste
 Conforme o código de produção cresce, também crescem em conjunto os testes unitários, 
 que são ativos tão valiosos quanto o próprio código de produção. A cada mudança de código, o conjunto de testes é executado, verificando a funcionalidade da nova implementação, mas também a compatibilidade com o código já existente. \cite{tddembeddedc}
 
-%\subsection{Microcontroladores ARM}\hfill\\
-%Microcontroladores da família de CPUs \textit{ARM Cortex-M} de 32 bits são largamente utilizados na 
-%indústria por sua alta eficiência, durabilidade, confiabilidade e arquitetura moderna, 
-%pensada para suportar sistemas operacionais dos mais variados \cite{masteringstm32}.
-%
-%São chips de alta performance, além de estarem disponíveis em diversos tamanhos, 
-%encapsulamentos, variando de acordo com a necessidade da aplicação.
 
 % ----------------------MATERIAIS E MÉTODOS-----------------------------------
-
-% ----------------------SOFTWARE-----------------------------------
 
 \section*{MATERIAIS E MÉTODOS}
 %Reseta o contador de subsection
 \setcounter{section}{-1}\stepcounter{section}
-
-%\subsection{Software - CMSIS}\hfill\\
-%O \textit{CMSIS} é uma sigla para \textit{Cortex Microcontroller \textit{software} Interface Standard}, 
-%um padrão criado pela própria ARM que define uma camada de abstração (\textit{API - Application programming interface}) de acesso ao \textit{hardware} para processadores da linha \textit{Cortex-M.}
-%
-%
-%\subsection{Software - STM32 HAL Library}\hfill\\
-%O \textit{STM32 HAL Library} é um \textit{framework}/biblioteca escrita em linguagem \textit{C} pelo fabricante 
-%\textit{STMicroelectronics} para a família de microcontroladores \textit{STM32}.
-%Possui todos os recursos necessários para interfaceamento e controle de periféricos dos chips.
 
 \subsection{Software - Ceedling}\hfill\\
 \textit{Ceedling} é um \textit{build system} (sistema de construção de \textit{software}) para projetos escritos em linguagem C.
@@ -233,57 +214,28 @@ O FreeRTOS permite a fácil implementação de multitarefa preemptiva ou não pr
 Abaixo pode-se ver os componentes de \textit{software} separados por nível de abstração:
 
 
-% ----------------------HARDWARE-----------------------------------
-
-
+% ----------------------METODOLOGIA-----------------------------------
+\section*{METODOLOGIA}\hfill\\
+A metodologia utilizada foi
 
 % ----------------------DESENVOLVIMENTO-----------------------------------
 
 \section*{DESENVOLVIMENTO}
 %Reseta o contador de subsections
 \setcounter{section}{-1}\stepcounter{section}
-%O processo de desenvolvimento do projeto seguiu o padrão adotado anteriormente nos projetos de Engenharia: 
-% estudo, análise, implementação, testes iniciais, integração e testes finais.\newline
-%Durante a etapa de estudos, buscou-se entender a teoria dos sistemas de controle, tanto em malha fechada, 
-% quanto em malha aberta, principalmente o controle PID. \newline
-%Por sua vez, na etapa de implementação, foi necessário dividir o desenvolvimento em três grandes frentes:
-%\begin{itemize}
-%    \item Implementação da interface gráfica com LVGL
-%    \item Implementação do firmware geral (configuração de periféricos)
-%    \item Implementação do algoritmo PID com CMSIS-DSP
-%\end{itemize}
-%
-%É importante notar que mesmo segregadas, ambas as implementações citadas anteriormente foram realizadas de 
-% forma paralela, não seguindo exatamente a ordem que estão listadas.
-
-%\subsection{Implementação da interface gráfica com LVGL}\hfill\\
-%Para se iniciar a implementação da interface gráfica foi necessário entender o fluxo de utilização de um controle PID via software. 
-% Para isso foram observados outros casos já existentes de simuladores de sistemas de controle.
-%A interface gráfica foi dividida em três telas principais:
-%\begin{itemize}
-%    \item Tela de parametrização das variáveis do PID
-%    \item Tela de monitoramento da entrada e saída do controlador em tempo real
-%    \item Tela onde um gráfico é plotado e atualizado em tempo real com as relação entre \textit{RPM x tempo} e \textit{set point x tempo}
-%\end{itemize}
-%
-%A biblioteca LVGL possui uma feature muito interessante, um simulador via \textit{software} no PC, o que acelera o desenvolvimento da interface gráfica. 
-% Abaixo pode-se ver o resultado da execução do simulador:
+O processo de desenvolvimento do projeto seguiu o padrão...
 
 \subsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
 Um dos pilares do desenvolvimento de \textit{software} multiplataforma é a abstração.
 Utilizar interfaces bem definidas apartir de \textit{header files}, variando apenas
 a implementação dessas interfaces nos \textit{source files}.
 
-
-
 \subsection{Camadas de abstração - drivers e RTOS}\hfill\\
 Para se escrever código portável é extremamente necessário a não dependência de 
 \textit{hardware}, \textit{RTOS - (Real Time Operating Systems)} e demais bibliotecas
 
-
 \subsection{Testes unitários}\hfill\\
 Para escrever testes unitários, é necessário a utilização de um \textit{framework}
-
 
 % ----------------------CONCLUSÃO-----------------------------------
 
