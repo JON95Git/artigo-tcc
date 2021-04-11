@@ -13,7 +13,6 @@
 .*.lb
 *build/
 *backup/
-Figures
 ## Intermediate documents:
 *.dvi
 *.xdv
