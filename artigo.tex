@@ -1,7 +1,6 @@
 \documentclass[times, twoside, watermark]{artigo}
 \usepackage{blindtext}
 \usepackage[utf8]{inputenc}
-\citebrackets[]
 
 \leadauthor{Jonathan} 
 
@@ -64,20 +63,22 @@ Devido ao alto nível de criticidade de alguns sistemas embarcados, é esperado 
 neles seja altamente confiável e com o mínimo de \textit{bugs} possível. A realidade da indústria de eletrônicos 
 mostra que essa afirmação nem sempre é verdadeira.
 
-Erros, falhas ou \textit{bugs} de \textit{software} são um problema em diversas áreas da tecnologia. 
-Desde \textit{bugs} que facilitam a ação de \textit{hackers} em redes sociais, \textit{bugs} em 
-\textit{smartphones} que causam travamento do sistema operacional a \textit{bugs} em sistemas de 
-freios que causam acidentes em veículos. Esse último caso é ainda mais grave, pois o sistema lida diretamente com vidas humanas. 
+Erros e falhas de \textit{software} são um problema em diversas áreas da tecnologia. 
+Desde vulnerabilidades que facilitam a ação de \textit{hackers} em redes sociais, falhas em 
+\textit{smartphones} que causam travamento do sistema operacional a inconsistências no 
+acionamento de sistemas de freios que causam acidentes em veículos. Esse último caso é ainda mais grave, pois o sistema
+lida diretamente com vidas humanas. 
 
 Especialistas em desenvolvimento de \textit{software} embarcado, como Jack Ganssle, James W. Grenning e Jacob Beningo, 
 dedicaram-se a criar literatura de qualidade, escrevendo livros e artigos com técnicas e metodologias de 
 desenvolvimento de \textit{software}. Alguns títulos relevantes são: \textit{Test-Driven development for Embedded C} \cite{tddembeddedc},
 \textit{The Art of Designing Embedded Systems} \cite{ganssle2008art}, \textit{Reusable Firmware Development} \cite{beningo2017reusable} entre outros. 
-A partir dessas obras muito se tem discutido sobre como criar sistemas mais seguros, com menos \textit{bugs} e menos suscetíveis a erros do usuário.
+A partir dessas obras muito se tem discutido sobre como criar sistemas mais seguros, com menor
+possibilidade de erros e menos suscetíveis a má utilização por parte do usuário.
 
 No processo de desenvolvimento de \textit{software}, o custo de uma alteração no código tende a ficar maior conforme 
 as etapas do desenvolvimento avançam, por isso o custo de um \textit{bug} encontrado em campo após o produto ser lançado, 
-é muito maior que o custo do mesmo \textit{bug} sendo encontrado ainda na fase de desenvolvimento \cite{firmwarecost}.
+é muito maior que o custo do mesmo sendo encontrado ainda na fase de desenvolvimento \cite{firmwarecost}.
 Esse cenário por si só já mostra a necessidade de se detectar problemas nas fases iniciais do projeto.
 
 \textit{Software} embarcado muitas vezes é difícil de ser testado e validado, extremamente dependente da plataforma de 
