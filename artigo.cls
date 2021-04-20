@@ -58,18 +58,26 @@
 \RequirePackage[rightcaption]{sidecap} % For sidecaptions
 \RequirePackage[misc]{ifsym} % For the \Letter symbol
 \RequirePackage{bbding} % For the \Envelope symbol
+
 \RequirePackage[twoside,%
 				letterpaper,includeheadfoot,%
 				layoutsize={8.125in,10.875in},%
                 layouthoffset=0.1875in,%
                 layoutvoffset=0.0625in,%
-                left=38.5pt,%
-                right=43pt,%
-                top=43pt,% 10pt provided by headsep
-                bottom=32pt,%
+                top=50pt,% 10pt provided by headsep
+                left=50pt,%
+                right=50pt,%
+                bottom=50pt,%
+                % left=3cm,%
+                % top=3cm,%
+                % right=2cm,%
+                % bottom=2cm,%
                 headheight=0pt,% No Header
                 headsep=10pt,%
                 footskip=25pt]{geometry}
+
+% \RequirePackage[left=3cm,top=3cm,right=2cm,bottom=2cm]{geometry}                
+                
 \RequirePackage[labelfont={bf,sf},%
                 labelsep=period,%
                 figurename=Fig.]{caption}
@@ -77,7 +85,7 @@
 \DeclareUnicodeCharacter{00B0}{\degree}
 
 %% Hyperlinking
-\RequirePackage[colorlinks=true, allcolors=blue]{hyperref}
+\RequirePackage[colorlinks=false, allcolors=blue]{hyperref}
 
 %% Ref to Sup
 \RequirePackage{nameref}
@@ -100,50 +108,48 @@
 
 \if@times\RequirePackage{times}\fi
 
+% %% sizes and margins
+% \topmargin      -16.0mm
+% %\oddsidemargin  -11.0mm
+% %\evensidemargin -11.0mm
+% %\textwidth        175mm
+% \textheight       243mm
+% \columnsep          7mm
+% \headsep          6.3mm
+% \headheight        12pt
+% \lineskip           1pt
+% \normallineskip     1pt
+% \def\baselinestretch{1}
 
+% \marginparsep      10pt
+% \marginparwidth    20pt
+% \marginparpush     25pt
 
-%% sizes and margins
-\topmargin      -16.0mm
-%\oddsidemargin  -11.0mm
-%\evensidemargin -11.0mm
-%\textwidth        175mm
-\textheight       243mm
-\columnsep          7mm
-\headsep          6.3mm
-\headheight        12pt
-\lineskip           1pt
-\normallineskip     1pt
-\def\baselinestretch{1}
+% \partopsep          \z@
+% \topsep           1.3ex
+% \parsep             \z@
+% \itemsep            \z@
 
-\marginparsep      10pt
-\marginparwidth    20pt
-\marginparpush     25pt
+% %%
+% \abovedisplayskip       0pt plus2pt minus5pt%
+% \belowdisplayskip       \abovedisplayskip
+% \abovedisplayshortskip  0pt plus3pt%
+% \belowdisplayshortskip  0pt plus3pt minus3pt%
 
-\partopsep          \z@
-\topsep           1.3ex
-\parsep             \z@
-\itemsep            \z@
-
-%%
-\abovedisplayskip       0pt plus2pt minus5pt%
-\belowdisplayskip       \abovedisplayskip
-\abovedisplayshortskip  0pt plus3pt%
-\belowdisplayshortskip  0pt plus3pt minus3pt%
-
-\arraycolsep     5pt
-\tabcolsep       6pt
-\arrayrulewidth .4pt
-\doublerulesep   2pt
-\tabbingsep\labelsep
+% \arraycolsep     5pt
+% \tabcolsep       6pt
+% \arrayrulewidth .4pt
+% \doublerulesep   2pt
+% \tabbingsep\labelsep
 
 %% footnotes
-\skip\footins 10pt plus 4pt minus 2pt
-\footnotesep 7pt
-\footskip 10mm
-\skip\@mpfootins = \skip\footins
-\fboxsep = 3pt \fboxrule = .4pt
-\long\def\@makefntext#1{\parindent .8em\indent$^{\@thefnmark}$#1}
-\def\footnoterule{}
+% \skip\footins 10pt plus 4pt minus 2pt
+% \footnotesep 7pt
+% \footskip 10mm
+% \skip\@mpfootins = \skip\footins
+% \fboxsep = 3pt \fboxrule = .4pt
+% \long\def\@makefntext#1{\parindent .8em\indent$^{\@thefnmark}$#1}
+% \def\footnoterule{}
 
 
 \newdimen\@maxsep
@@ -237,14 +243,11 @@
   {1em} %espaço depois da margem
   {#1} %titulo: #1 é ele normal, #1. é ele com um ponto no final
 
-
-
 \titleformat{\subsection}[runin]
   {\sffamily\itshape}
   {\thesubsection.}
   {2em}
   {#1. }
-  
   
 %\bfseries eh para negrito
 \titleformat{\subsubsection}[runin]
@@ -260,8 +263,6 @@
   {}
   {0em}
   {#1}
-  
-  
   
 % nesse caso é: espaço depois da margem, 
 \titlespacing*{\section}{5pc}{2ex \@plus1pt \@minus3pt}{2pt}
@@ -322,8 +323,9 @@
 
 % %% bibliography
 
-\usepackage[num,overcite, alf,abnt-etal-list=0,abnt-etal-cite=3]{abntex2cite}
-
+\usepackage[num, overcite, alf,abnt-etal-list=0,abnt-etal-cite=3]{abntex2cite}
+% \usepackage[alf, abnt-etal-list=0, abnt-etal-cite=3]{abntex2cite}
+\citebrackets()
 %\RequirePackage{chapterbib}
 %\RequirePackage[sectionbib,numbers,sort&compress,merge,round]{natbib}
 %\setlength{\bibsep}{0.0pt}
@@ -486,6 +488,12 @@
 
 \def\sectionmark#1{\relax}
 
-\parindent=0pt
+\parindent=20pt
 \endinput
 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \documentclass[article,11pt,oneside,a4paper,twocolumn]{abntex2}
+% \usepackage[left=3cm,top=3cm,right=2cm,bottom=2cm]{geometry}
+% \usepackage[alf, abnt-etal-list=0, abnt-etal-cite=3]{abntex2cite}
+% \citebrackets()
