@@ -1,11 +1,20 @@
 \documentclass[times, twoside, watermark]{artigo}
 \usepackage{blindtext}
 \usepackage[utf8]{inputenc}
-
-\leadauthor{Jonathan} 
+\citebrackets[]
+\usepackage{indentfirst}
+% \documentclass[article, 12pt, oneside, a4paper, twocolumn]{abntex2}
+% \usepackage[left=3cm,top=3cm,right=2cm,bottom=2cm]{geometry}
+% \usepackage[alf, abnt-etal-list=0, abnt-etal-cite=3]{abntex2cite}
+% \usepackage{authblk}
+% \usepackage{amsmath}
+% \usepackage{amsfonts}
+% \usepackage{amssymb}
+% \usepackage{graphicx}
+% \usepackage{verbatim}
+% \usepackage{titlesec}
 
 \begin{document}
-
 
 % -------------------------------Titulo---------------------------------------------
 
@@ -23,21 +32,21 @@
 
 % -------------------------------Resumo-Abstract-------------------------------------
 
-\begin{abstract}
+\noindent\begin{abstract}
 \textit{Resumo -} \normalfont{\textit{Este artigo .}}
 \end {abstract}
 
-\begin{keywords}
+\noindent\begin{keywords}
 \textit{\textbf{Palavras-chave: }}\normalfont{\textit{sitemas embarcados, firmware, TDD, testes unitários}}
 \end{keywords}
 
-\begin{abstract}
+\noindent\begin{abstract}
 \textit{Abstract - } \normalfont{\textit{This article .}}
 \end {abstract}
-\begin{keywords}
+\noindent\begin{keywords}
 \textit{\textbf{Keywords: }}\normalfont{\textit{embedded systems, firmware, TDD, unit tests}}
 \end{keywords}
-
+\hfill\
 % -------------------------------INTRODUÇÃO-----------------------------------------
 
 %Esses dispositivos por si só já somam a maioria dos sistemas computacionais do mundo \cite{eetimes}. 
@@ -49,65 +58,74 @@
 %Bugs em sistemas embarcados costumam ser críticos, pois espera-se que o produto funcione por anos sem apresentar problemas.
 
 \section{INTRODUÇÃO}
-Com o avanço da eletrônica e da computação, a miniaturização de circuitos integrados e a redução de custos de fabricação, 
-surgiram na indústria diversos dispositivos eletrônicos com poder de processamento. 
+
+Com o avanço da eletrônica e da computação, a miniaturização de circuitos integrados e a redução de
+custos de fabricação, surgiram na indústria diversos dispositivos eletrônicos com poder de
+processamento. 
 A maioria desses dispositivos conta com processadores, memórias e periféricos integrados, 
 de forma que seu \textit{software} é destinado e \textit{embarcado} numa aplicação específica. 
 Sistemas dessa natureza são conhecidos como \textit{sistemas embarcados}.
 
-Produtos como eletrodomésticos, eletrônicos em geral, equipamentos médicos, equipamentos de telecomunicações, 
-ferramentas eletrônicas, sistemas de controle e automação e sistemas de tempo real em veículos são ou 
-possuem sistemas embarcados em sua concepção.
+Produtos como eletrodomésticos, eletrônicos em geral, equipamentos médicos, equipamentos de
+telecomunicações, ferramentas eletrônicas, sistemas de controle e automação e sistemas de tempo real
+em veículos são ou possuem sistemas embarcados em sua concepção.
 
-Devido ao alto nível de criticidade de alguns sistemas embarcados, é esperado que o \textit{software} executado 
-neles seja altamente confiável e com o mínimo de \textit{bugs} possível. A realidade da indústria de eletrônicos 
-mostra que essa afirmação nem sempre é verdadeira.
+Devido ao alto nível de criticidade de alguns sistemas embarcados, é esperado que o \textit{software}
+executado neles seja altamente confiável e com o mínimo de \textit{bugs} possível. 
+A realidade da indústria de eletrônicos mostra que essa afirmação nem sempre é verdadeira.
 
 Erros e falhas de \textit{software} são um problema em diversas áreas da tecnologia. 
 Desde vulnerabilidades que facilitam a ação de \textit{hackers} em redes sociais, falhas em 
 \textit{smartphones} que causam travamento do sistema operacional a inconsistências no 
-acionamento de sistemas de freios que causam acidentes em veículos. Esse último caso é ainda mais grave, pois o sistema
-lida diretamente com vidas humanas. 
+acionamento de sistemas de freios que causam acidentes em veículos. 
+Esse último caso é ainda mais grave, pois o sistema lida diretamente com vidas humanas. 
 
-Especialistas em desenvolvimento de \textit{software} embarcado, como Jack Ganssle, James W. Grenning e Jacob Beningo, 
-dedicaram-se a criar literatura de qualidade, escrevendo livros e artigos com técnicas e metodologias de 
-desenvolvimento de \textit{software}. Alguns títulos relevantes são: \textit{Test-Driven development for Embedded C} \cite{tddembeddedc},
-\textit{The Art of Designing Embedded Systems} \cite{ganssle2008art}, \textit{Reusable Firmware Development} \cite{beningo2017reusable} entre outros. 
+Especialistas em desenvolvimento de \textit{software} embarcado, como Jack Ganssle, James W. Grenning
+e Jacob Beningo, dedicaram-se a criar literatura de qualidade, escrevendo livros e artigos com
+técnicas e metodologias de desenvolvimento de \textit{software}. Alguns títulos relevantes são:
+\textit{Test-Driven development for Embedded C}\cite{tddembeddedc}, \textit{The Art of Designing
+Embedded Systems}\cite{ganssle2008art},
+\textit{Reusable Firmware Development}\cite{beningo2017reusable} entre outros. 
 A partir dessas obras muito se tem discutido sobre como criar sistemas mais seguros, com menor
 possibilidade de erros e menos suscetíveis a má utilização por parte do usuário.
 
-No processo de desenvolvimento de \textit{software}, o custo de uma alteração no código tende a ficar maior conforme 
-as etapas do desenvolvimento avançam, por isso o custo de um \textit{bug} encontrado em campo após o produto ser lançado, 
-é muito maior que o custo do mesmo sendo encontrado ainda na fase de desenvolvimento \cite{firmwarecost}.
+No processo de desenvolvimento de \textit{software}, o custo de uma alteração no código tende a ficar
+maior conforme  as etapas do desenvolvimento avançam, por isso o custo de um \textit{bug} encontrado
+em campo após o produto ser lançado, é muito maior que o custo do mesmo sendo encontrado ainda na fase
+de desenvolvimento\cite{firmwarecost}.
 Esse cenário por si só já mostra a necessidade de se detectar problemas nas fases iniciais do projeto.
 
-\textit{Software} embarcado muitas vezes é difícil de ser testado e validado, extremamente dependente da plataforma de 
-\textit{hardware target}, e tende a demonstrar problemas de integração com outras partes do sistema após a inserção de 
-novas funcionalidades. Devido a limitação de recursos e a extrema dependência do \textit{hardware}, testes automatizados 
+\textit{Software} embarcado muitas vezes é difícil de ser testado e validado, extremamente dependente
+da plataforma de \textit{hardware target}, e tende a demonstrar problemas de integração com outras
+partes do sistema após a inserção de novas funcionalidades. 
+Devido a limitação de recursos e a extrema dependência do \textit{hardware}, testes automatizados 
 não são realizados, o que acaba prejudicando a qualidade do código.
 
-Metodologias e conceitos como \textit{TDD (Test-Driven development)}, pirâmide de testes, \textit{SOLID} e outros, 
-são historicamente e erroneamente atribuídos apenas aos \textit{softwares} de "alto nível", como \textit{web} ou 
-\textit{mobile} por exemplo, afastando os desenvolvedores de \textit{software} embarcado desses conceitos e da utilização de abstrações mais inteligentes. 
+Metodologias e conceitos como \textit{TDD (Test-Driven development)}, pirâmide de testes,
+\textit{SOLID} e outros, são historicamente e erroneamente atribuídos apenas aos 
+\textit{softwares} de "alto nível", como \textit{web} ou 
+\textit{mobile} por exemplo, afastando os desenvolvedores de \textit{software} embarcado desses
+conceitos e da utilização de abstrações mais inteligentes. 
 
-Com essas dificuldades em mente, percebe-se a necessidade de se estimular as boas práticas de desenvolvimento de 
-\textit{software} embarcado, a utilização de testes automatizados e independentes do \textit{hardware}, 
-e o estudo de conceitos de engenharia de \textit{software} que auxiliem na redução de \textit{bugs} e consequentemente, 
-redução de custos do projeto e aumento da qualidade do código gerado.
+Com essas dificuldades em mente, percebe-se a necessidade de se estimular as boas práticas de
+desenvolvimento de \textit{software} embarcado, a utilização de testes automatizados e independentes
+do \textit{hardware}, e o estudo de conceitos de engenharia de \textit{software} que auxiliem na
+redução de \textit{bugs} e consequentemente, redução de custos do projeto e aumento da 
+qualidade do código gerado. \hfill\\
 
 
 
 % ----------------------REFERENCIAL TEÓRICO-----------------------------------
 
 \section*{REFERENCIAL TEÓRICO}
-
 \subsection{Firmware}\hfill\\
+
 \textit{Firmware} é um tipo específico de \textit{software} executado diretamente
 num circuito integrado (ou \textit{chip}). 
 Não necessita de outras programas para ser executado (como sistemas operacionais),
 além de servir a um propósito único. 
 Em outras palavras, \textit{firmware} é o \textit{software} executado em um sistema
- embarcado.\cite{ganssle2004firmware}
+ embarcado\cite{ganssle2004firmware}.
 
 Devido a limitações de tamanho e recursos desse tipo de sistema, 
 o \textit{firmware} precisa manipular o \textit{hardware} diretamente e toda a sua
@@ -117,11 +135,11 @@ Diferente de sistemas computacionais mais complexos e com alto nível de abstra�
 onde geralmente o \textit{kernel} do sistema operacional é modularizado e abstrai
 o acesso a dispositivos de \textit{hardware},
 num sistema embarcado o \textit{firmware} é responsável pela gerência dos recursos 
-e eventos de \textit{hardware} (interrupções e excessões do processador) e também
+e eventos de \textit{hardware} (interrupções e exceções do processador) e também
 pelo código da aplicação (regras de negócio, interface com usuário e demais especificidades).
 
 Muitas vezes o \textit{firmware} faz parte de um sistema computacional maior,
-por exemplo, compudatores \textit{desktop} possuem circuitos integrados para 
+por exemplo, computadores \textit{desktop} possuem circuitos integrados para 
 aplicações específicas, como a \textit{BIOS} (\textit{Basic Input/Output System}).
 
 Algumas literaturas não fazem distinção entres os termos \textit{firmware} e 
@@ -133,12 +151,15 @@ num sistema operacional, geralmente baseado em \textit{GNU/Linux}) porém execut
 em dispositivos de propósito específico (roteadores, terminais de auto atendimento). 
 Pode ser escrito em linguagens de programação como \textit{C, C++, Rust, Go, Python} entre outras.
 
-Num sistema embarcado executando um \textit{firmware}, o cérebro por trás de todo o processamento é um componente chamado \textit{microcontrolador}.
+Num sistema embarcado executando um \textit{firmware}, o cérebro por trás de todo o 
+processamento é um componente chamado \textit{microcontrolador}.
 
 
 \subsection{Microcontroladores}\hfill\\
-Microcontroladores são processadores de pequeno porte com \textit{CPU}, memórias \textit{RAM}, \textit{ROM},
-\textit{FLASH} e recursos atrelados no mesmo encapsulamento ou \textit{SoC (System on Chip)}.
+
+Microcontroladores são processadores de pequeno porte com \textit{CPU}, memórias \textit{RAM},
+\textit{ROM},\textit{FLASH} e recursos atrelados no mesmo encapsulamento ou \textit{SoC 
+(System on Chip)}.
 Esses recursos denominados periféricos, são inclusos no \textit{chip} com o intuito de
 tornar possível o interfaceamento entre a \textit{CPU} e o mundo externo através dos 
 pinos físicos do componente.
@@ -150,10 +171,11 @@ serial (\textit{USART, I2C, SPI}), conversores analógico-digital e digital-anal
 Microcontroladores são usados em produtos e dispositivos automatizados, como os 
 sistemas de controle de automóvel, dispositivos médicos implantáveis,
 controles remotos, máquinas de escritório, eletrodomésticos, ferramentas elétricas,
-brinquedos e outros sistemas embarcados. \newline 
+brinquedos e outros sistemas embarcados.
+
 Ao reduzir o tamanho e o custo em comparação a um projeto que usa um dispositivo 
 microprocessado, microcontroladores tornam-se econômicos para controlar
-digitalmente dispositivos e processos. \cite{gridling2007introduction}
+digitalmente dispositivos e processos\cite{gridling2007introduction}.
 
 \subsection{Testes de software}\hfill\\
 Testes de \textit{software} são procedimentos pelos quais o código fonte de um
@@ -170,17 +192,23 @@ testar partes e situações diferentes. Podemos citar:
 \end{itemize}
 
 \subsection{Testes unitarios}\hfill\\
+
 Testes unitários são a base dos testes de \textit{software}. Na pirâmide de testes,
 encontram-se no nível mais baixo, o que indica que são o tipo mais barato, mas
-também os mais fáceis de se implementar.\cite{8402699}
+também os mais fáceis de se implementar\cite{8402699}.
 
 Como seu nome sugere, são testes de \textit{unidade}, onde é possível testar a 
 menor unidade testável do código (sejam funções, classes ou módulos).
 
 \subsection{TDD - Test-Driven development}\hfill\\
-\textit{Test-Driven development} (ou \textit{Desenvolvimento orientado a testes}) é uma técnica incremental de construção de \textit{software}. Nessa técnica, nenhum código de produção é escrito sem que primeiro seja escrito um teste unitário que falhe na primeira execução. 
 
-Ao contrário da prática comum de desenvolvimento de \textit{software}, onde primeiro é desenvolvido o código de produção e só depois os testes, no TDD
+\textit{Test-Driven development} (ou \textit{Desenvolvimento orientado a testes}) é uma técnica
+incremental de construção de \textit{software}. 
+Nessa técnica, nenhum código de produção é escrito sem que primeiro seja escrito um 
+teste unitário que falhe na primeira execução. 
+
+Ao contrário da prática comum de desenvolvimento de \textit{software}, onde primeiro é desenvolvido o
+código de produção e só depois os testes, no TDD
 o desenvolvedor expressa o comportamento desejado do código em um teste. 
 O teste é executado e falha. Só então ele escreve o código de produção, fazendo o teste passar.
 A automação de testes é a chave para o \textit{TDD}. Os testes são pequenos e automatizados.
@@ -188,7 +216,9 @@ A cada nova funcionalidade implementada, novos testes unitários são escritos,
 seguidos imediatamente por um código de produção que satisfaça aqueles testes. 
 
 Conforme o código de produção cresce, também crescem em conjunto os testes unitários, 
-que são ativos tão valiosos quanto o próprio código de produção. A cada mudança de código, o conjunto de testes é executado, verificando a funcionalidade da nova implementação, mas também a compatibilidade com o código já existente. \cite{tddembeddedc}
+que são ativos tão valiosos quanto o próprio código de produção. 
+A cada mudança de código, o conjunto de testes é executado, verificando a funcionalidade da nova
+implementação, mas também a compatibilidade com o código já existente\cite{tddembeddedc}.
 
 
 % ----------------------MATERIAIS E MÉTODOS-----------------------------------
@@ -198,17 +228,24 @@ que são ativos tão valiosos quanto o próprio código de produção. A cada mu
 \setcounter{section}{-1}\stepcounter{section}
 
 \subsection{Software - Ceedling}\hfill\\
-\textit{Ceedling} é um \textit{build system} (sistema de construção de \textit{software}) para projetos escritos em linguagem C.
+
+\textit{Ceedling} é um \textit{build system} (sistema de construção de 
+\textit{software}) para projetos escritos em linguagem C.
 É uma espécie de extensão do sistema de construção \textit{Rake (make-ish)} do \textit{Ruby}.
-O \textit{Ceedling} é voltado principalmente para o Desenvolvimento Orientado a Testes (TDD) em C e é projetado para reunir as ferramentas \textit{CMock},
-\textit{Unity} e \textit{CException} - três outros projetos de código aberto que auxiliam na dinâmica de testes automatizados. \cite{gomes2016uttos}
+O \textit{Ceedling} é voltado principalmente para o 
+Desenvolvimento Orientado a Testes (TDD) em C e é projetado para reunir as ferramentas \textit{CMock},
+\textit{Unity} e \textit{CException} - três outros projetos de código aberto 
+que auxiliam na dinâmica de testes automatizados\cite{gomes2016uttos}.
 
 
 \subsection{Software - FreeRTOS}\hfill\\
-\textit{FreeRTOS} é um \textit{kernel} de tempo real, ou um sistema operacional de tempo real (\textit{Real-Time Operating System}) 
+
+\textit{FreeRTOS} é um \textit{kernel} de tempo real, 
+ou um sistema operacional de tempo real (\textit{Real-Time Operating System}) 
 para dispositivos embarcados. Foi desenvolvido para ser pequeno, simples e portável. 
 Seu \textit{kernel} é composto por apenas 3 arquivos em linguagem C. 
-O FreeRTOS permite a fácil implementação de multitarefa preemptiva ou não preemptiva com diversos níveis de prioridade de tarefas.\cite{zhu2016understanding}
+O FreeRTOS permite a fácil implementação de multitarefa preemptiva 
+ou não preemptiva com diversos níveis de prioridade de tarefas\cite{zhu2016understanding}.
 
 
 \subsection{Arquitetura de \textit{software} do sistema}\hfill\\
@@ -216,26 +253,31 @@ Abaixo pode-se ver os componentes de \textit{software} separados por nível de a
 
 
 % ----------------------METODOLOGIA-----------------------------------
-\section*{METODOLOGIA}\hfill\\
+\section*{METODOLOGIA}\hfill\
+
 A metodologia utilizada foi
 
 % ----------------------DESENVOLVIMENTO-----------------------------------
 
 \section*{DESENVOLVIMENTO}
+
 %Reseta o contador de subsections
 \setcounter{section}{-1}\stepcounter{section}
 O processo de desenvolvimento do projeto seguiu o padrão...
 
 \subsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
+
 Um dos pilares do desenvolvimento de \textit{software} multiplataforma é a abstração.
 Utilizar interfaces bem definidas apartir de \textit{header files}, variando apenas
 a implementação dessas interfaces nos \textit{source files}.
 
 \subsection{Camadas de abstração - drivers e RTOS}\hfill\\
+
 Para se escrever código portável é extremamente necessário a não dependência de 
 \textit{hardware}, \textit{RTOS - (Real Time Operating Systems)} e demais bibliotecas
 
 \subsection{Testes unitários}\hfill\\
+
 Para escrever testes unitários, é necessário a utilização de um \textit{framework}
 
 % ----------------------CONCLUSÃO-----------------------------------
@@ -247,8 +289,8 @@ Conclui-se que
 \section*{}
 \bibliography{artigo}
 
-\cite{martin2009clean}
-\cite{martin2018clean}
-\cite{denardin2019sistemas}
+% \cite{martin2009clean}
+% \cite{martin2018clean}
+% \cite{denardin2019sistemas}
 
 \end{document}
