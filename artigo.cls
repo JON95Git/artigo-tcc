@@ -37,7 +37,7 @@
 %% and math support and fonts
 \RequirePackage{amsmath,amsfonts,amssymb}
 \RequirePackage{mathptmx}
-\fontfamily{ptm}
+\fontfamily{times}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Henriques lab dependencies - Start %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -110,11 +110,11 @@
 
 % %% sizes and margins
 % \topmargin      -16.0mm
-% %\oddsidemargin  -11.0mm
-% %\evensidemargin -11.0mm
-% %\textwidth        175mm
+%\oddsidemargin  -11.0mm
+%\evensidemargin -11.0mm
+%\textwidth        175mm
 % \textheight       243mm
-% \columnsep          7mm
+\columnsep          12mm
 % \headsep          6.3mm
 % \headheight        12pt
 % \lineskip           1pt
@@ -150,7 +150,7 @@
 % \fboxsep = 3pt \fboxrule = .4pt
 % \long\def\@makefntext#1{\parindent .8em\indent$^{\@thefnmark}$#1}
 % \def\footnoterule{}
-
+\usepackage{float}
 
 \newdimen\@maxsep
 \newdimen\@dblmaxsep
@@ -178,6 +178,11 @@
 \renewcommand{\bottomfraction}{0.99}
 \renewcommand{\textfraction}{0.01}
 
+
+
+% \renewcommand{\thesection}{\Roman{section}} 
+% \renewcommand{\thesubsection}{\thesection.\Roman{subsection}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %%
 %% Henriques lab parts adapted from PNAS %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -186,8 +191,8 @@
 \newcommand{\leadauthor}[1]{\def\@leadauthor{#1}}
 %\newcommand{\headerfont}{\normalfont\sffamily\fontsize{7}{9} \selectfont}
 \newcommand{\footerfont}{\normalfont\sffamily\fontsize{7}{9} \selectfont}
-\newcommand{\titlefont}{\fontfamily{ptm}\bfseries\fontsize{22pt}{24pt}\selectfont}
-\newcommand{\dropcapfont}{\fontfamily{ptm}\bfseries\fontsize{26pt}{28pt}\selectfont}
+\newcommand{\titlefont}{\fontfamily{times}\bfseries\fontsize{22pt}{24pt}\selectfont}
+\newcommand{\dropcapfont}{\fontfamily{times}\bfseries\fontsize{26pt}{28pt}\selectfont}
 \newcommand{\datesfont}{\normalfont\sffamily\fontsize{7}{8}\selectfont}
 \newcommand{\absfont}{\normalfont\sffamily\bfseries\fontsize{8}{11}\selectfont}
 \newcommand{\keywordsfont}{\normalfont\rmfamily\fontsize{7}{10}\selectfont}
@@ -228,6 +233,7 @@
 %   []
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 % Tamanho da section
 %\titleformat
 %  {\section} % command
@@ -236,26 +242,27 @@
 %  {0em}
 %  {}
 
+\renewcommand{\thesection}{\Roman{section}}
 %\titleformat{name=\section}
 \titleformat{\section}
   {\small\sffamily}
-  {}
+  {\thesection.}
   {1em} %espaço depois da margem
   {#1} %titulo: #1 é ele normal, #1. é ele com um ponto no final
 
+
 \titleformat{\subsection}[runin]
-  {\sffamily\itshape}
+  {\small\sffamily}
   {\thesubsection.}
   {2em}
-  {#1. }
+  {#1}
   
 %\bfseries eh para negrito
 \titleformat{\subsubsection}[runin]
   {\sffamily\small\itshape}
   {\thesubsubsection.}
-  {0.5em}
-  {#1. }
-  []
+  {1em}
+  {#1}
   
   
 \titleformat{\paragraph}[runin]
@@ -473,14 +480,14 @@
 \fancypagestyle{plain}{
 \fancyhf{}
 \fancyfoot[LO, RE]{Projeto de Fim de Curso  – Engenharia de Computação, 2021-1}
-\fancyfoot[CE,CO]{\leftmark}
+% \fancyfoot[CE,CO]{\leftmark}
 \fancyfoot[LE,RO]{\thepage}
 }
 
 \pagestyle{fancy}{
 \fancyhf{}
 \fancyfoot[LO, LE]{Projeto de Fim de Curso   – Engenharia de Computação, 2021-1}
-\fancyfoot[CE,CO]{\leftmark}
+% \fancyfoot[CE,CO]{\leftmark}
 \fancyfoot[RE,RO]{\thepage}
 }
 
