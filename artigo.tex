@@ -34,9 +34,10 @@
 % -------------------------------Resumo-Abstract-------------------------------------
 
 \noindent\begin{abstract}
-\textit{Resumo -} \normalfont{\textit{Este artigo apresenta uma alternativa de desenvolvimento de
-firmware robusto e multiplataforma, com o intuito de minimizar bugs de software, permitir a implementação
-de testes unitários e incentivar o estudo de conceitos de Engenharia de software aplicados a sistemas embarcados.}}
+\textit{Resumo -} \normalfont{\textit{Este artigo apresenta técnicas e ferramentas 
+para o desenvolvimento de firmware robusto e multiplataforma, com o intuito de 
+minimizar bugs, permitir a implementação de testes unitários e incentivar o estudo de 
+conceitos de Engenharia de software aplicados a sistemas embarcados.}}
 \end {abstract}
 
 \noindent\begin{keywords}
@@ -44,9 +45,10 @@ de testes unitários e incentivar o estudo de conceitos de Engenharia de softwar
 \end{keywords}
 
 \noindent\begin{abstract}
-\textit{Abstract - } \normalfont{\textit{This article presents an alternative for the development of
-robust and multiplatform firmware, in order to minimize software bugs, allow the implementation of unit
-tests and encourage the study of software engineering concepts applied to embedded systems.}}
+\textit{Abstract - } \normalfont{\textit{This article presents techniques and tools 
+for robust and multiplatform firmware development, in order to minimize bugs, allow 
+the implementation of unit tests and encourage the study of software engineering 
+concepts applied to embedded systems.}}
 \end {abstract}
 \noindent\begin{keywords}
 \textit{\textbf{Keywords: }}\normalfont{\textit{embedded systems, firmware, TDD, unit tests}}
@@ -116,7 +118,7 @@ Devido a limitação de recursos e a extrema dependência do \textit{hardware}, 
 automatizados não são realizados, o que acaba prejudicando a qualidade do código.
 
 Metodologias e conceitos como \textit{TDD (Test-Driven development)}, pirâmide de 
-testes, \textit{SOLID} e outros, são historicamente e erroneamente atribuídos apenas
+testes e \textit{SOLID}, são historicamente e erroneamente atribuídos apenas
 aos \textit{softwares} de "alto nível", como \textit{web} ou 
 \textit{mobile} por exemplo, afastando os desenvolvedores de \textit{software} 
 embarcado desses conceitos e da utilização de abstrações mais inteligentes. 
@@ -138,7 +140,7 @@ da qualidade do código gerado. \hfill\\
 
 \textit{Firmware} é um tipo específico de \textit{software} executado diretamente
 num circuito integrado (ou \textit{chip}). 
-Não necessita de outras programas para ser executado (como sistemas operacionais),
+Não necessita de outros programas para ser executado (como sistemas operacionais),
 além de servir a um propósito único. 
 Em outras palavras, é o \textit{software} executado em um sistema
 embarcado\cite{ganssle2004firmware}.
@@ -149,7 +151,7 @@ o \textit{firmware} precisa manipular o \textit{hardware} diretamente e toda a s
 
 Diferente de sistemas computacionais mais complexos e com alto nível de abstração,
 onde geralmente o \textit{kernel} do sistema operacional é modularizado e abstrai
-o acesso a dispositivos de \textit{hardware},
+o acesso a dispositivos de \textit{hardware}\cite{tanenbaum2015modern},
 num sistema embarcado o \textit{firmware} é responsável pela gerência dos recursos 
 e eventos de \textit{hardware} (interrupções e exceções do processador) e também
 pelo código da aplicação (regras de negócio, interface com usuário e demais especificidades).
@@ -167,8 +169,8 @@ esses termos: \textit{firmware} é o \textit{software} executado num circuito
 integrado comumente escrito em linguagem \textit{C, C++}, ou mesmo \textit{Assembly}. 
 Já o \textit{software embarcado} possui características de alta abstração, 
 sendo uma aplicação (um processo rodando num sistema operacional, 
-geralmente baseado em \textit{GNU/Linux}) porém executado em dispositivos de 
-propósito específico (como roteadores e terminais de auto atendimento). 
+geralmente baseado em \textit{GNU/Linux})\cite{simmonds2015mastering} porém executado 
+em dispositivos de propósito específico (como roteadores e terminais de autoatendimento). 
 Pode ser escrito em linguagens de programação como \textit{C, C++, Rust, Go, Python} entre outras.
 
 Em um sistema embarcado executando um \textit{firmware}, o cérebro por trás de todo o 
@@ -292,7 +294,7 @@ que auxiliam na dinâmica de testes automatizados\cite{gomes2016uttos}.
 ou um sistema operacional de tempo real (\textit{Real-Time Operating System}) 
 para dispositivos embarcados. Foi desenvolvido para ser pequeno, simples e portável. 
 Seu \textit{kernel} é composto por apenas 3 arquivos em linguagem C. 
-O FreeRTOS permite a fácil implementação de multitarefa preemptiva 
+O \textit{FreeRTOS} permite a fácil implementação de multitarefa preemptiva 
 ou não preemptiva com diversos níveis de prioridade de tarefas\cite{zhu2016understanding}.
 
 
@@ -315,14 +317,13 @@ simples\cite{martin2018clean}
 \end{itemize}
 
 \subsection{Arquitetura de \textit{software} do sistema}\hfill\\
-Abaixo pode-se ver os componentes de \textit{software} separados por nível de abstração:
+Abaixo pode-se ver os componentes de \textit{software} separados por nível de abstração:\hfill\\
 
 \begin{figure}[H]
     \centering
     \caption{Arquitetura de software do projeto}
     \includegraphics[width=0.7\linewidth]{images/arch.png}
     \caption*{\newline\textbf{Fonte:} acervo do autor}
-    % \label{fig:my_label}
 \end{figure}
 
 \subsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
@@ -348,9 +349,5 @@ Conclui-se que
 
 % \section{REFERÊNCIAS}
 \bibliography{artigo}
-
-% \cite{martin2009clean}
-% \cite{martin2018clean}
-% \cite{denardin2019sistemas}
 
 \end{document}
