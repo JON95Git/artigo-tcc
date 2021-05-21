@@ -245,11 +245,8 @@ que são ativos tão valiosos quanto o próprio código de produção.
 A cada mudança de código, o conjunto de testes é executado, verificando a funcionalidade da nova
 implementação, mas também a compatibilidade com o código já existente\cite{tddembeddedc}.
 
-% ----------------------METODOLOGIA-----------------------------------
-\section{METODOLOGIA}\hfill\
 
-A metodologia utilizada para o desenvolvimento do projeto segue a técnica de \textit{TDD} descrita anteriormente. 
-Um esquema simplificado pode ser visto na Figura 01 a seguir:\hfill\
+Um esquema simplificado é apresentado na Figura 01:\hfill\
 
 \begin{figure}[H]
     \centering
@@ -270,37 +267,79 @@ Na última etapa, o código passará pelo processo de \textit{refatoração}, on
 eliminados possíveis erros, duplicidade, e será formatado de acordo com o padrão 
 requisitado.
 
-Nas três etapas serão utilizadas ferramentas e mecanismos de \textit{software} para 
-auxílio na implementação dos testes, execução e automatização de processos.
 
-\subsection{MATERIAIS E MÉTODOS}
-%Reseta o contador de subsection
-% \setcounter{section}{-1}\stepcounter{section}
+\subsection{\textit{Framework} de testes - \textit{Unity}}\hfill\\
 
-\subsubsection{Software - Ceedling}\hfill\\
+\textit{Unity} é um \textit{framework} de testes escrito em linguagem C, pensado 
+principalmente para \textit{software} em sistemas embarcados.
+
+Trabalha com o conceito de \textit{asserts}, que nada mais são que formas de se 
+garantir e verificar parâmetros (entrada) e resultados (saída) de funções no código 
+fonte.
+
+
+\subsection{Ferramenta de dublês de testes - \textit{CMock}}\hfill\\
+
+\textit{CMock} é uma ferramenta de dublês de testes, usada para simular o 
+comportamento de funções que possuam dependência externa (\textit{hardware} ou 
+bibliotecas externas).
+
+Trabalha com os conceitos de \textit{mocks} e \textit{stubs}, 
+que nada mais são que funções \textit{fake}, criadas com o intuito de emular o 
+comportamento (entradas e saídas) de componentes do código que tenham alguma 
+dependência. 
+
+\subsection{\textit{Build system - Ceedling}}\hfill\\
 
 \textit{Ceedling} é um \textit{build system} (sistema de construção de 
 \textit{software}) para projetos escritos em linguagem C.
-É uma espécie de extensão do sistema de construção \textit{Rake (make-ish)} do \textit{Ruby}.
+É uma espécie de extensão do sistema de construção \textit{Rake (make-ish)} do 
+\textit{Ruby}.
 O \textit{Ceedling} é voltado principalmente para o 
-Desenvolvimento Orientado a Testes (TDD) em C e é projetado para reunir as ferramentas \textit{CMock},
-\textit{Unity} e \textit{CException} - três outros projetos de código aberto 
-que auxiliam na dinâmica de testes automatizados\cite{gomes2016uttos}.
+\textit{Desenvolvimento Orientado a Testes (TDD)} em linguagem C e reune o 
+\textit{framework} de testes \textit{Unity}, a ferramenta de dublês de testes 
+\textit{CMock} e a ferramenta de manipulação de exceção \textit{CException} - três 
+outros projetos de código aberto que auxiliam na dinâmica de testes 
+automatizados\cite{gomes2016uttos}.
 
-
-\subsubsection{Software - FreeRTOS}\hfill\\
+\subsection{Sistema operacional de tempo real - \textit{FreeRTOS}}\hfill\\
 
 \textit{FreeRTOS} é um \textit{kernel} de tempo real, 
 ou um sistema operacional de tempo real (\textit{Real-Time Operating System}) 
 para dispositivos embarcados. Foi desenvolvido para ser pequeno, simples e portável. 
 Seu \textit{kernel} é composto por apenas 3 arquivos em linguagem C. 
 O \textit{FreeRTOS} permite a fácil implementação de multitarefa preemptiva 
-ou não preemptiva com diversos níveis de prioridade de tarefas\cite{zhu2016understanding}.
+ou não preemptiva com diversos níveis de prioridade de 
+tarefas\cite{zhu2016understanding}.\hfill\\
 
+
+% ----------------------METODOLOGIA-----------------------------------
+\section{METODOLOGIA}\hfill\
+
+\subsection{MATERIAIS E MÉTODOS}\hfill\
+%Reseta o contador de subsection
+% \setcounter{section}{-1}\stepcounter{section}
+
+Serão utilizadas as seguintes ferramentas de \textit{software} na execução do projeto:
+
+\begin{itemize}
+\item \textit{FreeRTOS} - sistema operacional de tempo real
+\item \textit{Ceedling} - \textit{Build system} com \textit{framework} de testes \textit{Unity}
+\item \textit{GCC(x86)} e \textit{GCC(arm)}- compiladores para duas arquiteturas distintas
+\item \textit{VS Code} - editor de textos
+\item \textit{make} - ferramenta de \textit{Build system} para compilação
+\end{itemize}
+
+A metodologia utilizada para o desenvolvimento do projeto segue a técnica de \textit{TDD} descrita anteriormente. 
+
+
+Nas três etapas (\textit{Teste falha}, \textit{Teste passa}
+e \textit{Refatora}) serão utilizadas ferramentas e mecanismos de \textit{software} 
+para auxílio na implementação dos testes, execução e automatização de processos \hfill\
 
 % ----------------------DESENVOLVIMENTO-----------------------------------
 
-\section{DESENVOLVIMENTO}
+\subsection{DESENVOLVIMENTO}\hfill\\
 
 %Reseta o contador de subsections
 % \setcounter{section}{-1}\stepcounter{section}
@@ -316,8 +355,8 @@ simples\cite{martin2018clean}
 \cite{martin2002agile}
 \end{itemize}
 
-\subsection{Arquitetura de \textit{software} do sistema}\hfill\\
-Abaixo pode-se ver na Figura 02 os componentes de \textit{software} separados por nível de abstração:\hfill\\
+\subsubsection{Arquitetura de \textit{software} do sistema}\hfill\\
+Os componentes de \textit{software} separados por nível de abstração estão ilustrados na Figura 02.\hfill\\
 
 \begin{figure}[H]
     \centering
@@ -326,18 +365,18 @@ Abaixo pode-se ver na Figura 02 os componentes de \textit{software} separados po
     \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
-\subsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
+\subsubsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
 
 Um dos pilares do desenvolvimento de \textit{software} multiplataforma é a abstração.
 Utilizar interfaces bem definidas apartir de \textit{header files}, variando apenas
 a implementação dessas interfaces nos \textit{source files}.
 
-\subsection{Camadas de abstração - \textit{drivers} e \textit{RTOS}}\hfill\\
+\subsubsection{Camadas de abstração - \textit{drivers} e \textit{RTOS}}\hfill\\
 
 Para se escrever código portável é extremamente necessário a não dependência de 
 \textit{hardware}, \textit{RTOS - (Real Time Operating Systems)} e demais bibliotecas
 
-\subsection{Testes unitários}\hfill\\
+\subsubsection{Testes unitários}\hfill\\
 
 Para escrever testes unitários, é necessário a utilização de um \textit{framework}
 
