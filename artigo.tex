@@ -41,7 +41,8 @@ conceitos de Engenharia de software aplicados a sistemas embarcados.}}
 \end {abstract}
 
 \noindent\begin{keywords}
-\textit{\textbf{Palavras-chave: }}\normalfont{\textit{sitemas embarcados, firmware, TDD, testes unitários}}
+\textit{\textbf{Palavras-chave: }}\normalfont{\textit{sitemas embarcados, firmware, 
+TDD, testes unitários}}
 \end{keywords}
 
 \noindent\begin{abstract}
@@ -51,19 +52,12 @@ the implementation of unit tests and encourage the study of software engineering
 concepts applied to embedded systems.}}
 \end {abstract}
 \noindent\begin{keywords}
-\textit{\textbf{Keywords: }}\normalfont{\textit{embedded systems, firmware, TDD, unit tests}}
+\textit{\textbf{Keywords: }}\normalfont{\textit{embedded systems, firmware, TDD, unit 
+tests}}
 \end{keywords}
 %\hfill\
 
 % -------------------------------INTRODUÇÃO-----------------------------------------
-
-%Esses dispositivos por si só já somam a maioria dos sistemas computacionais do mundo \cite{eetimes}. 
-% Podemos chamar esses dispositivos de \textit{sistemas embarcados} (do inglês, embedded systems).
-
-%É importante frisar que o ambiente no qual um sistema embarcado vai ser utilizado é 
-% determinante não apenas para seu custo final, mas principalmente sua robustez e tolerância a falhas de hardware e software.
-
-%Bugs em sistemas embarcados costumam ser críticos, pois espera-se que o produto funcione por anos sem apresentar problemas.
 
 \section{INTRODUÇÃO }
 
@@ -102,13 +96,16 @@ Alguns títulos relevantes são: \textit{Test-Driven development for Embedded C}
 \textit{The Art of Designing Embedded Systems}\cite{ganssle2008art} e
 \textit{Reusable Firmware Development}\cite{beningo2017reusable}. 
 A partir dessas obras muito se tem discutido sobre como criar sistemas mais seguros, 
-com menor probabilidade de erros e menos suscetíveis a má utilização por parte do usuário.
+com menor probabilidade de erros e menos suscetíveis a má utilização por parte do 
+usuário.
 
 No processo de desenvolvimento de \textit{software}, o custo de uma alteração no 
 código tende a ficar maior conforme  as etapas do desenvolvimento avançam, por isso 
 o custo de um \textit{bug} encontrado em campo após o produto ser lançado, é muito 
-maior que o custo do mesmo sendo encontrado ainda na fase de desenvolvimento\cite{firmwarecost}.
-Esse cenário por si só já mostra a necessidade de se detectar problemas nas fases iniciais do projeto.
+maior que o custo do mesmo sendo encontrado ainda na fase de 
+desenvolvimento\cite{firmwarecost}.
+Esse cenário por si só já mostra a necessidade de se detectar problemas nas fases 
+iniciais do projeto.
 
 \textit{Software} para sistemas embarcados muitas vezes é difícil de ser testado e 
 validado, extremamente dependente da plataforma de \textit{hardware target}, e 
@@ -154,7 +151,8 @@ onde geralmente o \textit{kernel} do sistema operacional é modularizado e abstr
 o acesso a dispositivos de \textit{hardware}\cite{tanenbaum2015modern},
 num sistema embarcado o \textit{firmware} é responsável pela gerência dos recursos 
 e eventos de \textit{hardware} (interrupções e exceções do processador) e também
-pelo código da aplicação (regras de negócio, interface com usuário e demais especificidades).
+pelo código da aplicação (regras de negócio, interface com usuário e demais 
+especificidades).
 
 Muitas vezes ele faz parte de um sistema computacional maior,
 por exemplo, computadores \textit{desktop} possuem circuitos integrados para 
@@ -170,12 +168,13 @@ integrado comumente escrito em linguagem \textit{C, C++}, ou mesmo \textit{Assem
 Já o \textit{software embarcado} possui características de alta abstração, 
 sendo uma aplicação (um processo rodando num sistema operacional, 
 geralmente baseado em \textit{GNU/Linux})\cite{simmonds2015mastering} porém executado 
-em dispositivos de propósito específico (como roteadores e terminais de autoatendimento). 
-Pode ser escrito em linguagens de programação como \textit{C, C++, Rust, Go, Python} entre outras.
+em dispositivos de propósito específico (como roteadores e terminais de 
+autoatendimento). 
+Pode ser escrito em linguagens de programação como \textit{C, C++, Rust, Go, Python} 
+entre outras.
 
 Em um sistema embarcado executando um \textit{firmware}, o cérebro por trás de todo o 
 processamento é um componente chamado \textit{microcontrolador}.
-
 
 \subsection{Microcontroladores}\hfill\\
 
@@ -194,7 +193,31 @@ interface de pinos (\textit{GPIO}).
 
 Com tamanho e custo reduzidos em comparação ao microprocessadores,
 os microcontroladores tornam-se economicamente viáveis, além da
-escolha óbvia, para controlar digitalmente dispositivos e processos\cite{gridling2007introduction}.
+escolha óbvia, para controlar digitalmente dispositivos e 
+processos\cite{gridling2007introduction}.
+
+
+\subsection{Linguagem de programação - \textit{C}}\hfill\\
+
+\textit{C} é uma linguagem de programação procedural de propósito geral que 
+suporta programação estruturada, escopo de variável lexical e recursão, com um 
+sistema de tipo estático. Por design, \textit{C} fornece construções que mapeiam de 
+forma eficiente para instruções de máquina típicas. Dispõe de compiladores para a 
+maioria das arquiteturas de computador e sistemas operacionais 
+existentes.\cite{ritchie1993development}
+
+Devido a essas características, vem  sendo utilizada em aplicações previamente 
+codificados em linguagem \textit{assembly}. 
+Algumas dessas aplicações são: sistemas operacionais, compiladores,
+\textit{drivers} de dispositivos, bibliotecas com acesso a \textit{hardware} e 
+sistemas embarcados.
+
+Leva esse nome por ser sucessora da linguagem de programação \textit{B}.
+Foi desenvolvida no \textit{Bell Labs} por Dennis Ritchie entre 1972 e 1973 para 
+construir utilitários rodando em \textit{Unix}. 
+Em 1989 foi padronizada pelo \textit{ANSI} (\textit{ANSI C}) e pela 
+\textit{International Organization for Standardization (ISO)}.
+\cite{ritchie1993development}
 
 \subsection{Testes de \textit{software}}\hfill\\
 
@@ -210,7 +233,8 @@ grandes níveis:
 \begin{itemize}
 \item \textit{Testes end-to-end} - simulam a aplicação final
 \item \textit{Testes de integração} - testa a integração entre testes de unidade
-\item \textit{Testes unitários} - testes de unidade, verificam a menor unidade de código testável
+\item \textit{Testes unitários} - testes de unidade, verificam a menor unidade de 
+código testável
 \end{itemize}
 
 Apenas o último nível, os testes unitários, serão abordados nesse documento.
@@ -219,40 +243,43 @@ Apenas o último nível, os testes unitários, serão abordados nesse documento.
 
 Testes unitários são a base dos testes de \textit{software}. Na \textit{Pirâmide de 
 testes} encontram-se no nível mais baixo, o que indica que são 
-o tipo mais barato, mas também os mais fáceis de se 
-implementar\cite{contan2018test}.
+o tipo mais barato e fácil de implementar\cite{contan2018test}, 
+fazendo com que sejam os mais numerosos em relação aos demais tipos de teste.
 
 Como seu nome sugere, são testes de \textit{unidade}, onde é possível testar a 
 menor unidade testável do código (sejam funções, classes ou módulos).
 
 \subsection{\textit{TDD - Test-Driven development}}\hfill\\
 
-\textit{Test-Driven development} (ou \textit{Desenvolvimento orientado a testes}) é uma técnica
-incremental de construção de \textit{software}. 
+\textit{Test-Driven development} (ou \textit{Desenvolvimento orientado a testes}) é 
+uma técnica incremental de construção de \textit{software}. 
 Nessa técnica, nenhum código de produção é escrito sem que primeiro seja escrito um 
 teste unitário que falhe na primeira execução. 
 
-Ao contrário da prática comum de desenvolvimento de \textit{software}, onde primeiro é desenvolvido o
-código de produção e só depois os testes, no TDD
+Ao contrário da prática comum de desenvolvimento de \textit{software}, onde primeiro 
+é desenvolvido o código de produção e só depois os testes, no TDD
 o desenvolvedor expressa o comportamento desejado do código em um teste. 
-O teste é executado e falha. Só então ele escreve o código de produção, fazendo o teste passar.
-A automação de testes é a chave para o \textit{TDD}. Os testes são pequenos e automatizados.
+O teste é executado e falha. Só então ele escreve o código de produção, fazendo o 
+teste passar.
+A automação de testes é a chave para o \textit{TDD}. Os testes são pequenos e 
+automatizados.
 A cada nova funcionalidade implementada, novos testes unitários são escritos, 
 seguidos imediatamente por um código de produção que satisfaça aqueles testes. 
 
 Conforme o código de produção cresce, também crescem em conjunto os testes unitários, 
 que são ativos tão valiosos quanto o próprio código de produção. 
-A cada mudança de código, o conjunto de testes é executado, verificando a funcionalidade da nova
-implementação, mas também a compatibilidade com o código já existente\cite{tddembeddedc}.
+A cada mudança de código, o conjunto de testes é executado, verificando a 
+funcionalidade da nova implementação, mas também a compatibilidade com o código já 
+existente\cite{tddembeddedc}.
 
-
-Um esquema simplificado é apresentado na Figura 01:\hfill\
+Um esquema simplificado do \textit{TDD} é apresentado na Figura \ref{fig:tdd}:\hfill\
 
 \begin{figure}[H]
     \centering
     \caption{Esquema simplificado do TDD}
     \includegraphics[width=0.95\linewidth]{images/tdd.png}
     \caption*{\newline\textbf{Fonte:} acervo do autor}
+    \label{fig:tdd}
 \end{figure}
 
 Três grande etapas são necessárias: \textit{Teste falha}, \textit{Teste passa}
@@ -275,7 +302,7 @@ principalmente para \textit{software} em sistemas embarcados.
 
 Trabalha com o conceito de \textit{asserts}, que nada mais são que formas de se 
 garantir e verificar parâmetros (entrada) e resultados (saída) de funções no código 
-fonte.
+fonte.\cite{unity}
 
 
 \subsection{Ferramenta de dublês de testes - \textit{CMock}}\hfill\\
@@ -287,7 +314,7 @@ bibliotecas externas).
 Trabalha com os conceitos de \textit{mocks} e \textit{stubs}, 
 que nada mais são que funções \textit{fake}, criadas com o intuito de emular o 
 comportamento (entradas e saídas) de componentes do código que tenham alguma 
-dependência. 
+dependência.\cite{cmock}
 
 \subsection{\textit{Build system - Ceedling}}\hfill\\
 
@@ -312,11 +339,46 @@ O \textit{FreeRTOS} permite a fácil implementação de multitarefa preemptiva
 ou não preemptiva com diversos níveis de prioridade de 
 tarefas\cite{zhu2016understanding}.\hfill\\
 
+\subsection{\textit{Build system - GNU Make}}\hfill\\
+
+\textit{GNU Make} é um \textit{build system} (sistema de construção de 
+\textit{software}) que controla a geração de executáveis de um \textit{software}
+a partir dos arquivos de código fonte.
+
+A ferramenta \textit{Make} recebe as instruções de como construir o programa a partir 
+de um arquivo chamado \textit{makefile}, que lista cada um dos arquivos de código 
+fonte e os comandos para transformá-los em executáveis. 
+
+Ao escrever um programa, deve-se escrever um \textit{makefile} para ele, de modo 
+que seja possível usar o \textit{Make} para construção e execução do mesmo.
+\cite{gnumake}
+
+\subsection{Compilador - \textit{GCC}}\hfill\\
+
+O \textit{GNU Compiler Collection (GCC)} é um compilador de otimização produzido pelo 
+\textit{Projeto GNU} que oferece suporte a várias linguagens de programação, 
+arquiteturas de \textit{hardware} e sistemas operacionais. 
+
+A \textit{Free Software Foundation (FSF)} distribui o \textit{GCC} como 
+\textit{software livre} sob a licença \textit{GNU General Public License (GNU GPL)}.
+O \textit{GCC} é um componente chave da cadeia de ferramentas \textit{GNU} e o 
+compilador padrão para a maioria dos projetos relacionados ao \textit{GNU} e ao 
+\textit{kernel Linux}.\cite{gcc}
+
+
+\subsection{Editor de textos - \textit{Visual Studio Code}}\hfill\\
+
+O \textit{Visual Studio Code} é um editor de código-fonte \textit{freeware} feito 
+pela \textit{Microsoft} para \textit{Windows}, \textit{Linux} e \textit{macOS}. Os 
+recursos incluem suporte para depuração, destaque de sintaxe, autocompletar de código 
+inteligente, \textit{snippets}, refatoração de código e \textit{Git}
+incluso.\cite{vscode}
+
 
 % ----------------------METODOLOGIA-----------------------------------
-\section{METODOLOGIA}\hfill\
+\section{METODOLOGIA}
 
-\subsection{MATERIAIS E MÉTODOS}\hfill\
+\subsection{MATERIAIS E MÉTODOS}\hfill\\
 %Reseta o contador de subsection
 % \setcounter{section}{-1}\stepcounter{section}
 
@@ -324,14 +386,16 @@ Serão utilizadas as seguintes ferramentas de \textit{software} na execução do
 
 \begin{itemize}
 \item \textit{FreeRTOS} - sistema operacional de tempo real
-\item \textit{Ceedling} - \textit{Build system} com \textit{framework} de testes \textit{Unity}
-\item \textit{GCC(x86)} e \textit{GCC(arm)}- compiladores para duas arquiteturas distintas
+\item \textit{GNU make} - \textit{Build system} para compilação do código de produção
+\item \textit{GCC(x86)} e \textit{GCC(arm)}- compiladores para ambas arquiteturas
 \item \textit{VS Code} - editor de textos
-\item \textit{make} - ferramenta de \textit{Build system} para compilação
+\item \textit{Ceedling} - \textit{Build system} para compilação e execução dos testes
+\item \textit{Unity} - \textit{framework} de testes
+\item \textit{Cmock} - ferramenta de dublê de testes
 \end{itemize}
 
-A metodologia utilizada para o desenvolvimento do projeto segue a técnica de \textit{TDD} descrita anteriormente. 
-
+A metodologia utilizada para o desenvolvimento do projeto segue a técnica de 
+\textit{TDD} descrita anteriormente.
 
 Nas três etapas (\textit{Teste falha}, \textit{Teste passa}
 e \textit{Refatora}) serão utilizadas ferramentas e mecanismos de \textit{software} 
@@ -353,28 +417,171 @@ entendimento\cite{martin2009clean}
 simples\cite{martin2018clean}
 \item \textit{SOLID principles} - seguir os padrões do \textit{SOLID}
 \cite{martin2002agile}
+\item \textit{Boy Scout Principle} (Regra do escoteiro) - \textit{"Deixe o campo mais 
+limpo do que quando o encontrou"} - Sempre deixe o código melhor do antes de você 
+trabalhar nele\cite{martin2009clean}
+\item \textit{Refactoring} (Refatoração) - o código precisa ser refatorado e 
+aprimorado constatemente\cite{martin2009clean}
 \end{itemize}
 
 \subsubsection{Arquitetura de \textit{software} do sistema}\hfill\\
-Os componentes de \textit{software} separados por nível de abstração estão ilustrados na Figura 02.\hfill\\
+Os componentes de \textit{software} separados por nível de abstração estão ilustrados 
+na Figura \ref{fig:arch2}.\hfill\\
 
 \begin{figure}[H]
     \centering
     \caption{Arquitetura de software do projeto}
-    \includegraphics[width=0.7\linewidth]{images/arch.png}
+    \includegraphics[width=0.9\linewidth]{images/arch2.png}
     \caption*{\newline\textbf{Fonte:} acervo do autor}
+    \label{fig:arch2}
 \end{figure}
 
-\subsubsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
+A camada de \textit{Aplicação} faz uso dos \textit{Drivers} para controle dos 
+periféricos de \textit{harware}, utiliza o \textit{RTOS} para criar e gerenciar
+\textit{threads} e recursos compartilhados por elas e as \textit{Bibliotecas}
+fornecem alguma funcionalidade extra como \textit{file system} (sistema de arquivos)
+ou cálculo de \textit{PID (Proporcional - Integral -Derivativo)} por exemplo.
+
+\subsubsection{Camadas de abstração - \textit{drivers}, Bibliotecas e \textit{RTOS}}\hfill\\
 
 Um dos pilares do desenvolvimento de \textit{software} multiplataforma é a abstração.
-Utilizar interfaces bem definidas apartir de \textit{header files}, variando apenas
-a implementação dessas interfaces nos \textit{source files}.
-
-\subsubsection{Camadas de abstração - \textit{drivers} e \textit{RTOS}}\hfill\\
+Utilizar interfaces bem definidas apartir de \textit{header files} (arquivos de 
+extensão \textit{.h}), variando apenas a implementação dessas interfaces nos 
+\textit{source files} (arquivos de extensão \textit{.c}).
 
 Para se escrever código portável é extremamente necessário a não dependência de 
 \textit{hardware}, \textit{RTOS - (Real Time Operating Systems)} e demais bibliotecas
+
+A abordagem consiste em criar camadas de abstração que acessam as camadas de 
+\textit{Drivers}, \textit{RTOS} e \textit{Bibliotecas}, como pode ser visto na Figura 
+\ref{fig:arch-abs}:\hfill\\
+
+\begin{figure}[H]
+    \centering
+    \caption{Arquitetura de software com abstrações}
+    \includegraphics[width=0.9\linewidth]{images/arch-abs.png}
+    \caption*{\newline\textbf{Fonte:} acervo do autor}
+    \label{fig:arch-abs}
+\end{figure}
+
+
+Essas camadas são apenas funções que encapsulam as funções dos módulos originais, 
+fazendo com que o código da \textit{Aplicação} nunca realize uma chamada de função 
+diretamente a esses componentes, mas sim as suas abstrações.
+
+Imaginemos um exemplo de módulo dependente de \textit{hardware},
+responsável pelo acionamento de pinos de um microcontrolador. O módulo de 
+\textit{GPIO - General Purpose Input Output}. Esse módulo é um \textit{driver} e está 
+localizado na camada de mesmo nome:
+
+\begin{lstlisting}[language=C, caption=Interface do módulo de GPIO - gpio.h]
+#ifndef __GPIO_H__
+#define __GPIO_H__
+
+void gpio_config(int pin, int port);
+int gpio_read(int pin, int port);
+void gpio_write(int pin, int port, int level);
+
+#endif
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=C, caption=Implementação do módulo de GPIO - gpio.c]
+#include "gpio.h"
+
+void gpio_config(int pin, int port)
+{
+    //implementacao da funcao...
+}
+
+int gpio_read(int pin, int port)
+{
+    //implementacao da funcao...
+}
+
+void gpio_write(int pin, int port, int level)
+{
+    //implementacao da funcao...
+}
+\end{lstlisting}
+
+O módulo contém funções que dependem do \textit{hardware}, porém as mesmas não 
+devem ser chamadas diretamente pela aplicação, mas sim por uma abstração:
+
+\begin{lstlisting}[language=C, caption=Interface pública do módulo - gpio\_iface.h]
+#ifndef __GPIO_IFACE_H__
+#define __GPIO_IFACE_H__
+
+#include "gpio.h"
+
+void gpio_iface_config(int pin, int port);
+int gpio_iface_read(int pin, int port);
+void gpio_iface_write(int pin, int port, int level);
+
+#endif
+\end{lstlisting}
+
+
+\begin{lstlisting}[language=C, caption=Implementação da abstração para acesso ao 
+módulo de GPIO - gpio\_iface.c]
+#include "gpio_iface.h"
+
+void gpio_iface_config(int pin, int port)
+{
+    // Chama a funcao do modulo original
+    gpio_config(pin, port);
+}
+
+int gpio_iface_read(int pin, int port)
+{
+    // Chama a funcao do modulo original
+    return gpio_read(pin, port);
+}
+
+void gpio_iface_write(int pin, int port, int level)
+{
+    // Chama a funcao do modulo original
+    gpio_write(pin, port, level);
+}
+\end{lstlisting}
+
+
+A abstração do módulo, chamada de de \textit{gpio\_iface.c e gpio\_iface.h} 
+(\textit{iface} é uma abreviação para \textit{interface}) abstrai o 
+acesso, permitindo que seja feita a utilização de dublês de testes (\textit{mocks, 
+fakes e stubs}), visando a implementação de testes unitários.
+
+A aplicação final faz uso apenas do módulo de abstração:
+
+\begin{lstlisting}[language=C, caption=Camada de aplicação - main.c]
+#include <stdio.h>
+
+// Camada de aplicacao nao inclue o modulo
+// diretamente, mas sim sua abstracao
+#include "gpio_iface.h"
+
+int main(void)
+{
+    gpio_iface_config(13, GPIO_PORT_C);
+    
+    // Loop infinito
+    while (1) {
+        // Classico exemplo de pisca led
+        gpio_write(13, GPIO_PORT_C, 1);
+        delay_ms(500);
+        gpio_write(13, GPIO_PORT_C, 0);
+        delay_ms(500);
+    }
+    return 0;
+}
+\end{lstlisting}
+
+
+\subsubsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
+
+O processo de \textit{Dual-targeting} só é possível quando se consegue independência
+entre os módulos de software.
+
 
 \subsubsection{Testes unitários}\hfill\\
 
