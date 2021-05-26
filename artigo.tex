@@ -325,7 +325,7 @@ dependência.\cite{cmock}
 O \textit{Ceedling} é voltado principalmente para o 
 \textit{Desenvolvimento Orientado a Testes (TDD)} em linguagem C e reune o 
 \textit{framework} de testes \textit{Unity}, a ferramenta de dublês de testes 
-\textit{CMock} e a ferramenta de manipulação de exceção \textit{CException} - três 
+\textit{CMock} e a ferramenta de manipulação de exceções \textit{CException} - três 
 outros projetos de código aberto que auxiliam na dinâmica de testes 
 automatizados\cite{gomes2016uttos}.
 
@@ -437,7 +437,7 @@ na Figura \ref{fig:arch2}.\hfill\\
 \end{figure}
 
 A camada de \textit{Aplicação} faz uso dos \textit{Drivers} para controle dos 
-periféricos de \textit{harware}, utiliza o \textit{RTOS} para criar e gerenciar
+periféricos de \textit{hardware}, utiliza o \textit{RTOS} para criar e gerenciar
 \textit{threads} e recursos compartilhados por elas e as \textit{Bibliotecas}
 fornecem alguma funcionalidade extra como \textit{file system} (sistema de arquivos)
 ou cálculo de \textit{PID (Proporcional - Integral -Derivativo)} por exemplo.
@@ -445,16 +445,15 @@ ou cálculo de \textit{PID (Proporcional - Integral -Derivativo)} por exemplo.
 \subsubsection{Camadas de abstração - \textit{drivers}, Bibliotecas e \textit{RTOS}}\hfill\\
 
 Um dos pilares do desenvolvimento de \textit{software} multiplataforma é a abstração.
-Utilizar interfaces bem definidas apartir de \textit{header files} (arquivos de 
+Utilizar interfaces bem definidas a partir de \textit{header files} (arquivos de 
 extensão \textit{.h}), variando apenas a implementação dessas interfaces nos 
 \textit{source files} (arquivos de extensão \textit{.c}).
 
 Para se escrever código portável é extremamente necessário a não dependência de 
-\textit{hardware}, \textit{RTOS - (Real Time Operating Systems)} e demais bibliotecas
+\textit{Drivers}, \textit{RTOS - (Real Time Operating Systems)} e demais bibliotecas
 
-A abordagem consiste em criar camadas de abstração que acessam as camadas de 
-\textit{Drivers}, \textit{RTOS} e \textit{Bibliotecas}, como pode ser visto na Figura 
-\ref{fig:arch-abs}:\hfill\\
+A abordagem consiste em criar camadas de abstração que acessem essas camadas, como 
+pode ser visto na Figura \ref{fig:arch-abs}:\hfill\\
 
 \begin{figure}[H]
     \centering
@@ -478,9 +477,9 @@ localizado na camada de mesmo nome:
 #ifndef __GPIO_H__
 #define __GPIO_H__
 
-void gpio_config(int pin, int port);
-int gpio_read(int pin, int port);
-void gpio_write(int pin, int port, int level);
+void gpio_config(int port, int pin);
+int gpio_read(int port, int pin);
+void gpio_write(int port, int pin, int level);
 
 #endif
 \end{lstlisting}
@@ -489,19 +488,19 @@ void gpio_write(int pin, int port, int level);
 \begin{lstlisting}[language=C, caption=Implementação do módulo de GPIO - gpio.c]
 #include "gpio.h"
 
-void gpio_config(int pin, int port)
+void gpio_config(int port, int pin)
 {
-    //implementacao da funcao...
+    GPIO.port.CFG |= pin;
 }
 
-int gpio_read(int pin, int port)
+int gpio_read(int port, int pin)
 {
-    //implementacao da funcao...
+    return GPIO.port.RD.pin;
 }
 
-void gpio_write(int pin, int port, int level)
+void gpio_write(int port, int pin, int level)
 {
-    //implementacao da funcao...
+    GPIO.port.WR.pin = level;
 }
 \end{lstlisting}
 
@@ -514,10 +513,10 @@ devem ser chamadas diretamente pela aplicação, mas sim por uma abstração:
 
 #include "gpio.h"
 
-void gpio_iface_config(int pin, int port);
-int gpio_iface_read(int pin, int port);
-void gpio_iface_write(int pin, int port, int level);
-
+void gpio_iface_config(int port, int pin);
+int gpio_iface_read(int port, int pin);
+void gpio_iface_write(int port, int pin,
+                      int level);
 #endif
 \end{lstlisting}
 
@@ -526,22 +525,22 @@ void gpio_iface_write(int pin, int port, int level);
 módulo de GPIO - gpio\_iface.c]
 #include "gpio_iface.h"
 
-void gpio_iface_config(int pin, int port)
+void gpio_iface_config(int port, int pin)
 {
     // Chama a funcao do modulo original
-    gpio_config(pin, port);
+    gpio_config(port, pin);
 }
 
-int gpio_iface_read(int pin, int port)
+int gpio_iface_read(int port, int pin)
 {
     // Chama a funcao do modulo original
-    return gpio_read(pin, port);
+    return gpio_read(port, pin);
 }
 
-void gpio_iface_write(int pin, int port, int level)
+void gpio_iface_write(int port, int pin, int level)
 {
     // Chama a funcao do modulo original
-    gpio_write(pin, port, level);
+    gpio_write(port, pin, level);
 }
 \end{lstlisting}
 
@@ -555,26 +554,192 @@ A aplicação final faz uso apenas do módulo de abstração:
 
 \begin{lstlisting}[language=C, caption=Camada de aplicação - main.c]
 #include <stdio.h>
-
-// Camada de aplicacao nao inclue o modulo
+// Camada de aplicacao nao inclui o modulo
 // diretamente, mas sim sua abstracao
 #include "gpio_iface.h"
 
 int main(void)
 {
-    gpio_iface_config(13, GPIO_PORT_C);
+    gpio_iface_config(PORT_C, PIN_13);
     
     // Loop infinito
     while (1) {
         // Classico exemplo de pisca led
-        gpio_write(13, GPIO_PORT_C, 1);
+        gpio_iface_write(PORT_C, PIN_13, 1);
         delay_ms(500);
-        gpio_write(13, GPIO_PORT_C, 0);
+        gpio_iface_write(PORT_C, PIN_13, 0);
         delay_ms(500);
     }
     return 0;
 }
 \end{lstlisting}
+
+
+\subsubsection{Implementando testes unitários}\hfill\\
+
+A implementação de testes unitários, exige a utilização de um \textit{framework}
+de testes. Foi utilizado o \textit{Unity}, ferramenta já contida no \textit{Ceedling}. 
+Usando os comandos do próprio \textit{build system} para a criação
+do projeto, temos a seguinte linha de comando:
+
+\begin{lstlisting}[language=bash, caption=Criando um projeto com o \textit{Ceedling}]
+$ ceedling new projeto-exemplo
+\end{lstlisting}
+
+Uma estrutura de diretórios como a seguinte é criada:\hfill\
+
+\begin{forest}
+      for tree={
+        font=\ttfamily,
+        grow'=0,
+        child anchor=west,
+        parent anchor=south,
+        anchor=west,
+        calign=first,
+        inner xsep=7pt,
+        edge path={
+          \noexpand\path [draw, \forestoption{edge}]
+          (!u.south west) +(7.5pt,0) |- (.child anchor) pic {folder} \forestoption{edge label};
+        },
+        % style for your file node 
+        file/.style={edge path={\noexpand\path [draw, \forestoption{edge}]
+          (!u.south west) +(7.5pt,0) |- (.child anchor) \forestoption{edge label};},
+          inner xsep=2pt,font=\small\ttfamily
+                     },
+        before typesetting nodes={
+          if n=1
+            {insert before={[,phantom]}}
+            {}
+        },
+        fit=band,
+        before computing xy={l=15pt},
+      }
+[projeto-exemplo
+  [build]
+  [src]
+  [test]
+  [project.yml, file]
+]
+\end{forest}
+
+\begin{itemize}
+\item \textit{build} - contém os artefatos de \textit{software}, arquivos temporários 
+e executáveis
+\item \textit{src} - contém o código fonte da aplicação
+\item \textit{test} - contém o código fonte dos testes
+\item \textit{project.yml} - contém a configuração relativa ao projeto
+\end{itemize}
+
+Para criar o primeiro módulo, usamos \textit{ceedling module:create} passando o nome 
+do módulo como argumento:
+
+\begin{lstlisting}[language=bash, caption=Criando um modulo com o \textit{Ceedling}]
+$ ceedling module:create[gpio]
+\end{lstlisting}
+
+
+A ferramenta criará arquivos \textit{source} e \textit{header} em \textit{src} e um 
+arquivo de testes em \textit{test}:
+
+%\dirtree{%
+%.1 projeto-exemplo.
+%.2 build.
+%.3 gpio.c.
+%.3 gpio.h.
+%.2 src.
+%.2 test.
+%.3 test\_gpio.c.
+%.2 project.yml.
+%}
+
+\begin{forest}
+      for tree={
+        font=\ttfamily,
+        grow'=0,
+        child anchor=west,
+        parent anchor=south,
+        anchor=west,
+        calign=first,
+        inner xsep=7pt,
+        edge path={
+          \noexpand\path [draw, \forestoption{edge}]
+          (!u.south west) +(7.5pt,0) |- (.child anchor) pic {folder} \forestoption{edge label};
+        },
+        % style for your file node 
+        file/.style={edge path={\noexpand\path [draw, \forestoption{edge}]
+          (!u.south west) +(7.5pt,0) |- (.child anchor) \forestoption{edge label};},
+          inner xsep=2pt,font=\small\ttfamily
+                     },
+        before typesetting nodes={
+          if n=1
+            {insert before={[,phantom]}}
+            {}
+        },
+        fit=band,
+        before computing xy={l=15pt},
+      }
+[projeto-exemplo
+  [build]
+  [src
+    [gpio.c, file]
+    [gpio.h, file]
+  ]
+  [test
+    [test\_gpio.c, file]
+  ]
+  [project.yml, file]
+]
+\end{forest}
+
+
+No arquivo de testes, são criadas as funções, \textit{setUp()} e 
+\textit{tearDown()} e adicionado o \textit{header file unity.h}:
+
+\begin{lstlisting}[language=C, caption=Arquivo de testes inicial]
+#include "unity.h"
+#include "gpio.h"
+
+void setUp(void)
+{
+}
+
+void tearDown(void)
+{
+}
+
+void test_gpio_NeedToImplement(void)
+{
+    TEST_IGNORE_MESSAGE(
+        "Need to Implement gpio");
+}
+\end{lstlisting}
+
+Utilizando as abstrações demonstradas anteriormente, os primeiros testes podem ser 
+implementados:
+
+\begin{lstlisting}[language=C, caption=Arquivo de testes]
+#include "unity.h"
+#include "gpio.h"
+
+void setUp(void)
+{
+}
+
+void tearDown(void)
+{
+}
+
+void test_gpio(void)
+{
+    TEST_ASSERT_EQUAL(0, 
+        gpio_iface_read(PORT_C, PIN_13));
+}
+\end{lstlisting}
+
+\subsubsection{Utilizando dublês de teste}\hfill\\
+
+O processo de \textit{Dual-targeting} só é possível quando se consegue independência
+entre os módulos de software.
 
 
 \subsubsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
@@ -583,9 +748,7 @@ O processo de \textit{Dual-targeting} só é possível quando se consegue indepe
 entre os módulos de software.
 
 
-\subsubsection{Testes unitários}\hfill\\
 
-Para escrever testes unitários, é necessário a utilização de um \textit{framework}
 
 % ----------------------CONCLUSÃO-----------------------------------
 
