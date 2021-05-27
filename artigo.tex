@@ -144,7 +144,7 @@ embarcado\cite{ganssle2004firmware}.
 
 Devido a limitações de tamanho e recursos desse tipo de sistema, 
 o \textit{firmware} precisa manipular o \textit{hardware} diretamente e toda a sua
- arquitetura costuma ser voltada a eventos do mundo externo.
+arquitetura costuma ser voltada a eventos do mundo externo.
 
 Diferente de sistemas computacionais mais complexos e com alto nível de abstração,
 onde geralmente o \textit{kernel} do sistema operacional é modularizado e abstrai
@@ -577,7 +577,7 @@ int main(void)
 
 \subsubsection{Implementando testes unitários}\hfill\\
 
-A implementação de testes unitários, exige a utilização de um \textit{framework}
+A implementação de testes unitários exige a utilização de um \textit{framework}
 de testes. Foi utilizado o \textit{Unity}, ferramenta já contida no \textit{Ceedling}. 
 Usando os comandos do próprio \textit{build system} para a criação
 do projeto, temos a seguinte linha de comando:
@@ -586,7 +586,7 @@ do projeto, temos a seguinte linha de comando:
 $ ceedling new projeto-exemplo
 \end{lstlisting}
 
-Uma estrutura de diretórios como a seguinte é criada:\hfill\
+Uma estrutura de diretórios semelhante a mostrada abaixo é criada:\hfill\
 
 \begin{forest}
       for tree={
@@ -633,7 +633,7 @@ e executáveis
 Para criar o primeiro módulo, usamos \textit{ceedling module:create} passando o nome 
 do módulo como argumento:
 
-\begin{lstlisting}[language=bash, caption=Criando um modulo com o \textit{Ceedling}]
+\begin{lstlisting}[language=bash, caption=Criando um módulo com o \textit{Ceedling}]
 $ ceedling module:create[gpio]
 \end{lstlisting}
 
@@ -717,7 +717,7 @@ void test_gpio_NeedToImplement(void)
 Utilizando as abstrações demonstradas anteriormente, os primeiros testes podem ser 
 implementados:
 
-\begin{lstlisting}[language=C, caption=Arquivo de testes]
+\begin{lstlisting}[language=C, caption=Arquivo de testes com um teste simples]
 #include "unity.h"
 #include "gpio.h"
 
@@ -738,9 +738,77 @@ void test_gpio(void)
 
 \subsubsection{Utilizando dublês de teste}\hfill\\
 
-O processo de \textit{Dual-targeting} só é possível quando se consegue independência
-entre os módulos de software.
+Dublês de teste são utilizados nos casos em que há dependência de algum componente 
+externo e o módulo precisa ser testado. O \textit{driver} de \textit{GPIO} é um 
+exemplo de dependência de \textit{hardware}, nesse caso, é interessante o uso 
+de dublês de teste. A ferramenta responsável pela geração desses dublês é o 
+\textit{Cmock}.
 
+\begin{lstlisting}[language=C, caption=Arquivo de testes com mock]
+#include "unity.h"
+#include "mock_gpio.h"
+
+void setUp(void)
+{
+}
+
+void tearDown(void)
+{
+}
+
+// Callback utilizada ser chamada pelo Cmock
+int gpio_iface_read_callback(int cmock_num_calls)
+{
+    return 1;
+}
+
+void test_gpio(void)
+{
+    // Registrando a callback
+    gpio_iface_read_StubWithCallback(
+        gpio_iface_read_callback);
+        
+    TEST_ASSERT_EQUAL(0, 
+        gpio_iface_read(PORT_C, PIN_13));
+}
+\end{lstlisting}
+
+
+No código anterior uma função de \textit{callback} é definida e registrada no 
+\textit{Cmock}, de modo que toda vez que a função original for chamada,
+\textit{gpio\_iface\_read()}, a ferramenta redireciona a chamada para 
+\textit{gpio\_iface\_read\_callback()}. Para isso é necessário apenas incluir 
+o \textit{header file} com o prefixo \textit{mock\_}: \textit{mock\_gpio.h}.
+
+O argumento \textit{cmock\_num\_calls} na \textit{callback} é uma obrigatoriedade
+da ferramenta, para que haja o controle do número de chamadas realizadas a 
+\textit{callback}.
+
+
+\begin{lstlisting}[language=bash, caption=Rodando o primeiro teste com \textit{Ceedling}]
+$ ceedling test:all
+Test 'test_gpio.c'
+------------------------------
+Generating include list for gpio.h...
+Creating mock for gpio...
+Generating runner for test_gpio.c...
+Compiling test_gpio_runner.c...
+Compiling test_gpio.c...
+Compiling mock_gpio.c...
+Compiling unity.c...
+Compiling gpio.c...
+Compiling cmock.c...
+Linking gpio.out...
+Running gpio.out...
+
+--------------------
+OVERALL TEST SUMMARY
+--------------------
+TESTED:  1
+PASSED:  1
+FAILED:  0
+IGNORED: 0
+\end{lstlisting}
 
 \subsubsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
 
