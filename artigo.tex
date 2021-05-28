@@ -454,7 +454,7 @@ Para se escrever código portável é extremamente necessário a não dependênc
 \textit{Drivers}, \textit{RTOS - (Real Time Operating Systems)} e demais bibliotecas
 
 A abordagem consiste em criar camadas de abstração que acessem essas camadas, como
-pode ser visto na Figura \ref{fig:arch-abs}:\hfill\\
+pode ser visto na Figura \ref{fig:arch-abs}: \hfill\\
 
 \begin{figure}[H]
   \centering
@@ -471,9 +471,13 @@ diretamente a esses componentes, mas sim as suas abstrações.
 Imaginemos um exemplo de módulo dependente de \textit{hardware},
 responsável pelo acionamento de pinos de um microcontrolador. O módulo de
 \textit{GPIO - General Purpose Input Output}. Esse módulo é um \textit{driver} e está
-localizado na camada de mesmo nome:
+localizado na camada de mesmo nome, sua interface e implementação estão representadas
+nas Figuras \ref{fig:gpio.h} e \ref{fig:gpio.c}:\hfill\\
 
-\begin{lstlisting}[language=C, caption=Interface do módulo de GPIO - gpio.h]
+\begin{figure}[H]
+  \centering
+  \caption{Interface do módulo de GPIO - \textit{gpio.h}}
+\begin{lstlisting}[language=C]
 #ifndef __GPIO_H__
 #define __GPIO_H__
 
@@ -483,35 +487,49 @@ void gpio_write(int port, int pin, int level);
 
 #endif
 \end{lstlisting}
+  \label{fig:gpio.h}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
 
 
-\begin{lstlisting}[language=C, caption=Implementação do módulo de GPIO - gpio.c]
+\begin{figure}[H]
+  \centering
+  \caption{Implementação do módulo de GPIO - \textit{gpio.c}}
+\begin{lstlisting}[language=C]
 #include "gpio.h"
 
 void gpio_config(int port, int pin)
 {
+    // Acesso a registradores de hardware
     GPIO.port.CFG |= pin;
 }
 
 int gpio_read(int port, int pin)
 {
+    // Acesso a registradores de hardware
     return GPIO.port.RD.pin;
 }
 
 void gpio_write(int port, int pin, int level)
 {
+    // Acesso a registradores de hardware
     GPIO.port.WR.pin = level;
 }
 \end{lstlisting}
+  \label{fig:gpio.c}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
 
 O módulo contém funções que dependem do \textit{hardware}, porém as mesmas não
-devem ser chamadas diretamente pela aplicação, mas sim por uma abstração:
+devem ser chamadas diretamente pela aplicação, mas sim por uma camada de abstração
+mostrada nas Figuras \ref{fig:gpio_iface.h} e \ref{fig:gpio_iface.c}:\hfill\\
 
-\begin{lstlisting}[language=C, caption=Interface pública do módulo - gpio\_iface.h]
+\begin{figure}[H]
+  \centering
+  \caption{Interface pública do módulo - \textit{gpio\_iface.h}}
+\begin{lstlisting}[language=C]
 #ifndef __GPIO_IFACE_H__
 #define __GPIO_IFACE_H__
-
-#include "gpio.h"
 
 void gpio_iface_config(int port, int pin);
 int gpio_iface_read(int port, int pin);
@@ -519,37 +537,54 @@ void gpio_iface_write(int port, int pin,
                       int level);
 #endif
 \end{lstlisting}
+  \label{fig:gpio_iface.h}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
 
-
-\begin{lstlisting}[language=C, caption=Implementação da abstração para acesso ao 
-módulo de GPIO - gpio\_iface.c]
+\begin{figure}[H]
+  \centering
+  \caption{Implementação da abstração para acesso ao módulo de GPIO
+\textit{gpio\_iface.c}}
+\begin{lstlisting}[language=C]
 #include "gpio_iface.h"
+
+// Inclui header do modulo original
+#include "gpio.h"
 
 void gpio_iface_config(int port, int pin)
 {
+    // Chama funcao do modulo original
     gpio_config(port, pin);
 }
 
 int gpio_iface_read(int port, int pin)
 {
+    // Chama funcao do modulo original
     return gpio_read(port, pin);
 }
 
 void gpio_iface_write(int port, int pin, int level)
 {
+    // Chama funcao do modulo original
     gpio_write(port, pin, level);
 }
 \end{lstlisting}
-
+  \label{fig:gpio_iface.c}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
 
 A abstração do módulo, chamada de de \textit{gpio\_iface.c e gpio\_iface.h}
 (\textit{iface} é uma abreviação para \textit{interface}) abstrai o
 acesso, permitindo que seja feita a utilização de dublês de testes (\textit{mocks,
   fakes e stubs}), visando a implementação de testes unitários.
 
-A aplicação final faz uso apenas do módulo de abstração:
+A aplicação final faz uso apenas do módulo de abstração, como apresentado na Figura 
+\ref{fig:main.c}:\hfill\\
 
-\begin{lstlisting}[language=C, caption=Camada de aplicação - main.c]
+\begin{figure}[H]
+  \centering
+  \caption{Camada de aplicação - \textit{main.c}}
+\begin{lstlisting}[language=C, caption=]
 #include <stdio.h>
 // Camada de aplicacao nao inclui o modulo
 // diretamente, mas sim sua abstracao
@@ -570,21 +605,34 @@ int main(void)
     return 0;
 }
 \end{lstlisting}
-
+  \label{fig:main.c}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
 
 \subsubsection{Implementando testes unitários}\hfill\\
 
 A implementação de testes unitários exige a utilização de um \textit{framework}
 de testes. Foi utilizado o \textit{Unity}, ferramenta já contida no \textit{Ceedling}.
 Usando os comandos do próprio \textit{build system} para a criação
-do projeto, temos a seguinte linha de comando:
+do projeto, temos a seguinte linha de comando apresentada na 
+Figura \ref{fig:ceedling-new}:\hfill\\
 
-\begin{lstlisting}[language=bash, caption=Criando um projeto com o \textit{Ceedling}]
+\begin{figure}[H]
+  \centering
+  \caption{Criando um projeto com o \textit{Ceedling}}
+\begin{lstlisting}[language=bash]
 $ ceedling new projeto-exemplo
 \end{lstlisting}
+  \label{fig:ceedling-new}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
 
-Uma estrutura de diretórios semelhante a mostrada abaixo é criada:\hfill\
+Uma estrutura de diretórios semelhante a mostrada na Figura \ref{fig:ceedling-new-dir}
+é criada:\hfill\\
 
+\begin{figure}[H]
+  \centering
+  \caption{Estrutura de diretórios criada pelo \textit{Ceedling}}
 \begin{forest}
   for tree={
   font=\ttfamily,
@@ -618,6 +666,9 @@ Uma estrutura de diretórios semelhante a mostrada abaixo é criada:\hfill\
   [project.yml, file]
   ]
 \end{forest}
+  \label{fig:ceedling-new-dir}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
 
 \begin{itemize}
   \item \textit{build} - contém os artefatos de \textit{software}, arquivos temporários
@@ -628,27 +679,25 @@ Uma estrutura de diretórios semelhante a mostrada abaixo é criada:\hfill\
 \end{itemize}
 
 Para criar o primeiro módulo, usamos \textit{ceedling module:create} passando o nome
-do módulo como argumento:
+do módulo como argumento segundo mostra a Figura \ref{fig:ceedling-module}:
 
-\begin{lstlisting}[language=bash, caption=Criando um módulo com o \textit{Ceedling}]
+\begin{figure}[H]
+  \centering
+  \caption{Criando um módulo com o \textit{Ceedling}}
+\begin{lstlisting}[language=bash]
 $ ceedling module:create[gpio]
 \end{lstlisting}
-
+  \label{fig:ceedling-module}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
 
 A ferramenta criará arquivos \textit{source} e \textit{header} em \textit{src} e um
-arquivo de testes em \textit{test}:
+arquivo de testes em \textit{test} como mostrado na Figura \ref{fig:ceedling-dir}:
+\hfill\\
 
-%\dirtree{%
-%.1 projeto-exemplo.
-%.2 build.
-%.3 gpio.c.
-%.3 gpio.h.
-%.2 src.
-%.2 test.
-%.3 test\_gpio.c.
-%.2 project.yml.
-%}
-
+\begin{figure}[H]
+  \centering
+  \caption{Estrutura de diretórios com arquivos criados}
 \begin{forest}
   for tree={
   font=\ttfamily,
@@ -687,12 +736,18 @@ arquivo de testes em \textit{test}:
   [project.yml, file]
   ]
 \end{forest}
-
+  \label{fig:ceedling-dir}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
 
 No arquivo de testes, são criadas as funções, \textit{setUp()} e
-\textit{tearDown()} e adicionado o \textit{header file unity.h}:
+\textit{tearDown()} e adicionado o \textit{header file unity.h}, como 
+mostra a Figura \ref{fig:tests-init}:\hfill\\
 
-\begin{lstlisting}[language=C, caption=Arquivo de testes inicial]
+\begin{figure}[H]
+  \centering
+  \caption{Arquivo de testes inicial - \textit{test\_gpio.c}}
+\begin{lstlisting}[language=C]
 #include "unity.h"
 #include "gpio.h"
 
@@ -710,11 +765,17 @@ void test_gpio_NeedToImplement(void)
         "Need to Implement gpio");
 }
 \end{lstlisting}
+  \label{fig:tests-init}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
 
 Utilizando as abstrações demonstradas anteriormente, os primeiros testes podem ser
-implementados:
+implementados, como demonstrado na Figura \ref{fig:simple-test}:\hfill\\
 
-\begin{lstlisting}[language=C, caption=Arquivo de testes com um teste simples]
+\begin{figure}[H]
+  \centering
+  \caption{Arquivo de testes com um teste simples  - \textit{test\_gpio.c}}
+\begin{lstlisting}[language=C]
 #include "unity.h"
 #include "gpio.h"
 
@@ -732,6 +793,9 @@ void test_gpio(void)
         gpio_iface_read(PORT_C, PIN_13));
 }
 \end{lstlisting}
+  \label{fig:simple-test}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
 
 \subsubsection{Utilizando dublês de teste}\hfill\\
 
@@ -739,9 +803,13 @@ Dublês de teste são utilizados nos casos em que há dependência de algum comp
 externo e o módulo precisa ser testado. O \textit{driver} de \textit{GPIO} é um
 exemplo de dependência de \textit{hardware}, nesse caso, é interessante o uso
 de dublês de teste. A ferramenta responsável pela geração desses dublês é o
-\textit{Cmock}.
+\textit{Cmock}. A Figura \ref{fig:mock-test} mostra um simples exemplo de utilização:
+\hfill\\
 
-\begin{lstlisting}[language=C, caption=Arquivo de testes com mock]
+\begin{figure}[H]
+  \centering
+  \caption{Arquivo de testes com mock - \textit{test\_gpio.c}}
+\begin{lstlisting}[language=C]
 #include "unity.h"
 #include "mock_gpio.h"
 
@@ -753,7 +821,7 @@ void tearDown(void)
 {
 }
 
-// Callback utilizada ser chamada pelo Cmock
+// Callback chamada pelo Cmock
 int gpio_iface_read_callback(int cmock_num_calls)
 {
     return 1;
@@ -769,7 +837,9 @@ void test_gpio(void)
         gpio_iface_read(PORT_C, PIN_13));
 }
 \end{lstlisting}
-
+  \label{fig:mock-test}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
 
 No código anterior uma função de \textit{callback} é definida e registrada no
 \textit{Cmock}, de modo que toda vez que a função original for chamada,
@@ -781,8 +851,13 @@ O argumento \textit{cmock\_num\_calls} na \textit{callback} é uma obrigatorieda
 da ferramenta, para que haja o controle do número de chamadas realizadas a
 \textit{callback}.
 
+A Figura \ref{fig:ceedling-output} mostra a saída do comando resultado da execução
+de todos os testes:\hfill\\
 
-\begin{lstlisting}[language=bash, caption=Rodando o primeiro teste com \textit{Ceedling}]
+\begin{figure}[H]
+  \centering
+  \caption{Rodando o primeiro teste com \textit{Ceedling}}
+\begin{lstlisting}[language=bash]
 $ ceedling test:all
 Test 'test_gpio.c'
 ------------------------------
@@ -806,6 +881,9 @@ PASSED:  1
 FAILED:  0
 IGNORED: 0
 \end{lstlisting}
+  \label{fig:ceedling-output}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
 
 \subsubsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
 
