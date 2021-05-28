@@ -171,7 +171,9 @@
 \def\bottomfraction{.1}
 \setcounter{totalnumber}{4}
 \def\textfraction{.1}
+
 \setlength{\belowcaptionskip}{-10pt} % reduces spacing between figure legend and text
+\setlength{\abovecaptionskip}{-1pt} % reduces spacing between figure legend and text
 
 \renewcommand{\topfraction}{0.99}
 \renewcommand{\floatpagefraction}{0.5}
