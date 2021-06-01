@@ -272,7 +272,7 @@ A cada mudança de código, o conjunto de testes é executado, verificando a
 funcionalidade da nova implementação, mas também a compatibilidade com o código já
 existente\cite{tddembeddedc}.
 
-Um esquema simplificado do \textit{TDD} é apresentado na Figura \ref{fig:tdd}:\hfill\
+Um esquema simplificado do \textit{TDD} é apresentado na Figura \ref{fig:tdd}.\hfill\
 
 \begin{figure}[H]
   \centering
@@ -468,11 +468,11 @@ Essas camadas são apenas funções que encapsulam as funções dos módulos ori
 fazendo com que o código da \textit{Aplicação} nunca realize uma chamada de função
 diretamente a esses componentes, mas sim as suas abstrações.
 
-Imaginemos um exemplo de módulo dependente de \textit{hardware},
+Um exemplo de módulo dependente de \textit{hardware},
 responsável pelo acionamento de pinos de um microcontrolador. O módulo de
-\textit{GPIO - General Purpose Input Output}. Esse módulo é um \textit{driver} e está
+\textit{GPIO - General Purpose Input Output}. Este módulo é um \textit{driver} e está
 localizado na camada de mesmo nome, sua interface e implementação estão representadas
-nas Figuras \ref{fig:gpio.h} e \ref{fig:gpio.c}:\hfill\\
+nas Figuras \ref{fig:gpio.h} e \ref{fig:gpio.c}.\hfill\\
 
 \begin{figure}[H]
   \centering
@@ -522,7 +522,7 @@ void gpio_write(int port, int pin, int level)
 
 O módulo contém funções que dependem do \textit{hardware}, porém as mesmas não
 devem ser chamadas diretamente pela aplicação, mas sim por uma camada de abstração
-mostrada nas Figuras \ref{fig:gpio_iface.h} e \ref{fig:gpio_iface.c}:\hfill\\
+mostrada nas Figuras \ref{fig:gpio_iface.h} e \ref{fig:gpio_iface.c}.\hfill\\
 
 \begin{figure}[H]
   \centering
@@ -614,8 +614,8 @@ int main(void)
 A implementação de testes unitários exige a utilização de um \textit{framework}
 de testes. Foi utilizado o \textit{Unity}, ferramenta já contida no \textit{Ceedling}.
 Usando os comandos do próprio \textit{build system} para a criação
-do projeto, temos a seguinte linha de comando apresentada na 
-Figura \ref{fig:ceedling-new}:\hfill\\
+do projeto, tem-se a seguinte linha de comando apresentada na 
+Figura \ref{fig:ceedling-new}.\hfill\\
 
 \begin{figure}[H]
   \centering
@@ -627,8 +627,7 @@ $ ceedling new projeto-exemplo
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
-Uma estrutura de diretórios semelhante a mostrada na Figura \ref{fig:ceedling-new-dir}
-é criada:\hfill\\
+Foi criada uma estrutura de diretórios semelhante a mostrada na Figura \ref{fig:ceedling-new-dir}. \hfill\\
 
 \begin{figure}[H]
   \centering
@@ -678,7 +677,7 @@ Uma estrutura de diretórios semelhante a mostrada na Figura \ref{fig:ceedling-n
   \item \textit{project.yml} - contém a configuração relativa ao projeto
 \end{itemize}
 
-Para criar o primeiro módulo, usamos \textit{ceedling module:create} passando o nome
+Para criar o primeiro módulo, utilizou-se \textit{ceedling module:create} passando o nome
 do módulo como argumento segundo mostra a Figura \ref{fig:ceedling-module}:
 
 \begin{figure}[H]
