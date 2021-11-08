@@ -424,6 +424,41 @@ juntamente com algumas regras e boas práticas:
         aprimorado constatemente\cite{martin2009clean}
 \end{itemize}
 
+\subsubsection{Definindo a aplicação e suas funcionalidades}\hfill\\
+
+A aplicação escolhida para demonstração das técnicas trata-se de uma interface
+gráfica para geração de números verdadeiramente aleatórios (\textit{TRNG - True 
+Random Number Generator}).
+
+Essa interface gráfica será executada em dois ambientes diferentes: embarcado e 
+\textit{desktop}. As funcionalidades, interfaces de aplicação (\textit{API - 
+application programming interface}) e visual serão exatamente os mesmos, variando-se
+apenas as implementações e código dependente de plataforma. 
+
+Haverão duas abas disponíveis para o usuário, a primeira, chamada de \textit{Mass 
+storage}, permitirá que seja salvo um arquivo no sistema de arquivos de 
+tamanho e nomes a serem escolhidos pelo usuário. Essa aba conterá uma caixa de texto 
+para receber o nome do arquivo, um \textit{spinbox} para se definir o tamanho do 
+arquivo, e um botão de salvar.
+
+A segunda aba chamada de \textit{Random}, permitirá que o usuário escolha um limite
+mínimo e máximo, e ao clicar em \textit{Get random}, irá obter um número aleatório
+dentro desse limite anteriomente definido.
+
+\subsubsection{Definindo os casos de teste}\hfill\\
+
+A prática do \textit{TDD} exige que os requisitos de um \textit{software}
+estejam muito bem definidos desde o início para que se possa começar a escrever 
+os testes, por isso recomenda-se que se defina uma lista de testes como a seguinte:
+
+\begin{itemize}
+\item Checar sanidade do RNG (dados não devem se repetir com frequência)
+\item Checar tamanho do nome do arquivo (deve respeitar o limite do sistema de arquivos)
+\item Checar se o arquivo foi realmente criado
+\item Checar se os limites de mínimo e máixmo são respeitados (mínimo deve ser menor que máixmo)
+\item Checar se o numero dado realmente está no range exigido
+\end{itemize}
+
 \subsubsection{Arquitetura de \textit{software} do sistema}\hfill\\
 
 Os componentes de \textit{software} separados por nível de abstração estão ilustrados
@@ -468,112 +503,114 @@ Essas camadas são apenas funções que encapsulam as funções dos módulos ori
 fazendo com que o código da \textit{Aplicação} nunca realize uma chamada de função
 diretamente a esses componentes, mas sim as suas abstrações.
 
-Um exemplo de módulo dependente de \textit{hardware},
-responsável pelo acionamento de pinos de um microcontrolador. O módulo de
-\textit{GPIO - General Purpose Input Output}. Este módulo é um \textit{driver} e está
-localizado na camada de mesmo nome, sua interface e implementação estão representadas
-nas Figuras \ref{fig:gpio.h} e \ref{fig:gpio.c}.\hfill\\
+A prática da escrita de código dessa maneira é chamada de \textit{Dual-targeting}.
+
+\subsubsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
+
+O processo de \textit{Dual-targeting} exige independência
+entre os módulos de \textit{software} e principalmente da arquitetura de 
+\textit{hardware}.
+Escrever \textit{software} embarcado independente de arquitetura exige claro
+entendimento dos limites entre o código da aplicação e demais códigos (bibliotecas, 
+\textit{drivers}).
+
+\subsubsection{Abstraindo um módulo com dependência}\hfill\\
+
+Um módulo dependente de \textit{hardware}, responsável pelo aquisição de amostras
+de números verdadeiramente aleatórias, módulo de \textit{RNG - Random Number 
+Generator}.
+Este módulo é um \textit{driver} e está localizado na camada de mesmo nome, sua 
+interface e implementação estão representadas
+nas Figuras \ref{fig:rng.h} e \ref{fig:rng.c}.\hfill\
 
 \begin{figure}[H]
   \centering
-  \caption{Interface do módulo de GPIO - \textit{gpio.h}}
+  \caption{Interface do módulo de RNG - \textit{rng.h}}
 \begin{lstlisting}[language=C]
-#ifndef __GPIO_H__
-#define __GPIO_H__
+#ifndef __RNG_H__
+#define __RNG_H__
 
-void gpio_config(int port, int pin);
-int gpio_read(int port, int pin);
-void gpio_write(int port, int pin, int level);
+void rng_init(rng_config_st *rng);
+uint8_t rng_get(rng_config_st *rng);
 
 #endif
 \end{lstlisting}
-  \label{fig:gpio.h}
+  \label{fig:rng.h}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
 
 \begin{figure}[H]
   \centering
-  \caption{Implementação do módulo de GPIO - \textit{gpio.c}}
+  \caption{Implementação do módulo de RNG - \textit{rng.c}}
 \begin{lstlisting}[language=C]
-#include "gpio.h"
+#include "rng.h"
 
-void gpio_config(int port, int pin)
+void rng_init(rng_config_st *rng)
 {
     // Acesso a registradores de hardware
-    GPIO.port.CFG |= pin;
+    RNG->periph.cfg_st = rng;
 }
 
-int gpio_read(int port, int pin)
+uint8_t rng_get(rng_config_st *rng))
 {
     // Acesso a registradores de hardware
-    return GPIO.port.RD.pin;
+    return RNG->periph.data;
 }
 
-void gpio_write(int port, int pin, int level)
-{
-    // Acesso a registradores de hardware
-    GPIO.port.WR.pin = level;
-}
 \end{lstlisting}
-  \label{fig:gpio.c}
+  \label{fig:rng.c}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
 O módulo contém funções que dependem do \textit{hardware}, porém as mesmas não
 devem ser chamadas diretamente pela aplicação, mas sim por uma camada de abstração
-mostrada nas Figuras \ref{fig:gpio_iface.h} e \ref{fig:gpio_iface.c}.\hfill\\
+mostrada nas Figuras \ref{fig:rng_iface.h} e \ref{fig:rng_iface.c}.\hfill\\
 
 \begin{figure}[H]
   \centering
-  \caption{Interface pública do módulo - \textit{gpio\_iface.h}}
+  \caption{Interface pública do módulo - \textit{rng\_iface.h}}
 \begin{lstlisting}[language=C]
-#ifndef __GPIO_IFACE_H__
-#define __GPIO_IFACE_H__
+#ifndef __RNG_IFACE_H__
+#define __RNG_IFACE_H__
 
-void gpio_iface_config(int port, int pin);
-int gpio_iface_read(int port, int pin);
-void gpio_iface_write(int port, int pin,
-                      int level);
+void rng_iface_init(rng_config_st *rng);
+uint8_t rng_iface_get(rng_config_st *rng);
+
 #endif
 \end{lstlisting}
-  \label{fig:gpio_iface.h}
+  \label{fig:rng_iface.h}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \caption{Implementação da abstração para acesso ao módulo de GPIO
-\textit{gpio\_iface.c}}
+  \caption{Implementação da abstração para acesso ao módulo de RNG
+\textit{rng\_iface.c}}
 \begin{lstlisting}[language=C]
-#include "gpio_iface.h"
+#include "rng_iface.h"
 
 // Inclui header do modulo original
-#include "gpio.h"
+#include "rng.h"
 
-void gpio_iface_config(int port, int pin)
+void rng_iface_init(rng_config_st *rng)
 {
     // Chama funcao do modulo original
-    gpio_config(port, pin);
+    rng_init(rng);
 }
 
-int gpio_iface_read(int port, int pin)
+uint8_t rng_iface_get(rng_config_st *rng)
 {
     // Chama funcao do modulo original
-    return gpio_read(port, pin);
+    return rng_get(rng);
 }
 
-void gpio_iface_write(int port, int pin, int level)
-{
-    // Chama funcao do modulo original
-    gpio_write(port, pin, level);
-}
 \end{lstlisting}
-  \label{fig:gpio_iface.c}
+  \label{fig:rng_iface.c}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
-A abstração do módulo, chamada de \textit{gpio\_iface.c e gpio\_iface.h}
+A abstração do módulo, chamada de \textit{rng\_iface.c e rng\_iface.h}
 (\textit{iface} é uma abreviação para \textit{interface}) abstrai o
 acesso, permitindo que seja feita a utilização de dublês de testes (\textit{mocks,
   fakes e stubs}), visando a implementação de testes unitários.
@@ -588,20 +625,22 @@ A aplicação final faz uso apenas do módulo de abstração, como apresentado n
 #include <stdio.h>
 // Camada de aplicacao nao inclui o modulo
 // diretamente, mas sim sua abstracao
-#include "gpio_iface.h"
+#include "rng_iface.h"
+#define RNG_SAMPLES 32
 
 int main(void)
-{
-    gpio_iface_config(PORT_C, PIN_13);
+{	
+	rng_config_st rng;
+	rng_iface_init(&rng);
+	uint8_t rng_buffer[RNG_SAMPLES];
     
-    // Loop infinito
-    while (1) {
-        // Classico exemplo de pisca led
-        gpio_iface_write(PORT_C, PIN_13, 1);
-        delay_ms(500);
-        gpio_iface_write(PORT_C, PIN_13, 0);
-        delay_ms(500);
-    }
+	// Loop infinito
+	while (1) {
+	// Obtem 32 amostras de RNG
+		for (int i = 0; i < RNG_SAMPLES; i++) {
+			rng_buffer[i] = rng_iface_get(&rng);
+		}
+	}
     return 0;
 }
 \end{lstlisting}
@@ -684,7 +723,7 @@ do módulo como argumento segundo mostra a Figura \ref{fig:ceedling-module}:
   \centering
   \caption{Criando um módulo com o \textit{Ceedling}}
 \begin{lstlisting}[language=bash]
-$ ceedling module:create[gpio]
+$ ceedling module:create[rng]
 \end{lstlisting}
   \label{fig:ceedling-module}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
@@ -726,11 +765,11 @@ arquivo de testes em \textit{test} como mostrado na Figura \ref{fig:ceedling-dir
   [projeto-exemplo
   [build]
   [src
-    [gpio.c, file]
-    [gpio.h, file]
+    [rng.c, file]
+    [rng.h, file]
   ]
   [test
-    [test\_gpio.c, file]
+    [test\_rng.c, file]
   ]
   [project.yml, file]
   ]
@@ -745,10 +784,10 @@ mostra a Figura \ref{fig:tests-init}:\hfill\\
 
 \begin{figure}[H]
   \centering
-  \caption{Arquivo de testes inicial - \textit{test\_gpio.c}}
+  \caption{Arquivo de testes inicial - \textit{test\_rng.c}}
 \begin{lstlisting}[language=C]
 #include "unity.h"
-#include "gpio.h"
+#include "rng.h"
 
 void setUp(void)
 {
@@ -758,10 +797,9 @@ void tearDown(void)
 {
 }
 
-void test_gpio_NeedToImplement(void)
+void test_rng_NeedToImplement(void)
 {
-    TEST_IGNORE_MESSAGE(
-        "Need to Implement gpio");
+	TEST_IGNORE_MESSAGE("Need to Implement rng");
 }
 \end{lstlisting}
   \label{fig:tests-init}
@@ -773,23 +811,26 @@ implementados, como demonstrado na Figura \ref{fig:simple-test}:\hfill\\
 
 \begin{figure}[H]
   \centering
-  \caption{Arquivo de testes com um teste simples  - \textit{test\_gpio.c}}
+  \caption{Arquivo de testes com um teste simples  - \textit{test\_rng.c}}
 \begin{lstlisting}[language=C]
 #include "unity.h"
-#include "gpio.h"
+#include "rng.h"
 
 void setUp(void)
 {
+	rng_config_st rng;
+	rng_iface_init(&rng);	
 }
 
 void tearDown(void)
 {
 }
 
-void test_gpio(void)
-{
-    TEST_ASSERT_EQUAL(0, 
-        gpio_iface_read(PORT_C, PIN_13));
+void test_rng(void)
+{	
+	uint8_t rng_buffer;
+	rng_buffer = rng_iface_get();
+	TEST_ASSERT_NOT_EQUAL(0, rng_buffer);
 }
 \end{lstlisting}
   \label{fig:simple-test}
@@ -799,7 +840,7 @@ void test_gpio(void)
 \subsubsection{Utilizando dublês de teste}\hfill\\
 
 Dublês de teste são utilizados nos casos em que há dependência de algum componente
-externo e o módulo precisa ser testado. O \textit{driver} de \textit{GPIO} é um
+externo e o módulo precisa ser testado. O \textit{driver} de \textit{RNG} é um
 exemplo de dependência de \textit{hardware}, nesse caso, é interessante o uso
 de dublês de teste. A ferramenta responsável pela geração desses dublês é o
 \textit{Cmock}. A Figura \ref{fig:mock-test} mostra um simples exemplo de utilização:
@@ -807,33 +848,28 @@ de dublês de teste. A ferramenta responsável pela geração desses dublês é 
 
 \begin{figure}[H]
   \centering
-  \caption{Arquivo de testes com mock - \textit{test\_gpio.c}}
+  \caption{Arquivo de testes com mock - \textit{test\_rng.c}}
 \begin{lstlisting}[language=C]
 #include "unity.h"
-#include "mock_gpio.h"
-
-void setUp(void)
-{
-}
-
-void tearDown(void)
-{
-}
+#include "mock_rng.h"
+#include <stdlib.h>
 
 // Callback chamada pelo Cmock
-int gpio_iface_read_callback(int cmock_num_calls)
+int rng_iface_get_callback(int cmock_num_calls)
 {
-    return 1;
+	// Usa funao rand() da linguagem C
+	return rand();
 }
 
-void test_gpio(void)
+void test_rng(void)
 {
-    // Registrando a callback
-    gpio_iface_read_StubWithCallback(
-        gpio_iface_read_callback);
-        
-    TEST_ASSERT_EQUAL(0, 
-        gpio_iface_read(PORT_C, PIN_13));
+	uint8_t rng_buffer;
+
+	// Registrando a callback
+	rng_iface_get_StubWithCallback(rng_iface_get_callback);
+       
+	rng_buffer = rng_iface_get();
+	TEST_ASSERT_NOT_EQUAL(0, rng_buffer);
 }
 \end{lstlisting}
   \label{fig:mock-test}
@@ -842,9 +878,9 @@ void test_gpio(void)
 
 No código anterior uma função de \textit{callback} é definida e registrada no
 \textit{Cmock}, de modo que toda vez que a função original for chamada,
-\textit{gpio\_iface\_read()}, a ferramenta redireciona a chamada para
-\textit{gpio\_iface\_read\_callback()}. Para isso é necessário apenas incluir
-o \textit{header file} com o prefixo \textit{mock\_}: \textit{mock\_gpio.h}.
+\textit{rng\_iface\_read()}, a ferramenta redireciona a chamada para
+\textit{rng~\_iface\_read\_callback()}. Para isso é necessário apenas incluir
+o \textit{header file} com o prefixo \textit{mock\_}: \textit{mock\_rng.h}.
 
 O argumento \textit{cmock\_num\_calls} na \textit{callback} é uma obrigatoriedade
 da ferramenta, para que haja o controle do número de chamadas realizadas a
@@ -858,19 +894,19 @@ de todos os testes:\hfill\\
   \caption{Rodando o primeiro teste com \textit{Ceedling}}
 \begin{lstlisting}[language=bash]
 $ ceedling test:all
-Test 'test_gpio.c'
+Test 'test_rng.c'
 ------------------------------
-Generating include list for gpio.h...
-Creating mock for gpio...
-Generating runner for test_gpio.c...
-Compiling test_gpio_runner.c...
-Compiling test_gpio.c...
-Compiling mock_gpio.c...
+Generating include list for rng.h...
+Creating mock for rng...
+Generating runner for test_rng.c...
+Compiling test_rng_runner.c...
+Compiling test_rng.c...
+Compiling mock_rng.c...
 Compiling unity.c...
-Compiling gpio.c...
+Compiling rng.c...
 Compiling cmock.c...
-Linking gpio.out...
-Running gpio.out...
+Linking rng.out...
+Running rng.out...
 
 --------------------
 OVERALL TEST SUMMARY
@@ -884,12 +920,13 @@ IGNORED: 0
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
-\subsubsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
-
-O processo de \textit{Dual-targeting} só é possível quando se consegue independência
-entre os módulos de software.
+\subsubsection{Executando a aplicação em ambiente desktop}\hfill\\
 
 
+\subsubsection{Executando a aplicação em ambiente embarcado}\hfill\\
+
+
+\subsubsection{Code coverage - cobertura de código dos testes}\hfill\\
 
 
 % ----------------------CONCLUSÃO-----------------------------------
