@@ -37,7 +37,8 @@
 \textit{Resumo -} \normalfont{\textit{Este artigo apresenta técnicas e ferramentas
     para o desenvolvimento de firmware robusto e multiplataforma, com o intuito de
     minimizar bugs, permitir a implementação de testes unitários e incentivar o estudo de
-    conceitos de Engenharia de software aplicados a sistemas embarcados.}}
+    conceitos de Engenharia de software aplicados a sistemas embarcados.
+    É utilizada uma aplicação de exemplo, uma interface gráfica para requisição de amostras de números verdadeiramente aleatórios (TRNG - True Random Number Generator), capaz de rodar em ambiente desktop e embarcado.}}
 \end {abstract}
 
 \noindent\begin{keywords}
@@ -49,7 +50,8 @@
 \textit{Abstract - } \normalfont{\textit{This article presents techniques and tools
     for robust and multiplatform firmware development, in order to minimize bugs, allow
     the implementation of unit tests and encourage the study of software engineering
-    concepts applied to embedded systems.}}
+    concepts applied to embedded systems.
+    An example application is used, a graphical interface for requesting samples of truly random numbers (TRNG - True Random Number Generator), capable of running in both desktop and embedded environments.}}
 \end {abstract}
 \noindent\begin{keywords}
   \textit{\textbf{Keywords: }}\normalfont{\textit{embedded systems, firmware, TDD, unit
@@ -374,6 +376,28 @@ recursos incluem suporte para depuração, destaque de sintaxe, autocompletar de
 inteligente, \textit{snippets}, refatoração de código e \textit{Git}
 incluso.\cite{vscode}
 
+\subsection{\textit{TRNG - True Random Number Generator}}\hfill\\
+
+Um gerador de números verdadeiramente aleatórios, ou \textit{TRNG - True Random 
+Number Generator} é um circuito capaz de gerar números aleatórios através
+de algum processo físico ao invés dos métodos convencionais de uso de algoritmos
+para o mesmo fim.
+Alguns dos possíveis fenômenos físicos que podem ser utilizados por uma \textit{TRNG}
+são:
+
+\begin{itemize}
+  \item Ruído térmico
+  \item Ruído analógico
+  \item Fenômeno fotoelétrico
+  \item Fenômeno quântico
+\end{itemize}
+
+O objetivo geração de números verdadeiramente aleatórios remete ao uso da 
+criptografia, como geração de chaves criptográficas.
+
+Em microcontroladores que possuem periféricos avançados, os \textit{TRNG} são 
+implementados em silício, num circuito que utiliza os ruídos analógicos de 
+alimentação e temperatura.\cite{vasyltsov2008fast}
 
 % ----------------------METODOLOGIA-----------------------------------
 \section{METODOLOGIA}
@@ -433,7 +457,7 @@ Random Number Generator}).
 Essa interface gráfica será executada em dois ambientes diferentes: embarcado e 
 \textit{desktop}. As funcionalidades, interfaces de aplicação (\textit{API - 
 application programming interface}) e visual serão exatamente os mesmos, variando-se
-apenas as implementações e código dependente de plataforma. 
+apenas as implementações de código dependente de plataforma. 
 
 Haverão duas abas disponíveis para o usuário, a primeira, chamada de \textit{Mass 
 storage}, permitirá que seja salvo um arquivo no sistema de arquivos de 
@@ -443,20 +467,29 @@ arquivo, e um botão de salvar.
 
 A segunda aba chamada de \textit{Random}, permitirá que o usuário escolha um limite
 mínimo e máximo, e ao clicar em \textit{Get random}, irá obter um número aleatório
-dentro desse limite anteriomente definido.
+dentro desse limite anteriomente definido. Essa aba conterá dois \textit{spinbox}
+para escolha dos valores mínimo e máximo, e uma \textit{label} para mostrar o 
+resultado.
 
 \subsubsection{Definindo os casos de teste}\hfill\\
 
 A prática do \textit{TDD} exige que os requisitos de um \textit{software}
 estejam muito bem definidos desde o início para que se possa começar a escrever 
-os testes, por isso recomenda-se que se defina uma lista de testes como a seguinte:
+os testes, por isso é necessário que se defina uma lista de testes.
+
+Testes na aba \textit{Mass storage}:
 
 \begin{itemize}
-\item Checar sanidade do RNG (dados não devem se repetir com frequência)
+\item Checar a sanidade do \textit{RNG} (dados não devem se repetir com frequência)
 \item Checar tamanho do nome do arquivo (deve respeitar o limite do sistema de arquivos)
 \item Checar se o arquivo foi realmente criado
-\item Checar se os limites de mínimo e máixmo são respeitados (mínimo deve ser menor que máixmo)
-\item Checar se o numero dado realmente está no range exigido
+\end{itemize}
+
+Testes na aba \textit{Random}:
+
+\begin{itemize}
+\item Checar se os limites mínimo e máximo são respeitados (mínimo deve ser menor que máximo)
+\item Checar se o resultado dado realmente está no intervalo definido
 \end{itemize}
 
 \subsubsection{Arquitetura de \textit{software} do sistema}\hfill\\
@@ -501,9 +534,7 @@ pode ser visto na Figura \ref{fig:arch-abs}: \hfill\\
 
 Essas camadas são apenas funções que encapsulam as funções dos módulos originais,
 fazendo com que o código da \textit{Aplicação} nunca realize uma chamada de função
-diretamente a esses componentes, mas sim as suas abstrações.
-
-A prática da escrita de código dessa maneira é chamada de \textit{Dual-targeting}.
+diretamente a esses componentes, mas sim as suas abstrações. A prática da escrita de código dessa maneira é chamada de \textit{Dual-targeting}.
 
 \subsubsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
 
@@ -636,7 +667,7 @@ int main(void)
     
 	// Loop infinito
 	while (1) {
-	// Obtem 32 amostras de RNG
+		// Obtem 32 amostras de RNG
 		for (int i = 0; i < RNG_SAMPLES; i++) {
 			rng_buffer[i] = rng_iface_get(&rng);
 		}
@@ -919,6 +950,10 @@ IGNORED: 0
   \label{fig:ceedling-output}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
+
+\subsubsection{Desenvolvendo interface gráfica}\hfill\\
+
+O processo de desenvolvimento da interface gráfica 
 
 \subsubsection{Executando a aplicação em ambiente desktop}\hfill\\
 
