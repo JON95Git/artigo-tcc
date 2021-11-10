@@ -376,6 +376,15 @@ recursos incluem suporte para depuração, destaque de sintaxe, autocompletar de
 inteligente, \textit{snippets}, refatoração de código e \textit{Git}
 incluso.\cite{vscode}
 
+\subsection{Biblioteca gráfica - \textit{LVGL}}\hfill\\
+
+\textit{LVGL} é um biblioteca gráfica \textit{open source} para desenvolvimento
+de interfaces gráficas em sistemas embarcados. Escrita em linguagem C, pode ser usada 
+em microcontroladores ou microprocessadores. 
+A bilioteca dispõe de um simulador para desenvolvimento da interface sem 
+a necessidade do \textit{hardware} dedicado, permitindo a execução de código em
+ambiente \textit{desktop}.\cite{lvgl}
+
 \subsection{\textit{TRNG - True Random Number Generator}}\hfill\\
 
 Um gerador de números verdadeiramente aleatórios, ou \textit{TRNG - True Random 
@@ -951,12 +960,47 @@ IGNORED: 0
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
-\subsubsection{Desenvolvendo interface gráfica}\hfill\\
+\subsubsection{Desenvolvendo a interface gráfica}\hfill\\
 
-O processo de desenvolvimento da interface gráfica 
+O processo de desenvolvimento da interface gráfica foi realizado utilizando a 
+biblioteca \textit{LVGL} e sua funcionalidade de simulador. Dessa forma, todo o 
+\textit{design} da aplicação foi criado de forma independente de \textit{hardware},
+reforçando a prática de \textit{dual-targeting}.
+
+Por questões técnicas, a interface gráfica exige que seja feita uma atualização
+síncrona a cada 5 ms (milisegundos), o que impossibilita a implementação de testes 
+unitários.
+
+Devido a essa limitação, a aplicação gráfica foi definida e implementada antes da 
+lógica de negócio da aplicação completa.
+
+As abas anteriormente definidas, \textit{Mass storage} e \textit{Random} são 
+mostradas a seguir. A primeira aba é mostrada na Figura 
+\ref{fig:mass-storage}.\hfill\
+
+\begin{figure}[H]
+  \centering
+  \caption{Aba \textit{Mass storage}}
+  \includegraphics[width=0.95\linewidth]{images/mass-storage-screen.png}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+  \label{fig:mass-storage}
+\end{figure}
+
+A segunda aba é mostrada na Figura \ref{fig:random}.\hfill\
+
+\begin{figure}[H]
+  \centering
+  \caption{Aba \textit{Random}}
+  \includegraphics[width=0.95\linewidth]{images/random-screen.png}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+  \label{fig:random}
+\end{figure}
 
 \subsubsection{Executando a aplicação em ambiente desktop}\hfill\\
 
+Executar a aplicação apartir do simulador da biblioteca gráfica permite que sejam
+utilizadas as abstrações para sistema de arquivos e \textit{RNG} criadas 
+anteriormente.
 
 \subsubsection{Executando a aplicação em ambiente embarcado}\hfill\\
 
