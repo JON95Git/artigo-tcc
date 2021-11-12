@@ -285,7 +285,7 @@ Um esquema simplificado do \textit{TDD} é apresentado na Figura \ref{fig:tdd}.\
   \label{fig:tdd}
 \end{figure}
 
-Três grande etapas são necessárias: \textit{Teste falha}, \textit{Teste passa}
+Três grandes etapas são necessárias: \textit{Teste falha}, \textit{Teste passa}
 e \textit{Refatora}. Na primeira, são escritos apenas os testes unitários, com base
 nos requisitos do projeto, porém sem nenhum código de produção ainda, o que
 obviamente fará com que os testes falhem após a execução.
@@ -561,7 +561,7 @@ entendimento dos limites entre o código da aplicação e demais códigos (bibli
 \subsubsection{Abstraindo um módulo com dependência}\hfill\\
 
 O módulo de \textit{RNG} responsável pelo aquisição de amostras de números 
-verdadeiramente aleatórios, é dependente da implementação de driver,
+verdadeiramente aleatórios, é dependente da implementação de \textit{driver},
 portantto, é dependente de \textit{hardware}, 
 Este módulo é um \textit{driver} e está localizado na camada de mesmo nome, sua 
 interface e implementação estão representadas
@@ -569,7 +569,7 @@ nas Figuras \ref{fig:rng.h} e \ref{fig:rng.c}.\hfill\
 
 \begin{figure}[H]
   \centering
-  \caption{Interface do módulo de RNG - \textit{rng.h}}
+  \caption{Interface do módulo de \textit{RNG} - \textit{rng.h}}
 \begin{lstlisting}[language=C]
 #ifndef __RNG_H__
 #define __RNG_H__
@@ -586,7 +586,7 @@ uint8_t rng_get(rng_config_st *rng);
 
 \begin{figure}[H]
   \centering
-  \caption{Implementação do módulo de RNG - \textit{rng.c}}
+  \caption{Implementação do módulo de \textit{RNG} - \textit{rng.c}}
 \begin{lstlisting}[language=C]
 #include "rng.h"
 
@@ -609,55 +609,54 @@ uint8_t rng_get(rng_config_st *rng))
 
 O módulo contém funções que dependem do \textit{hardware}, porém as mesmas não
 devem ser chamadas diretamente pela aplicação, mas sim por uma camada de abstração
-mostrada nas Figuras \ref{fig:rng_iface.h} e \ref{fig:rng_iface.c}.\hfill\\
+mostrada nas Figuras \ref{fig:rng_user.h} e \ref{fig:rng_user.c}.\hfill\\
 
 \begin{figure}[H]
   \centering
-  \caption{Interface pública do módulo - \textit{rng\_iface.h}}
+  \caption{Interface pública do módulo - \textit{rng\_user.h}}
 \begin{lstlisting}[language=C]
-#ifndef __RNG_IFACE_H__
-#define __RNG_IFACE_H__
+#ifndef __RNG_USER_H__
+#define __RNG_USER_H__
 
-void rng_iface_init(rng_config_st *rng);
-uint8_t rng_iface_get(rng_config_st *rng);
+void rng_user_init(rng_config_st *rng);
+uint8_t rng_user_get(rng_config_st *rng);
 
 #endif
 \end{lstlisting}
-  \label{fig:rng_iface.h}
+  \label{fig:rng_user.h}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \caption{Implementação da abstração para acesso ao módulo de RNG
-\textit{rng\_iface.c}}
+  \caption{Implementação da abstração para acesso ao módulo de \textit{RNG}
+\textit{rng\_user.c}}
 \begin{lstlisting}[language=C]
-#include "rng_iface.h"
+#include "rng_user.h"
 
 // Inclui header do modulo original
 #include "rng.h"
 
-void rng_iface_init(rng_config_st *rng)
+void rng_user_init(rng_config_st *rng)
 {
     // Chama funcao do modulo original
     rng_init(rng);
 }
 
-uint8_t rng_iface_get(rng_config_st *rng)
+uint8_t rng_user_get(rng_config_st *rng)
 {
     // Chama funcao do modulo original
     return rng_get(rng);
 }
 
 \end{lstlisting}
-  \label{fig:rng_iface.c}
+  \label{fig:rng_user.c}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
-A abstração do módulo, chamada de \textit{rng\_iface.c e rng\_iface.h}
-(\textit{iface} é uma abreviação para \textit{interface}) abstrai o
+A abstração do módulo, chamada de \textit{rng\_user.c e rng\_user.h} abstrai o
 acesso, permitindo que seja feita a utilização de dublês de testes (\textit{mocks,
-  fakes e stubs}), visando a implementação de testes unitários.
+fakes e stubs}), visando a implementação de testes unitários.
 
 A aplicação final faz uso apenas do módulo de abstração, como apresentado na Figura 
 \ref{fig:main.c}:\hfill\\
@@ -669,20 +668,20 @@ A aplicação final faz uso apenas do módulo de abstração, como apresentado n
 #include <stdio.h>
 // Camada de aplicacao nao inclui o modulo
 // diretamente, mas sim sua abstracao
-#include "rng_iface.h"
+#include "rng_user.h"
 #define RNG_SAMPLES 32
 
 int main(void)
 {	
 	rng_config_st rng;
-	rng_iface_init(&rng);
+	rng_user_init(&rng);
 	uint8_t rng_buffer[RNG_SAMPLES];
     
 	// Loop infinito
 	while (1) {
 		// Obtem 32 amostras de RNG
 		for (int i = 0; i < RNG_SAMPLES; i++) {
-			rng_buffer[i] = rng_iface_get(&rng);
+			rng_buffer[i] = rng_user_get(&rng);
 		}
 	}
     return 0;
@@ -866,7 +865,7 @@ implementados, como demonstrado na Figura \ref{fig:simple-test}:\hfill\\
 void setUp(void)
 {
 	rng_config_st rng;
-	rng_iface_init(&rng);	
+	rng_user_init(&rng);	
 }
 
 void tearDown(void)
@@ -876,7 +875,7 @@ void tearDown(void)
 void test_rng(void)
 {	
 	uint8_t rng_buffer;
-	rng_buffer = rng_iface_get();
+	rng_buffer = rng_user_get();
 	TEST_ASSERT_NOT_EQUAL(0, rng_buffer);
 }
 \end{lstlisting}
@@ -895,14 +894,14 @@ de dublês de teste. A ferramenta responsável pela geração desses dublês é 
 
 \begin{figure}[H]
   \centering
-  \caption{Arquivo de testes com mock - \textit{test\_rng.c}}
+  \caption{Arquivo de testes com mock - \textit{test\_rng\_user.c}}
 \begin{lstlisting}[language=C]
 #include "unity.h"
-#include "mock_rng.h"
+#include "mock_rng_user.h"
 #include <stdlib.h>
 
 // Callback chamada pelo Cmock
-int rng_iface_get_callback(int cmock_num_calls)
+int rng_user_get_callback(int cmock_num_calls)
 {
 	// Usa funao rand() da linguagem C
 	return rand();
@@ -913,9 +912,9 @@ void test_rng(void)
 	uint8_t rng_buffer;
 
 	// Registrando a callback
-	rng_iface_get_StubWithCallback(rng_iface_get_callback);
+	rng_user_get_StubWithCallback(rng_user_get_callback);
        
-	rng_buffer = rng_iface_get();
+	rng_buffer = rng_user_get();
 	TEST_ASSERT_NOT_EQUAL(0, rng_buffer);
 }
 \end{lstlisting}
@@ -925,35 +924,35 @@ void test_rng(void)
 
 No código anterior uma função de \textit{callback} é definida e registrada no
 \textit{Cmock}, de modo que toda vez que a função original for chamada,
-\textit{rng\_iface\_read()}, a ferramenta redireciona a chamada para
-\textit{rng~\_iface\_read\_callback()}. Para isso é necessário apenas incluir
-o \textit{header file} com o prefixo \textit{mock\_}: \textit{mock\_rng.h}.
+\textit{rng\_user\_read()}, a ferramenta redireciona a chamada para
+\textit{rng\_user\_read\_callback()}. Para isso é necessário apenas incluir
+o \textit{header file} com o prefixo \textit{mock\_}: \textit{mock\_rng\_user.h}.
 
 O argumento \textit{cmock\_num\_calls} na \textit{callback} é uma obrigatoriedade
 da ferramenta, para que haja o controle do número de chamadas realizadas a
 \textit{callback}.
 
 A Figura \ref{fig:ceedling-output} mostra a saída do comando resultado da execução
-de todos os testes:\hfill\\
+do teste de \textit{RNG}:\hfill\\
 
 \begin{figure}[H]
   \centering
   \caption{Rodando o primeiro teste com \textit{Ceedling}}
 \begin{lstlisting}[language=bash]
-$ ceedling test:all
-Test 'test_rng.c'
+$ ceedling test:rng_user
+Test 'test_rng_user.c'
 ------------------------------
-Generating include list for rng.h...
-Creating mock for rng...
-Generating runner for test_rng.c...
-Compiling test_rng_runner.c...
-Compiling test_rng.c...
-Compiling mock_rng.c...
+Generating include list for rng_user.h...
+Creating mock for rng_user...
+Generating runner for test_rng_user.c...
+Compiling test_rng_user_runner.c...
+Compiling test_rng_user.c...
+Compiling mock_rng_user.c...
 Compiling unity.c...
-Compiling rng.c...
+Compiling rng_user.c...
 Compiling cmock.c...
-Linking rng.out...
-Running rng.out...
+Linking rng_user.out...
+Running rng_user.out...
 
 --------------------
 OVERALL TEST SUMMARY
@@ -997,6 +996,7 @@ A segunda aba é mostrada na Figura \ref{fig:random}.\hfill\
 
 \begin{figure}[H]
   \centering
+  
   \caption{Aba \textit{Random}}
   \includegraphics[width=0.95\linewidth]{images/random-screen.png}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
@@ -1009,15 +1009,85 @@ Executar a aplicação apartir do simulador da biblioteca gráfica permite que s
 utilizadas as abstrações para sistema de arquivos e \textit{RNG} criadas 
 anteriormente.
 
+A lógica da aplicação pode ser testada e validada no \textit{host} antes de ser
+testada no \textit{target}.
+
+A saída da execução dos testes unitários pode ser vista na 
+Figura \ref{fig:ceedling-output-all}.\hfill\
+
+\begin{figure}[H]
+  \centering
+  \caption{Rodando todos os testes}
+\begin{lstlisting}[language=bash]
+$ ceedling test:all
+Test 'test_app.c'
+-----------------
+Running test_app.out...
+
+
+Test 'test_portable.c'
+----------------------
+Compiling test_portable.c...
+Linking test_portable.out...
+Running test_portable.out...
+
+
+Test 'test_rng_user.c'
+----------------------
+Compiling test_rng_user_runner.c...
+Compiling test_rng_user.c...
+Linking test_rng_user.out...
+Running test_rng_user.out...
+
+--------------------
+OVERALL TEST SUMMARY
+--------------------
+TESTED:  12
+PASSED:  12
+FAILED:   0
+IGNORED:  0
+\end{lstlisting}
+  \label{fig:ceedling-output-all}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
+
 \subsubsection{Executando a aplicação em ambiente embarcado}\hfill\\
 
+Nesse ponto, a aplicação, sua lógica e suas partes independentes de plataforma já 
+foram testadas e validadas, restando apenas testar as especificidades do
+\textit{target}, como detalhes de implementação de \textit{drivers}, arquitetura
+do processador e execução das \textit{threads} do \textit{RTOS}.
+
+A execução da primeira aba no \textit{target} é mostrada na 
+Figura \ref{fig:random}.\hfill\
+
+\begin{figure}[H]
+  \centering
+  \caption{Aba \textit{Mass storage}}
+  \includegraphics[width=0.95\linewidth]{images/mass-storage-screen-embedded.jpg}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+  \label{fig:mass-storage-embedded}
+\end{figure}
+
+A segunda aba é mostrada na Figura \ref{fig:random-embedded}.\hfill\
+
+\begin{figure}[H]
+  \centering
+  
+  \caption{Aba \textit{Random}}
+  \includegraphics[width=0.95\linewidth]{images/random-screen-embedded.jpg}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+  \label{fig:random-embedded}
+\end{figure}
 
 \subsubsection{\textit{Code coverage} - cobertura de código dos testes}\hfill\\
 
 O \textit{framework} de testes utilizado possui uma ferramenta de verificação 
 de cobertura de código dos testes (\textit{code coverage}). A ferramenta permite 
 avaliar quais trechos de código foram de fato submetidos aos testes ou não.
-Essa é uma das métricas disponíveis para se avaliar a cobertura de código.
+Essa é uma das métricas disponíveis para se avaliar a efetividade dos testes de 
+código.
+
 Na Figura \ref{fig:code-coverage} são exibidos os dados de cobertura de código 
 dos módulos. \hfill\\
 
@@ -1035,12 +1105,16 @@ dos módulos. \hfill\\
 Conclui-se que a utilização das técnicas apresentadas permite um processo de
 desenvolvimento de \textit{firmware} eficiente (pois todas as funcionalidades são
 previamente pensadas), portável e testável, além de considerável redução de tempo de
-\textit{debug}.
+\textit{debug} pois o código é submetido a testes periodicamente.
 
-A constante prática do \textit{TDD} alinhada a utilização de boas práticas
+A constante utilização do \textit{TDD} alinhada as boas práticas de programação
 como \textit{Clean Code} e \textit{SOLID}, agregam não somente a qualidade
 do produto final, mas também aos desenvolvedores, elevando o nível técnico 
 das equipes.
+
+A utilização das ferramentas de teste apresentadas proporcionam ao desenvolvedor
+uma clara visão dos possíveis \textit{bugs} introduzidos e permitem que os mesmos
+sejam corrigidos ainda em tempo de desenvolvimento.
 
 Com a alta demanda por \textit{firmware} em diversos campos da indústria, é nítida
 a importância do investimento em preparo dos times para que seja gerado código 
