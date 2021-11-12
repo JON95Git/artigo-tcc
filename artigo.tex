@@ -233,6 +233,7 @@ testar partes e situações diferentes. A chamada \textit{Pirâmide de testes}
 grandes níveis:
 
 \begin{itemize}
+\itemsep0em 
   \item \textit{Testes end-to-end} - simulam a aplicação final
   \item \textit{Testes de integração} - testa a integração entre testes de unidade
   \item \textit{Testes unitários} - testes de unidade, verificam a menor unidade de
@@ -389,11 +390,8 @@ ambiente \textit{desktop}.\cite{lvgl}
 
 Um gerador de números verdadeiramente aleatórios, ou \textit{TRNG - True Random 
 Number Generator} é um circuito capaz de gerar números aleatórios através
-de algum processo físico ao invés dos métodos convencionais de uso de algoritmos
-para o mesmo fim.
-Alguns dos possíveis fenômenos físicos que podem ser utilizados por uma \textit{TRNG}
-são:
-
+de algum processo físico ao invés dos métodos convencionais de uso de algoritmos.
+Alguns dos possíveis fenômenos físicos que podem ser utilizados para esse fim são:
 \begin{itemize}
   \item Ruído térmico
   \item Ruído analógico
@@ -401,10 +399,10 @@ são:
   \item Fenômeno quântico
 \end{itemize}
 
-O objetivo geração de números verdadeiramente aleatórios remete ao uso da 
+O objetivo da geração de números verdadeiramente aleatórios remete ao uso da 
 criptografia, como geração de chaves criptográficas.
 
-Em microcontroladores que possuem periféricos avançados, os \textit{TRNG} são 
+Os periféricos \textit{TRNG} presentes em microcontroladores são 
 implementados em silício, num circuito que utiliza os ruídos analógicos de 
 alimentação e temperatura.\cite{vasyltsov2008fast}
 
@@ -418,6 +416,7 @@ alimentação e temperatura.\cite{vasyltsov2008fast}
 Serão utilizadas as seguintes ferramentas de \textit{software} na execução do projeto:
 
 \begin{itemize}
+\itemsep0em
   \item \textit{FreeRTOS} - sistema operacional de tempo real
   \item \textit{GNU make} - \textit{Build system} para compilação do código de produção
   \item \textit{GCC(x86)} e \textit{GCC(arm)}- compiladores para ambas arquiteturas
@@ -425,6 +424,7 @@ Serão utilizadas as seguintes ferramentas de \textit{software} na execução do
   \item \textit{Ceedling} - \textit{Build system} para compilação e execução dos testes
   \item \textit{Unity} - \textit{framework} de testes
   \item \textit{Cmock} - ferramenta de dublê de testes
+  \item \textit{LVGL} - Biblioteca gráfica
 \end{itemize}
 
 A metodologia utilizada para o desenvolvimento do projeto segue a técnica de
@@ -444,6 +444,7 @@ O processo de desenvolvimento do projeto seguiu o padrão especificado anteriorm
 juntamente com algumas regras e boas práticas:
 
 \begin{itemize}
+\itemsep0em 
   \item \textit{Clean Code} (Código limpo) - o código precisa ser de fácil
         entendimento\cite{martin2009clean}
   \item \textit{KISS (Keep it simple stupid)} - as soluções implementadas precisam ser
@@ -484,11 +485,13 @@ resultado.
 
 A prática do \textit{TDD} exige que os requisitos de um \textit{software}
 estejam muito bem definidos desde o início para que se possa começar a escrever 
-os testes, por isso é necessário que se defina uma lista de testes.
+os testes, por isso é necessário que se defina uma lista de testes, como a descrita 
+abaixo:
 
 Testes na aba \textit{Mass storage}:
 
 \begin{itemize}
+\itemsep0em 
 \item Checar a sanidade do \textit{RNG} (dados não devem se repetir com frequência)
 \item Checar tamanho do nome do arquivo (deve respeitar o limite do sistema de arquivos)
 \item Checar se o arquivo foi realmente criado
@@ -497,6 +500,7 @@ Testes na aba \textit{Mass storage}:
 Testes na aba \textit{Random}:
 
 \begin{itemize}
+\itemsep0em 
 \item Checar se os limites mínimo e máximo são respeitados (mínimo deve ser menor que máximo)
 \item Checar se o resultado dado realmente está no intervalo definido
 \end{itemize}
@@ -517,8 +521,8 @@ na Figura \ref{fig:arch2}.\hfill\\
 A camada de \textit{Aplicação} faz uso dos \textit{Drivers} para controle dos
 periféricos de \textit{hardware}, utiliza o \textit{RTOS} para criar e gerenciar
 \textit{threads} e recursos compartilhados por elas e as \textit{Bibliotecas}
-fornecem alguma funcionalidade extra como \textit{file system} (sistema de arquivos)
-ou criação de \textit{GUI (Graphical User Interface)} por exemplo.
+fornecem alguma funcionalidade extra como o \textit{file system} (sistema de 
+arquivos) e a biblioteca gráfica \textit{LVGL}.
 
 \subsubsection{Camadas de abstração - \textit{drivers}, Bibliotecas e \textit{RTOS}}\hfill\\
 
@@ -556,9 +560,9 @@ entendimento dos limites entre o código da aplicação e demais códigos (bibli
 
 \subsubsection{Abstraindo um módulo com dependência}\hfill\\
 
-Um módulo dependente de \textit{hardware}, responsável pelo aquisição de amostras
-de números verdadeiramente aleatórias, módulo de \textit{RNG - Random Number 
-Generator}.
+O módulo de \textit{RNG} responsável pelo aquisição de amostras de números 
+verdadeiramente aleatórios, é dependente da implementação de driver,
+portantto, é dependente de \textit{hardware}, 
 Este módulo é um \textit{driver} e está localizado na camada de mesmo nome, sua 
 interface e implementação estão representadas
 nas Figuras \ref{fig:rng.h} e \ref{fig:rng.c}.\hfill\
@@ -691,7 +695,8 @@ int main(void)
 \subsubsection{Implementando testes unitários}\hfill\\
 
 A implementação de testes unitários exige a utilização de um \textit{framework}
-de testes. Foi utilizado o \textit{Unity}, ferramenta já contida no \textit{Ceedling}.
+de testes. Foi utilizado o \textit{Unity}, ferramenta já contida no 
+\textit{Ceedling}.
 Usando os comandos do próprio \textit{build system} para a criação
 do projeto, tem-se a seguinte linha de comando apresentada na 
 Figura \ref{fig:ceedling-new}.\hfill\\
@@ -706,7 +711,7 @@ $ ceedling new projeto-exemplo
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
-Foi criada uma estrutura de diretórios semelhante a mostrada na Figura \ref{fig:ceedling-new-dir}. \hfill\\
+É criada uma estrutura de diretórios semelhante a mostrada na Figura \ref{fig:ceedling-new-dir}. \hfill\\
 
 \begin{figure}[H]
   \centering
@@ -749,15 +754,16 @@ Foi criada uma estrutura de diretórios semelhante a mostrada na Figura \ref{fig
 \end{figure}
 
 \begin{itemize}
-  \item \textit{build} - contém os artefatos de \textit{software}, arquivos temporários
-        e executáveis
+\itemsep0em 
+  \item \textit{build} - contém os artefatos de \textit{software}, arquivos 
+temporários e executáveis
   \item \textit{src} - contém o código fonte da aplicação
   \item \textit{test} - contém o código fonte dos testes
   \item \textit{project.yml} - contém a configuração relativa ao projeto
 \end{itemize}
 
-Para criar o primeiro módulo, utilizou-se \textit{ceedling module:create} passando o nome
-do módulo como argumento segundo mostra a Figura \ref{fig:ceedling-module}:
+Para criar o primeiro módulo, utiliza-se \textit{ceedling module:create} passando o 
+nome do módulo como argumento, como mostra a Figura \ref{fig:ceedling-module}:
 
 \begin{figure}[H]
   \centering
@@ -819,8 +825,9 @@ arquivo de testes em \textit{test} como mostrado na Figura \ref{fig:ceedling-dir
 \end{figure}
 
 No arquivo de testes, são criadas as funções, \textit{setUp()} e
-\textit{tearDown()} e adicionado o \textit{header file unity.h}, como 
-mostra a Figura \ref{fig:tests-init}:\hfill\\
+\textit{tearDown()} (funções necessárias para o \textit{framework Unity}) 
+e adicionado o \textit{header file unity.h}, como 
+mostra a Figura \ref{fig:tests-init}:\hfill\
 
 \begin{figure}[H]
   \centering
@@ -1017,7 +1024,7 @@ dos módulos. \hfill\\
 \begin{figure}[H]
   \centering
   \caption{Cobertura de código dos testes}
-  \includegraphics[width=0.95\linewidth]{images/code-coverage.png}
+  \includegraphics[width=1\linewidth]{images/code-coverage-2.png}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
   \label{fig:code-coverage}
 \end{figure}
