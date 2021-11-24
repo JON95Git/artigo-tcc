@@ -481,14 +481,14 @@
 
 \fancypagestyle{plain}{
 \fancyhf{}
-\fancyfoot[LO, RE]{Projeto de Fim de Curso  – Engenharia de Computação, 2021-1}
+\fancyfoot[LO, RE]{Projeto de Fim de Curso  – Engenharia de Computação, 2021-2}
 % \fancyfoot[CE,CO]{\leftmark}
 \fancyfoot[LE,RO]{\thepage}
 }
 
 \pagestyle{fancy}{
 \fancyhf{}
-\fancyfoot[LO, LE]{Projeto de Fim de Curso   – Engenharia de Computação, 2021-1}
+\fancyfoot[LO, LE]{Projeto de Fim de Curso   – Engenharia de Computação, 2021-2}
 % \fancyfoot[CE,CO]{\leftmark}
 \fancyfoot[RE,RO]{\thepage}
 }
