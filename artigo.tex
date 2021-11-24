@@ -37,7 +37,8 @@
 \textit{Resumo -} \normalfont{\textit{Este artigo apresenta técnicas e ferramentas
     para o desenvolvimento de firmware robusto e multiplataforma, com o intuito de
     minimizar bugs, permitir a implementação de testes unitários e incentivar o estudo de
-    conceitos de Engenharia de software aplicados a sistemas embarcados.}}
+    conceitos de Engenharia de software aplicados a sistemas embarcados.
+    É utilizada uma aplicação de exemplo, uma interface gráfica para requisição de amostras de números verdadeiramente aleatórios (TRNG - True Random Number Generator), capaz de rodar em ambiente desktop e embarcado.}}
 \end {abstract}
 
 \noindent\begin{keywords}
@@ -49,7 +50,8 @@
 \textit{Abstract - } \normalfont{\textit{This article presents techniques and tools
     for robust and multiplatform firmware development, in order to minimize bugs, allow
     the implementation of unit tests and encourage the study of software engineering
-    concepts applied to embedded systems.}}
+    concepts applied to embedded systems.
+    An example application is used, a graphical interface for requesting samples of truly random numbers (TRNG - True Random Number Generator), capable of running in both desktop and embedded environments.}}
 \end {abstract}
 \noindent\begin{keywords}
   \textit{\textbf{Keywords: }}\normalfont{\textit{embedded systems, firmware, TDD, unit
@@ -231,6 +233,7 @@ testar partes e situações diferentes. A chamada \textit{Pirâmide de testes}
 grandes níveis:
 
 \begin{itemize}
+\itemsep0em 
   \item \textit{Testes end-to-end} - simulam a aplicação final
   \item \textit{Testes de integração} - testa a integração entre testes de unidade
   \item \textit{Testes unitários} - testes de unidade, verificam a menor unidade de
@@ -282,7 +285,7 @@ Um esquema simplificado do \textit{TDD} é apresentado na Figura \ref{fig:tdd}.\
   \label{fig:tdd}
 \end{figure}
 
-Três grande etapas são necessárias: \textit{Teste falha}, \textit{Teste passa}
+Três grandes etapas são necessárias: \textit{Teste falha}, \textit{Teste passa}
 e \textit{Refatora}. Na primeira, são escritos apenas os testes unitários, com base
 nos requisitos do projeto, porém sem nenhum código de produção ainda, o que
 obviamente fará com que os testes falhem após a execução.
@@ -374,6 +377,34 @@ recursos incluem suporte para depuração, destaque de sintaxe, autocompletar de
 inteligente, \textit{snippets}, refatoração de código e \textit{Git}
 incluso.\cite{vscode}
 
+\subsection{Biblioteca gráfica - \textit{LVGL}}\hfill\\
+
+\textit{LVGL} é um biblioteca gráfica \textit{open source} para desenvolvimento
+de interfaces gráficas em sistemas embarcados. Escrita em linguagem C, pode ser usada 
+em microcontroladores ou microprocessadores. 
+A bilioteca dispõe de um simulador para desenvolvimento da interface sem 
+a necessidade do \textit{hardware} dedicado, permitindo a execução de código em
+ambiente \textit{desktop}.\cite{lvgl}
+
+\subsection{\textit{TRNG - True Random Number Generator}}\hfill\\
+
+Um gerador de números verdadeiramente aleatórios, ou \textit{TRNG - True Random 
+Number Generator} é um circuito capaz de gerar números aleatórios através
+de algum processo físico ao invés dos métodos convencionais de uso de algoritmos.
+Alguns dos possíveis fenômenos físicos que podem ser utilizados para esse fim são:
+\begin{itemize}
+  \item Ruído térmico
+  \item Ruído analógico
+  \item Fenômeno fotoelétrico
+  \item Fenômeno quântico
+\end{itemize}
+
+O objetivo da geração de números verdadeiramente aleatórios remete ao uso da 
+criptografia, como geração de chaves criptográficas.
+
+Os periféricos \textit{TRNG} presentes em microcontroladores são 
+implementados em silício, num circuito que utiliza os ruídos analógicos de 
+alimentação e temperatura.\cite{vasyltsov2008fast}
 
 % ----------------------METODOLOGIA-----------------------------------
 \section{METODOLOGIA}
@@ -385,6 +416,7 @@ incluso.\cite{vscode}
 Serão utilizadas as seguintes ferramentas de \textit{software} na execução do projeto:
 
 \begin{itemize}
+\itemsep0em
   \item \textit{FreeRTOS} - sistema operacional de tempo real
   \item \textit{GNU make} - \textit{Build system} para compilação do código de produção
   \item \textit{GCC(x86)} e \textit{GCC(arm)}- compiladores para ambas arquiteturas
@@ -392,6 +424,7 @@ Serão utilizadas as seguintes ferramentas de \textit{software} na execução do
   \item \textit{Ceedling} - \textit{Build system} para compilação e execução dos testes
   \item \textit{Unity} - \textit{framework} de testes
   \item \textit{Cmock} - ferramenta de dublê de testes
+  \item \textit{LVGL} - Biblioteca gráfica
 \end{itemize}
 
 A metodologia utilizada para o desenvolvimento do projeto segue a técnica de
@@ -411,6 +444,7 @@ O processo de desenvolvimento do projeto seguiu o padrão especificado anteriorm
 juntamente com algumas regras e boas práticas:
 
 \begin{itemize}
+\itemsep0em 
   \item \textit{Clean Code} (Código limpo) - o código precisa ser de fácil
         entendimento\cite{martin2009clean}
   \item \textit{KISS (Keep it simple stupid)} - as soluções implementadas precisam ser
@@ -422,6 +456,53 @@ juntamente com algumas regras e boas práticas:
         trabalhar nele\cite{martin2009clean}
   \item \textit{Refactoring} (Refatoração) - o código precisa ser refatorado e
         aprimorado constatemente\cite{martin2009clean}
+\end{itemize}
+
+\subsubsection{Definindo a aplicação e suas funcionalidades}\hfill\\
+
+A aplicação escolhida para demonstração das técnicas trata-se de uma interface
+gráfica para geração de números verdadeiramente aleatórios (\textit{TRNG - True 
+Random Number Generator}).
+
+Essa interface gráfica será executada em dois ambientes diferentes: embarcado e 
+\textit{desktop}. As funcionalidades, interfaces de aplicação (\textit{API - 
+application programming interface}) e visual serão exatamente os mesmos, variando-se
+apenas as implementações de código dependente de plataforma. 
+
+Haverão duas abas disponíveis para o usuário, a primeira, chamada de \textit{Mass 
+storage}, permitirá que seja salvo um arquivo no sistema de arquivos de 
+tamanho e nomes a serem escolhidos pelo usuário. Essa aba conterá uma caixa de texto 
+para receber o nome do arquivo, um \textit{spinbox} para se definir o tamanho do 
+arquivo, e um botão de salvar.
+
+A segunda aba chamada de \textit{Random}, permitirá que o usuário escolha um limite
+mínimo e máximo, e ao clicar em \textit{Get random}, irá obter um número aleatório
+dentro desse limite anteriomente definido. Essa aba conterá dois \textit{spinbox}
+para escolha dos valores mínimo e máximo, e uma \textit{label} para mostrar o 
+resultado.
+
+\subsubsection{Definindo os casos de teste}\hfill\\
+
+A prática do \textit{TDD} exige que os requisitos de um \textit{software}
+estejam muito bem definidos desde o início para que se possa começar a escrever 
+os testes, por isso é necessário que se defina uma lista de testes, como a descrita 
+abaixo:
+
+Testes na aba \textit{Mass storage}:
+
+\begin{itemize}
+\itemsep0em 
+\item Checar a sanidade do \textit{RNG} (dados não devem se repetir com frequência)
+\item Checar tamanho do nome do arquivo (deve respeitar o limite do sistema de arquivos)
+\item Checar se o arquivo foi realmente criado
+\end{itemize}
+
+Testes na aba \textit{Random}:
+
+\begin{itemize}
+\itemsep0em 
+\item Checar se os limites mínimo e máximo são respeitados (mínimo deve ser menor que máximo)
+\item Checar se o resultado dado realmente está no intervalo definido
 \end{itemize}
 
 \subsubsection{Arquitetura de \textit{software} do sistema}\hfill\\
@@ -440,8 +521,8 @@ na Figura \ref{fig:arch2}.\hfill\\
 A camada de \textit{Aplicação} faz uso dos \textit{Drivers} para controle dos
 periféricos de \textit{hardware}, utiliza o \textit{RTOS} para criar e gerenciar
 \textit{threads} e recursos compartilhados por elas e as \textit{Bibliotecas}
-fornecem alguma funcionalidade extra como \textit{file system} (sistema de arquivos)
-ou criação de \textit{GUI (Graphical User Interface)} por exemplo.
+fornecem alguma funcionalidade extra como o \textit{file system} (sistema de 
+arquivos) e a biblioteca gráfica \textit{LVGL}.
 
 \subsubsection{Camadas de abstração - \textit{drivers}, Bibliotecas e \textit{RTOS}}\hfill\\
 
@@ -466,117 +547,116 @@ pode ser visto na Figura \ref{fig:arch-abs}: \hfill\\
 
 Essas camadas são apenas funções que encapsulam as funções dos módulos originais,
 fazendo com que o código da \textit{Aplicação} nunca realize uma chamada de função
-diretamente a esses componentes, mas sim as suas abstrações.
+diretamente a esses componentes, mas sim as suas abstrações. A prática da escrita de código dessa maneira é chamada de \textit{Dual-targeting}.
 
-Um exemplo de módulo dependente de \textit{hardware},
-responsável pelo acionamento de pinos de um microcontrolador. O módulo de
-\textit{GPIO - General Purpose Input Output}. Este módulo é um \textit{driver} e está
-localizado na camada de mesmo nome, sua interface e implementação estão representadas
-nas Figuras \ref{fig:gpio.h} e \ref{fig:gpio.c}.\hfill\\
+\subsubsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
+
+O processo de \textit{Dual-targeting} exige independência
+entre os módulos de \textit{software} e principalmente da arquitetura de 
+\textit{hardware}.
+Escrever \textit{software} embarcado independente de arquitetura exige claro
+entendimento dos limites entre o código da aplicação e demais códigos (bibliotecas, 
+\textit{drivers}).
+
+\subsubsection{Abstraindo um módulo com dependência}\hfill\\
+
+O módulo de \textit{RNG} responsável pelo aquisição de amostras de números 
+verdadeiramente aleatórios, é dependente da implementação de \textit{driver},
+portantto, é dependente de \textit{hardware}, 
+Este módulo é um \textit{driver} e está localizado na camada de mesmo nome, sua 
+interface e implementação estão representadas
+nas Figuras \ref{fig:rng.h} e \ref{fig:rng.c}.\hfill\
 
 \begin{figure}[H]
   \centering
-  \caption{Interface do módulo de GPIO - \textit{gpio.h}}
+  \caption{Interface do módulo de \textit{RNG} - \textit{rng.h}}
 \begin{lstlisting}[language=C]
-#ifndef __GPIO_H__
-#define __GPIO_H__
+#ifndef __RNG_H__
+#define __RNG_H__
 
-void gpio_config(int port, int pin);
-int gpio_read(int port, int pin);
-void gpio_write(int port, int pin, int level);
+void rng_init(rng_config_st *rng);
+uint8_t rng_get(rng_config_st *rng);
 
 #endif
 \end{lstlisting}
-  \label{fig:gpio.h}
+  \label{fig:rng.h}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
 
 \begin{figure}[H]
   \centering
-  \caption{Implementação do módulo de GPIO - \textit{gpio.c}}
+  \caption{Implementação do módulo de \textit{RNG} - \textit{rng.c}}
 \begin{lstlisting}[language=C]
-#include "gpio.h"
+#include "rng.h"
 
-void gpio_config(int port, int pin)
+void rng_init(rng_config_st *rng)
 {
     // Acesso a registradores de hardware
-    GPIO.port.CFG |= pin;
+    RNG->periph.cfg_st = rng;
 }
 
-int gpio_read(int port, int pin)
+uint8_t rng_get(rng_config_st *rng))
 {
     // Acesso a registradores de hardware
-    return GPIO.port.RD.pin;
+    return RNG->periph.data;
 }
 
-void gpio_write(int port, int pin, int level)
-{
-    // Acesso a registradores de hardware
-    GPIO.port.WR.pin = level;
-}
 \end{lstlisting}
-  \label{fig:gpio.c}
+  \label{fig:rng.c}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
 O módulo contém funções que dependem do \textit{hardware}, porém as mesmas não
 devem ser chamadas diretamente pela aplicação, mas sim por uma camada de abstração
-mostrada nas Figuras \ref{fig:gpio_iface.h} e \ref{fig:gpio_iface.c}.\hfill\\
+mostrada nas Figuras \ref{fig:rng_user.h} e \ref{fig:rng_user.c}.\hfill\\
 
 \begin{figure}[H]
   \centering
-  \caption{Interface pública do módulo - \textit{gpio\_iface.h}}
+  \caption{Interface pública do módulo - \textit{rng\_user.h}}
 \begin{lstlisting}[language=C]
-#ifndef __GPIO_IFACE_H__
-#define __GPIO_IFACE_H__
+#ifndef __RNG_USER_H__
+#define __RNG_USER_H__
 
-void gpio_iface_config(int port, int pin);
-int gpio_iface_read(int port, int pin);
-void gpio_iface_write(int port, int pin,
-                      int level);
+void rng_user_init(rng_config_st *rng);
+uint8_t rng_user_get(rng_config_st *rng);
+
 #endif
 \end{lstlisting}
-  \label{fig:gpio_iface.h}
+  \label{fig:rng_user.h}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \caption{Implementação da abstração para acesso ao módulo de GPIO
-\textit{gpio\_iface.c}}
+  \caption{Implementação da abstração para acesso ao módulo de \textit{RNG}
+\textit{rng\_user.c}}
 \begin{lstlisting}[language=C]
-#include "gpio_iface.h"
+#include "rng_user.h"
 
 // Inclui header do modulo original
-#include "gpio.h"
+#include "rng.h"
 
-void gpio_iface_config(int port, int pin)
+void rng_user_init(rng_config_st *rng)
 {
     // Chama funcao do modulo original
-    gpio_config(port, pin);
+    rng_init(rng);
 }
 
-int gpio_iface_read(int port, int pin)
+uint8_t rng_user_get(rng_config_st *rng)
 {
     // Chama funcao do modulo original
-    return gpio_read(port, pin);
+    return rng_get(rng);
 }
 
-void gpio_iface_write(int port, int pin, int level)
-{
-    // Chama funcao do modulo original
-    gpio_write(port, pin, level);
-}
 \end{lstlisting}
-  \label{fig:gpio_iface.c}
+  \label{fig:rng_user.c}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
-A abstração do módulo, chamada de \textit{gpio\_iface.c e gpio\_iface.h}
-(\textit{iface} é uma abreviação para \textit{interface}) abstrai o
+A abstração do módulo, chamada de \textit{rng\_user.c e rng\_user.h} abstrai o
 acesso, permitindo que seja feita a utilização de dublês de testes (\textit{mocks,
-  fakes e stubs}), visando a implementação de testes unitários.
+fakes e stubs}), visando a implementação de testes unitários.
 
 A aplicação final faz uso apenas do módulo de abstração, como apresentado na Figura 
 \ref{fig:main.c}:\hfill\\
@@ -588,20 +668,22 @@ A aplicação final faz uso apenas do módulo de abstração, como apresentado n
 #include <stdio.h>
 // Camada de aplicacao nao inclui o modulo
 // diretamente, mas sim sua abstracao
-#include "gpio_iface.h"
+#include "rng_user.h"
+#define RNG_SAMPLES 32
 
 int main(void)
-{
-    gpio_iface_config(PORT_C, PIN_13);
+{	
+	rng_config_st rng;
+	rng_user_init(&rng);
+	uint8_t rng_buffer[RNG_SAMPLES];
     
-    // Loop infinito
-    while (1) {
-        // Classico exemplo de pisca led
-        gpio_iface_write(PORT_C, PIN_13, 1);
-        delay_ms(500);
-        gpio_iface_write(PORT_C, PIN_13, 0);
-        delay_ms(500);
-    }
+	// Loop infinito
+	while (1) {
+		// Obtem 32 amostras de RNG
+		for (int i = 0; i < RNG_SAMPLES; i++) {
+			rng_buffer[i] = rng_user_get(&rng);
+		}
+	}
     return 0;
 }
 \end{lstlisting}
@@ -612,7 +694,8 @@ int main(void)
 \subsubsection{Implementando testes unitários}\hfill\\
 
 A implementação de testes unitários exige a utilização de um \textit{framework}
-de testes. Foi utilizado o \textit{Unity}, ferramenta já contida no \textit{Ceedling}.
+de testes. Foi utilizado o \textit{Unity}, ferramenta já contida no 
+\textit{Ceedling}.
 Usando os comandos do próprio \textit{build system} para a criação
 do projeto, tem-se a seguinte linha de comando apresentada na 
 Figura \ref{fig:ceedling-new}.\hfill\\
@@ -627,7 +710,7 @@ $ ceedling new projeto-exemplo
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
-Foi criada uma estrutura de diretórios semelhante a mostrada na Figura \ref{fig:ceedling-new-dir}. \hfill\\
+É criada uma estrutura de diretórios semelhante a mostrada na Figura \ref{fig:ceedling-new-dir}. \hfill\\
 
 \begin{figure}[H]
   \centering
@@ -670,21 +753,22 @@ Foi criada uma estrutura de diretórios semelhante a mostrada na Figura \ref{fig
 \end{figure}
 
 \begin{itemize}
-  \item \textit{build} - contém os artefatos de \textit{software}, arquivos temporários
-        e executáveis
+\itemsep0em 
+  \item \textit{build} - contém os artefatos de \textit{software}, arquivos 
+temporários e executáveis
   \item \textit{src} - contém o código fonte da aplicação
   \item \textit{test} - contém o código fonte dos testes
   \item \textit{project.yml} - contém a configuração relativa ao projeto
 \end{itemize}
 
-Para criar o primeiro módulo, utilizou-se \textit{ceedling module:create} passando o nome
-do módulo como argumento segundo mostra a Figura \ref{fig:ceedling-module}:
+Para criar o primeiro módulo, utiliza-se \textit{ceedling module:create} passando o 
+nome do módulo como argumento, como mostra a Figura \ref{fig:ceedling-module}:
 
 \begin{figure}[H]
   \centering
   \caption{Criando um módulo com o \textit{Ceedling}}
 \begin{lstlisting}[language=bash]
-$ ceedling module:create[gpio]
+$ ceedling module:create[rng]
 \end{lstlisting}
   \label{fig:ceedling-module}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
@@ -726,11 +810,11 @@ arquivo de testes em \textit{test} como mostrado na Figura \ref{fig:ceedling-dir
   [projeto-exemplo
   [build]
   [src
-    [gpio.c, file]
-    [gpio.h, file]
+    [rng.c, file]
+    [rng.h, file]
   ]
   [test
-    [test\_gpio.c, file]
+    [test\_rng.c, file]
   ]
   [project.yml, file]
   ]
@@ -740,15 +824,16 @@ arquivo de testes em \textit{test} como mostrado na Figura \ref{fig:ceedling-dir
 \end{figure}
 
 No arquivo de testes, são criadas as funções, \textit{setUp()} e
-\textit{tearDown()} e adicionado o \textit{header file unity.h}, como 
-mostra a Figura \ref{fig:tests-init}:\hfill\\
+\textit{tearDown()} (funções necessárias para o \textit{framework Unity}) 
+e adicionado o \textit{header file unity.h}, como 
+mostra a Figura \ref{fig:tests-init}:\hfill\
 
 \begin{figure}[H]
   \centering
-  \caption{Arquivo de testes inicial - \textit{test\_gpio.c}}
+  \caption{Arquivo de testes inicial - \textit{test\_rng.c}}
 \begin{lstlisting}[language=C]
 #include "unity.h"
-#include "gpio.h"
+#include "rng.h"
 
 void setUp(void)
 {
@@ -758,10 +843,9 @@ void tearDown(void)
 {
 }
 
-void test_gpio_NeedToImplement(void)
+void test_rng_NeedToImplement(void)
 {
-    TEST_IGNORE_MESSAGE(
-        "Need to Implement gpio");
+	TEST_IGNORE_MESSAGE("Need to Implement rng");
 }
 \end{lstlisting}
   \label{fig:tests-init}
@@ -773,23 +857,26 @@ implementados, como demonstrado na Figura \ref{fig:simple-test}:\hfill\\
 
 \begin{figure}[H]
   \centering
-  \caption{Arquivo de testes com um teste simples  - \textit{test\_gpio.c}}
+  \caption{Arquivo de testes com um teste simples  - \textit{test\_rng.c}}
 \begin{lstlisting}[language=C]
 #include "unity.h"
-#include "gpio.h"
+#include "rng.h"
 
 void setUp(void)
 {
+	rng_config_st rng;
+	rng_user_init(&rng);	
 }
 
 void tearDown(void)
 {
 }
 
-void test_gpio(void)
-{
-    TEST_ASSERT_EQUAL(0, 
-        gpio_iface_read(PORT_C, PIN_13));
+void test_rng(void)
+{	
+	uint8_t rng_buffer;
+	rng_buffer = rng_user_get();
+	TEST_ASSERT_NOT_EQUAL(0, rng_buffer);
 }
 \end{lstlisting}
   \label{fig:simple-test}
@@ -799,7 +886,7 @@ void test_gpio(void)
 \subsubsection{Utilizando dublês de teste}\hfill\\
 
 Dublês de teste são utilizados nos casos em que há dependência de algum componente
-externo e o módulo precisa ser testado. O \textit{driver} de \textit{GPIO} é um
+externo e o módulo precisa ser testado. O \textit{driver} de \textit{RNG} é um
 exemplo de dependência de \textit{hardware}, nesse caso, é interessante o uso
 de dublês de teste. A ferramenta responsável pela geração desses dublês é o
 \textit{Cmock}. A Figura \ref{fig:mock-test} mostra um simples exemplo de utilização:
@@ -807,33 +894,28 @@ de dublês de teste. A ferramenta responsável pela geração desses dublês é 
 
 \begin{figure}[H]
   \centering
-  \caption{Arquivo de testes com mock - \textit{test\_gpio.c}}
+  \caption{Arquivo de testes com mock - \textit{test\_rng\_user.c}}
 \begin{lstlisting}[language=C]
 #include "unity.h"
-#include "mock_gpio.h"
-
-void setUp(void)
-{
-}
-
-void tearDown(void)
-{
-}
+#include "mock_rng_user.h"
+#include <stdlib.h>
 
 // Callback chamada pelo Cmock
-int gpio_iface_read_callback(int cmock_num_calls)
+int rng_user_get_callback(int cmock_num_calls)
 {
-    return 1;
+	// Usa funao rand() da linguagem C
+	return rand();
 }
 
-void test_gpio(void)
+void test_rng(void)
 {
-    // Registrando a callback
-    gpio_iface_read_StubWithCallback(
-        gpio_iface_read_callback);
-        
-    TEST_ASSERT_EQUAL(0, 
-        gpio_iface_read(PORT_C, PIN_13));
+	uint8_t rng_buffer;
+
+	// Registrando a callback
+	rng_user_get_StubWithCallback(rng_user_get_callback);
+       
+	rng_buffer = rng_user_get();
+	TEST_ASSERT_NOT_EQUAL(0, rng_buffer);
 }
 \end{lstlisting}
   \label{fig:mock-test}
@@ -842,35 +924,35 @@ void test_gpio(void)
 
 No código anterior uma função de \textit{callback} é definida e registrada no
 \textit{Cmock}, de modo que toda vez que a função original for chamada,
-\textit{gpio\_iface\_read()}, a ferramenta redireciona a chamada para
-\textit{gpio\_iface\_read\_callback()}. Para isso é necessário apenas incluir
-o \textit{header file} com o prefixo \textit{mock\_}: \textit{mock\_gpio.h}.
+\textit{rng\_user\_read()}, a ferramenta redireciona a chamada para
+\textit{rng\_user\_read\_callback()}. Para isso é necessário apenas incluir
+o \textit{header file} com o prefixo \textit{mock\_}: \textit{mock\_rng\_user.h}.
 
 O argumento \textit{cmock\_num\_calls} na \textit{callback} é uma obrigatoriedade
 da ferramenta, para que haja o controle do número de chamadas realizadas a
 \textit{callback}.
 
 A Figura \ref{fig:ceedling-output} mostra a saída do comando resultado da execução
-de todos os testes:\hfill\\
+do teste de \textit{RNG}:\hfill\\
 
 \begin{figure}[H]
   \centering
   \caption{Rodando o primeiro teste com \textit{Ceedling}}
 \begin{lstlisting}[language=bash]
-$ ceedling test:all
-Test 'test_gpio.c'
+$ ceedling test:rng_user
+Test 'test_rng_user.c'
 ------------------------------
-Generating include list for gpio.h...
-Creating mock for gpio...
-Generating runner for test_gpio.c...
-Compiling test_gpio_runner.c...
-Compiling test_gpio.c...
-Compiling mock_gpio.c...
+Generating include list for rng_user.h...
+Creating mock for rng_user...
+Generating runner for test_rng_user.c...
+Compiling test_rng_user_runner.c...
+Compiling test_rng_user.c...
+Compiling mock_rng_user.c...
 Compiling unity.c...
-Compiling gpio.c...
+Compiling rng_user.c...
 Compiling cmock.c...
-Linking gpio.out...
-Running gpio.out...
+Linking rng_user.out...
+Running rng_user.out...
 
 --------------------
 OVERALL TEST SUMMARY
@@ -884,18 +966,159 @@ IGNORED: 0
   \caption*{\newline\textbf{Fonte:} acervo do autor}
 \end{figure}
 
-\subsubsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
+\subsubsection{Desenvolvendo a interface gráfica}\hfill\\
 
-O processo de \textit{Dual-targeting} só é possível quando se consegue independência
-entre os módulos de software.
+O processo de desenvolvimento da interface gráfica foi realizado utilizando a 
+biblioteca \textit{LVGL} e sua funcionalidade de simulador. Dessa forma, todo o 
+\textit{design} da aplicação foi criado de forma independente de \textit{hardware},
+reforçando a prática de \textit{dual-targeting}.
+
+Por questões técnicas, a interface gráfica exige que seja feita uma atualização
+síncrona a cada 5 ms (milisegundos), o que impossibilita a implementação de testes 
+unitários.
+
+Devido a essa limitação, a aplicação gráfica foi definida e implementada antes da 
+lógica de negócio da aplicação completa.
+
+As abas anteriormente definidas, \textit{Mass storage} e \textit{Random} são 
+mostradas a seguir. A primeira aba é mostrada na Figura 
+\ref{fig:mass-storage}.\hfill\
+
+\begin{figure}[H]
+  \centering
+  \caption{Aba \textit{Mass storage}}
+  \includegraphics[width=0.95\linewidth]{images/mass-storage-screen.png}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+  \label{fig:mass-storage}
+\end{figure}
+
+A segunda aba é mostrada na Figura \ref{fig:random}.\hfill\
+
+\begin{figure}[H]
+  \centering
+  
+  \caption{Aba \textit{Random}}
+  \includegraphics[width=0.95\linewidth]{images/random-screen.png}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+  \label{fig:random}
+\end{figure}
+
+\subsubsection{Executando a aplicação em ambiente desktop}\hfill\\
+
+Executar a aplicação apartir do simulador da biblioteca gráfica permite que sejam
+utilizadas as abstrações para sistema de arquivos e \textit{RNG} criadas 
+anteriormente.
+
+A lógica da aplicação pode ser testada e validada no \textit{host} antes de ser
+testada no \textit{target}.
+
+A saída da execução dos testes unitários pode ser vista na 
+Figura \ref{fig:ceedling-output-all}.\hfill\
+
+\begin{figure}[H]
+  \centering
+  \caption{Rodando todos os testes}
+\begin{lstlisting}[language=bash]
+$ ceedling test:all
+Test 'test_app.c'
+-----------------
+Running test_app.out...
 
 
+Test 'test_portable.c'
+----------------------
+Compiling test_portable.c...
+Linking test_portable.out...
+Running test_portable.out...
 
+
+Test 'test_rng_user.c'
+----------------------
+Compiling test_rng_user_runner.c...
+Compiling test_rng_user.c...
+Linking test_rng_user.out...
+Running test_rng_user.out...
+
+--------------------
+OVERALL TEST SUMMARY
+--------------------
+TESTED:  12
+PASSED:  12
+FAILED:   0
+IGNORED:  0
+\end{lstlisting}
+  \label{fig:ceedling-output-all}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
+
+\subsubsection{Executando a aplicação em ambiente embarcado}\hfill\\
+
+Nesse ponto, a aplicação, sua lógica e suas partes independentes de plataforma já 
+foram testadas e validadas, restando apenas testar as especificidades do
+\textit{target}, como detalhes de implementação de \textit{drivers}, arquitetura
+do processador e execução das \textit{threads} do \textit{RTOS}.
+
+A execução da primeira aba no \textit{target} é mostrada na 
+Figura \ref{fig:random}.\hfill\
+
+\begin{figure}[H]
+  \centering
+  \caption{Aba \textit{Mass storage}}
+  \includegraphics[width=0.95\linewidth]{images/mass-storage-screen-embedded.png}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+  \label{fig:mass-storage-embedded}
+\end{figure}
+
+A segunda aba é mostrada na Figura \ref{fig:random-embedded}.\hfill\
+
+\begin{figure}[H]
+  \centering
+  
+  \caption{Aba \textit{Random}}
+  \includegraphics[width=0.95\linewidth]{images/random-screen-embedded.png}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+  \label{fig:random-embedded}
+\end{figure}
+
+\subsubsection{\textit{Code coverage} - cobertura de código dos testes}\hfill\\
+
+O \textit{framework} de testes utilizado possui uma ferramenta de verificação 
+de cobertura de código dos testes (\textit{code coverage}). A ferramenta permite 
+avaliar quais trechos de código foram de fato submetidos aos testes ou não.
+Essa é uma das métricas disponíveis para se avaliar a efetividade dos testes de 
+código.
+
+Na Figura \ref{fig:code-coverage} são exibidos os dados de cobertura de código 
+dos módulos. \hfill\\
+
+\begin{figure}[H]
+  \centering
+  \caption{Cobertura de código dos testes}
+  \includegraphics[width=1\linewidth]{images/code-coverage-2.png}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+  \label{fig:code-coverage}
+\end{figure}
 
 % ----------------------CONCLUSÃO-----------------------------------
 
 \section{CONCLUSÃO}\hfill\\
-Conclui-se que
+Conclui-se que a utilização das técnicas apresentadas permite um processo de
+desenvolvimento de \textit{firmware} eficiente (pois todas as funcionalidades são
+previamente pensadas), portável e testável, além de considerável redução de tempo de
+\textit{debug} pois o código é submetido a testes periodicamente.
+
+A constante utilização do \textit{TDD} alinhada as boas práticas de programação
+como \textit{Clean Code} e \textit{SOLID}, agregam não somente a qualidade
+do produto final, mas também aos desenvolvedores, elevando o nível técnico 
+das equipes.
+
+A utilização das ferramentas de teste apresentadas proporcionam ao desenvolvedor
+uma clara visão dos possíveis \textit{bugs} introduzidos e permitem que os mesmos
+sejam corrigidos ainda em tempo de desenvolvimento.
+
+Com a alta demanda por \textit{firmware} em diversos campos da indústria, é nítida
+a importância do investimento em preparo dos times para que seja gerado código 
+de qualidade.
 
 
 % \section{REFERÊNCIAS}
