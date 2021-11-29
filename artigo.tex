@@ -38,7 +38,7 @@
     para o desenvolvimento de firmware robusto e multiplataforma, com o intuito de
     minimizar bugs, permitir a implementação de testes unitários e incentivar o estudo de
     conceitos de Engenharia de software aplicados a sistemas embarcados.
-    É utilizada uma aplicação de exemplo, uma interface gráfica para requisição de amostras de números verdadeiramente aleatórios (TRNG - True Random Number Generator), capaz de rodar em ambiente desktop e embarcado.}}
+    Foi utilizada uma aplicação de exemplo, uma interface gráfica para requisição de amostras de números verdadeiramente aleatórios (TRNG - True Random Number Generator), capaz de rodar em ambiente desktop e embarcado.}}
 \end {abstract}
 
 \noindent\begin{keywords}
@@ -51,7 +51,7 @@
     for robust and multiplatform firmware development, in order to minimize bugs, allow
     the implementation of unit tests and encourage the study of software engineering
     concepts applied to embedded systems.
-    An example application is used, a graphical interface for requesting samples of truly random numbers (TRNG - True Random Number Generator), capable of running in both desktop and embedded environments.}}
+    An example application was used, a graphical interface for requesting samples of truly random numbers (TRNG - True Random Number Generator), capable of running in both desktop and embedded environments.}}
 \end {abstract}
 \noindent\begin{keywords}
   \textit{\textbf{Keywords: }}\normalfont{\textit{embedded systems, firmware, TDD, unit
@@ -235,8 +235,8 @@ grandes níveis:
 \begin{itemize}
 \itemsep0em 
   \item \textit{Testes end-to-end} - simulam a aplicação final
-  \item \textit{Testes de integração} - testa a integração entre testes de unidade
-  \item \textit{Testes unitários} - testes de unidade, verificam a menor unidade de
+  \item \textit{Testes de integração} - testam a integração entre módulos de \textit{software}
+  \item \textit{Testes unitários} - testes de unidade, testam a menor unidade de
         código testável
 \end{itemize}
 
@@ -413,7 +413,7 @@ alimentação e temperatura.\cite{vasyltsov2008fast}
 %Reseta o contador de subsection
 % \setcounter{section}{-1}\stepcounter{section}
 
-Serão utilizadas as seguintes ferramentas de \textit{software} na execução do projeto:
+Foram utilizadas as seguintes ferramentas de \textit{software} na execução do projeto:
 
 \begin{itemize}
 \itemsep0em
@@ -427,11 +427,11 @@ Serão utilizadas as seguintes ferramentas de \textit{software} na execução do
   \item \textit{LVGL} - Biblioteca gráfica
 \end{itemize}
 
-A metodologia utilizada para o desenvolvimento do projeto segue a técnica de
+A metodologia utilizada para o desenvolvimento do projeto seguiu a técnica de
 \textit{TDD} descrita anteriormente.
 
 Nas três etapas (\textit{Teste falha}, \textit{Teste passa}
-e \textit{Refatora}) serão utilizadas ferramentas e mecanismos de \textit{software}
+e \textit{Refatora}) foram utilizadas ferramentas e mecanismos de \textit{software}
 para auxílio na implementação dos testes, execução e automatização de processos \hfill\
 
 % ----------------------DESENVOLVIMENTO-----------------------------------
@@ -464,20 +464,21 @@ A aplicação escolhida para demonstração das técnicas trata-se de uma interf
 gráfica para geração de números verdadeiramente aleatórios (\textit{TRNG - True 
 Random Number Generator}).
 
-Essa interface gráfica será executada em dois ambientes diferentes: embarcado e 
-\textit{desktop}. As funcionalidades, interfaces de aplicação (\textit{API - 
-application programming interface}) e visual serão exatamente os mesmos, variando-se
+Essa interface gráfica é capaz de ser executada em dois ambientes 
+diferentes:embarcado e \textit{desktop}. 
+As funcionalidades, interfaces de aplicação (\textit{API - 
+application programming interface}) e visual são exatamente os mesmos, variando-se
 apenas as implementações de código dependente de plataforma. 
 
-Haverão duas abas disponíveis para o usuário, a primeira, chamada de \textit{Mass 
-storage}, permitirá que seja salvo um arquivo no sistema de arquivos de 
-tamanho e nomes a serem escolhidos pelo usuário. Essa aba conterá uma caixa de texto 
+Existem duas abas disponíveis para o usuário, a primeira, chamada de \textit{Mass 
+storage}, permite que seja salvo um arquivo no sistema de arquivos de 
+tamanho e nomes a serem escolhidos pelo usuário. Essa aba contém uma caixa de texto 
 para receber o nome do arquivo, um \textit{spinbox} para se definir o tamanho do 
 arquivo, e um botão de salvar.
 
-A segunda aba chamada de \textit{Random}, permitirá que o usuário escolha um limite
+A segunda aba chamada de \textit{Random}, permite que o usuário escolha um limite
 mínimo e máximo, e ao clicar em \textit{Get random}, irá obter um número aleatório
-dentro desse limite anteriomente definido. Essa aba conterá dois \textit{spinbox}
+dentro desse limite anteriomente definido. Essa aba contém dois \textit{spinbox}
 para escolha dos valores mínimo e máximo, e uma \textit{label} para mostrar o 
 resultado.
 
@@ -528,7 +529,7 @@ arquivos) e a biblioteca gráfica \textit{LVGL}.
 
 Um dos pilares do desenvolvimento de \textit{software} multiplataforma é a abstração.
 Utilizar interfaces bem definidas a partir de \textit{header files} (arquivos de
-extensão \textit{.h}), variando apenas a implementação dessas interfaces nos
+extensão \textit{.h}), variando-se apenas a implementação dessas interfaces nos
 \textit{source files} (arquivos de extensão \textit{.c}).
 
 Para se escrever código portável é extremamente necessário a não dependência de
@@ -547,7 +548,8 @@ pode ser visto na Figura \ref{fig:arch-abs}: \hfill\\
 
 Essas camadas são apenas funções que encapsulam as funções dos módulos originais,
 fazendo com que o código da \textit{Aplicação} nunca realize uma chamada de função
-diretamente a esses componentes, mas sim as suas abstrações. A prática da escrita de código dessa maneira é chamada de \textit{Dual-targeting}.
+diretamente a esses componentes, mas sim as suas abstrações. A prática da escrita de 
+código dessa maneira é chamada de \textit{Dual-targeting}.
 
 \subsubsection{Dual-targeting: compilando para duas arquiteturas}\hfill\\
 
@@ -704,7 +706,7 @@ Figura \ref{fig:ceedling-new}.\hfill\\
   \centering
   \caption{Criando um projeto com o \textit{Ceedling}}
 \begin{lstlisting}[language=bash]
-$ ceedling new projeto-exemplo
+$ ceedling new embedded_rng
 \end{lstlisting}
   \label{fig:ceedling-new}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
@@ -741,7 +743,7 @@ $ ceedling new projeto-exemplo
   fit=band,
   before computing xy={l=15pt},
   }
-  [projeto-exemplo
+  [embedded\_rng
   [build]
   [src]
   [test]
@@ -768,7 +770,7 @@ nome do módulo como argumento, como mostra a Figura \ref{fig:ceedling-module}:
   \centering
   \caption{Criando um módulo com o \textit{Ceedling}}
 \begin{lstlisting}[language=bash]
-$ ceedling module:create[rng]
+$ ceedling module:create[rng_user]
 \end{lstlisting}
   \label{fig:ceedling-module}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
@@ -807,14 +809,14 @@ arquivo de testes em \textit{test} como mostrado na Figura \ref{fig:ceedling-dir
   fit=band,
   before computing xy={l=15pt},
   }
-  [projeto-exemplo
+  [embedded\_rng
   [build]
   [src
-    [rng.c, file]
-    [rng.h, file]
+    [rng\_user.c, file]
+    [rng\_user.h, file]
   ]
   [test
-    [test\_rng.c, file]
+    [test\_rng\_user.c, file]
   ]
   [project.yml, file]
   ]
@@ -830,10 +832,10 @@ mostra a Figura \ref{fig:tests-init}:\hfill\
 
 \begin{figure}[H]
   \centering
-  \caption{Arquivo de testes inicial - \textit{test\_rng.c}}
+  \caption{Arquivo de testes inicial - \textit{test\_rng\_user.c}}
 \begin{lstlisting}[language=C]
 #include "unity.h"
-#include "rng.h"
+#include "rng_user.h"
 
 void setUp(void)
 {
@@ -843,7 +845,7 @@ void tearDown(void)
 {
 }
 
-void test_rng_NeedToImplement(void)
+void test_rng__userNeedToImplement(void)
 {
 	TEST_IGNORE_MESSAGE("Need to Implement rng");
 }
@@ -857,10 +859,10 @@ implementados, como demonstrado na Figura \ref{fig:simple-test}:\hfill\\
 
 \begin{figure}[H]
   \centering
-  \caption{Arquivo de testes com um teste simples  - \textit{test\_rng.c}}
+  \caption{Arquivo de testes com um teste simples  - \textit{test\_rng\_user.c}}
 \begin{lstlisting}[language=C]
 #include "unity.h"
-#include "rng.h"
+#include "rng_user.h"
 
 void setUp(void)
 {
@@ -872,7 +874,7 @@ void tearDown(void)
 {
 }
 
-void test_rng(void)
+void test_rng_user(void)
 {	
 	uint8_t rng_buffer;
 	rng_buffer = rng_user_get();
@@ -1080,7 +1082,64 @@ A segunda aba é mostrada na Figura \ref{fig:random-embedded}.\hfill\
   \label{fig:random-embedded}
 \end{figure}
 
-\subsubsection{\textit{Code coverage} - cobertura de código dos testes}\hfill\\
+% ----------------------RESULTADOS E DISCUSSÕES-----------------------------------
+
+\section{RESULTADOS E DISCUSSÕES}
+Os resultados obtidos, o código final da aplicação, os códigos de testes e os dados 
+de execução e cobertura dos testes são mostrados a seguir.
+
+\subsection{Código da aplicação}\hfill\\
+
+O código da aplicação resultante da utilização das técnicas e ferramentas 
+apresentadas é de fácil compreensão, manutenção e portabilidade, como pode ser visto
+na Figura \ref{fig:app-code}.\hfill\
+
+\begin{figure}[H]
+  \centering
+  \caption{Trecho de código da aplicação}
+\begin{lstlisting}[language=C]
+#include "app_main.h"
+
+void app_main(void)
+{
+	hardware_init();
+	system_utils_init();
+	lv_init();
+	tft_init();
+	touchpad_init();
+	app_create_threads();
+	gui_app();
+}
+\end{lstlisting}
+  \label{fig:app-code}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
+
+\subsection{Código de teste}\hfill\\
+
+O código de teste resultante também apresenta uma estrutura simples
+e escalável, como pode ser visto na Figura \ref{fig:test-code}.\hfill\
+
+\begin{figure}[H]
+  \centering
+  \caption{Trecho de código de teste}
+\begin{lstlisting}[language=C]
+void test_get_a_random_number_in_a_range(void)
+{
+	uint32_t min = 0;
+	uint32_t max = 32768;
+	uint32_t random;
+
+	return_random_in_a_range(min, max, &random);
+	TEST_ASSERT_GREATER_OR_EQUAL(min, random);
+	TEST_ASSERT_LESS_OR_EQUAL(max, random);
+}
+\end{lstlisting}
+  \label{fig:test-code}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+\end{figure}
+
+\subsection{\textit{Code coverage} - cobertura de código dos testes}\hfill\\
 
 O \textit{framework} de testes utilizado possui uma ferramenta de verificação 
 de cobertura de código dos testes (\textit{code coverage}). A ferramenta permite 
@@ -1089,14 +1148,36 @@ Essa é uma das métricas disponíveis para se avaliar a efetividade dos testes 
 código.
 
 Na Figura \ref{fig:code-coverage} são exibidos os dados de cobertura de código 
-dos módulos. \hfill\\
+dos módulos: \hfill\\
 
 \begin{figure}[H]
   \centering
-  \caption{Cobertura de código dos testes}
+  \caption{Cobertura de código da aplicação}
   \includegraphics[width=1\linewidth]{images/code-coverage-2.png}
   \caption*{\newline\textbf{Fonte:} acervo do autor}
   \label{fig:code-coverage}
+\end{figure}
+
+É possível navegar por cada arquivo de código fonte e inspecionar os resultados de
+forma mais detalhada como é apresentado na Figura \ref{fig:code-coverage-detail}:
+
+\begin{figure}[H]
+  \centering
+  \caption{Cobertura detalhada de código da aplicação}
+  \includegraphics[width=1\linewidth]{images/code-coverage-detail.png}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+  \label{fig:code-coverage-detail}
+\end{figure}
+
+A relação entre os testes, o tempo de execução e o \textit{status} de execução dos
+mesmos pode ser visto na Figura \ref{fig:table-tests}:
+
+\begin{figure}[H]
+  \centering
+  \caption{Tabela contendo dados de execução dos testes}
+  \includegraphics[width=1\linewidth]{images/table-tests.png}
+  \caption*{\newline\textbf{Fonte:} acervo do autor}
+  \label{fig:table-tests}
 \end{figure}
 
 % ----------------------CONCLUSÃO-----------------------------------
